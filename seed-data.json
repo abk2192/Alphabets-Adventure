@@ -15,16 +15,18 @@
       "id": "1f8e06d8-f7e6-4896-be13-4e3a28bd55b6",
       "letter": "b",
       "word": "BALL",
-      "categories": [],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4747f7GuqubpW46FSnQSaY-RdECYnRpYTR5p-380leA&s=10",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=ball&tl=en&client=tw-ob",
-      "fallback": "\u26bd"
+      "fallback": "\u26bd",
+      "categories": []
     },
     {
       "id": "d68d6f09-71ea-467b-ba20-fd35f2a3190e",
       "letter": "c",
       "word": "CAT",
-      "categories": [],
+      "categories": [
+        "animal"
+      ],
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Cat_November_2010-1a.jpg/960px-Cat_November_2010-1a.jpg",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=cat&tl=en&client=tw-ob",
       "fallback": "\ud83d\udc31"
@@ -33,15 +35,20 @@
       "id": "01f95503-2ba0-4656-b5f5-a85840ec736c",
       "letter": "d",
       "word": "DOG",
-      "categories": [],
+      "categories": [
+        "animal"
+      ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWMKYq7ZwbLA7_4M3wuqGRFUjyUHlPFR__WtARVaeGvg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=dog&tl=en&client=tw-ob",
       "fallback": "\ud83d\udc36"
     },
     {
       "id": "10491482-9eb8-4b35-b9ab-8928a8c3465f",
       "letter": "e",
       "word": "ELEPHANT",
-      "categories": [],
+      "categories": [
+        "animal"
+      ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKiYlbMTOClMb0NPQVRSxkNdmWfKQJuDcfDUgDQ-ur4BNyRVk4wRd2Ph9DerOK_2AbmfDB9dUNdTD6JQzfzWaKNT7-3cm7lZ9hvhykTQ&s=10",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=elephant&tl=en&client=tw-ob",
       "fallback": "\ud83d\udc18"
@@ -50,7 +57,9 @@
       "id": "4bbf2ca2-c531-49ff-bdab-d1b6181b6ed0",
       "letter": "f",
       "word": "FISH",
-      "categories": [],
+      "categories": [
+        "animal"
+      ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqHStMH6A2CYnNaGF9t313zq12DR0li-nIs71790kfdg&s=10",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=fish&tl=en&client=tw-ob",
       "fallback": "\ud83d\udc1f"
@@ -59,34 +68,40 @@
       "id": "6c9deb3f-f069-44a5-99fc-e26872dab495",
       "letter": "g",
       "word": "GOAT",
-      "categories": [],
-      "imageUrl": "data:image/jpeg;base64,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",
-      "fallback": "\ud83d\udc10",
-      "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/b/bc/Herd_of_goats_bleating.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAe1xRKSSjq12zRZH52pb103ab_svCmS6bTaPTJO8OgQ&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=goat&tl=en&client=tw-ob",
+      "fallback": "\ud83d\udc10"
     },
     {
       "id": "556d2a8e-29c5-40f8-8102-e56e4553610d",
       "letter": "h",
       "word": "HAT",
-      "categories": [],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoqLrSv2tfs-J__-38wqxUmpqnzChJUOE2PmOodk5pLQ&s=10",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=hat&tl=en&client=tw-ob",
-      "fallback": "\ud83c\udfa9"
+      "fallback": "\ud83c\udfa9",
+      "categories": []
     },
     {
       "id": "7956a004-703a-4446-aa1c-542d959f6f20",
       "letter": "i",
       "word": "ICE CREAM",
-      "categories": [],
+      "categories": [
+        "food"
+      ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfCBzkPnRWGieAGc9FhdQ3vrhJ9O8IlvUgnZT1pwW6vQ&s=10",
-      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=ice%20cream&tl=en&client=tw-ob",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=ice+cream&tl=en&client=tw-ob",
       "fallback": "\ud83c\udf66"
     },
     {
       "id": "361e977b-15b3-4b13-88e7-4074983d55b5",
       "letter": "j",
       "word": "JUICE",
-      "categories": [],
+      "categories": [
+        "food"
+      ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDpz_npjLEcVuhBHWbsejkBREIUh8j7Ng8yIUTyXsy6w&s=10",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=juice&tl=en&client=tw-ob",
       "fallback": "\ud83e\uddc3"
@@ -119,6 +134,7 @@
         "animal"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZETIBHztISgGwDgXiLhAnwOOOu49U52aPQgUg3LBRtg&s",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=monkey&tl=en&client=tw-ob",
       "fallback": "\ud83d\udc12"
     },
     {
@@ -127,6 +143,7 @@
       "word": "NEST",
       "categories": [],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGPWafXC7f8QoFzMvRBLxaQpIHU6CmugkcuEEE_S7z1Q&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=nest&tl=en&client=tw-ob",
       "fallback": "\ud83e\udeb9"
     },
     {
@@ -144,8 +161,11 @@
       "id": "c1bd8193-17bf-46f5-8bdd-4f5d8088bee9",
       "letter": "p",
       "word": "PIG",
-      "categories": [],
+      "categories": [
+        "animal"
+      ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8AttK-mTWvZ6-FYeVxyBl2uLA9emwIyuG0YCrH_Uy7Q&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=pig&tl=en&client=tw-ob",
       "fallback": "\ud83d\udc37"
     },
     {
@@ -154,14 +174,18 @@
       "word": "QUEEN",
       "categories": [],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_DsQ7rKcShUYtlrCJNNJf5q1tRFkAkZlTV3bcRRYbAA&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=queen&tl=en&client=tw-ob",
       "fallback": "\ud83d\udc51"
     },
     {
       "id": "8a1d55da-a2c2-422b-bf64-d9b71db865d1",
       "letter": "r",
       "word": "RABBIT",
-      "categories": [],
+      "categories": [
+        "animal"
+      ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzPkc_Q-291gQhIHD7JVUH9j1bbulEKbQa2btDOzF7_Q&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=rabbit&tl=en&client=tw-ob",
       "fallback": "\ud83d\udc30"
     },
     {
@@ -170,6 +194,7 @@
       "word": "SUN",
       "categories": [],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUl-UiuStKaLhxHqBEFGrg_VQGe3_XWR6uG85qd6q34Q&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=sun&tl=en&client=tw-ob",
       "fallback": "\u2600\ufe0f"
     },
     {
@@ -180,6 +205,7 @@
         "animal"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm0GFPyC_EgTi4DOLAEu6q3RcezljvoW0GqQDS9MGLcQ&s",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=turtle&tl=en&client=tw-ob",
       "fallback": "\ud83d\udc22"
     },
     {
@@ -188,6 +214,7 @@
       "word": "UMBRELLA",
       "categories": [],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPGBI67vxtknCVyFSFVtYukuFQramLV4qOmdKUY11ctw&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=umbrella&tl=en&client=tw-ob",
       "fallback": "\u2602\ufe0f"
     },
     {
@@ -196,6 +223,7 @@
       "word": "VIOLIN",
       "categories": [],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGjU9eV5S49fzD_U844F-yGuyUhBtibpHWCsHUJ4dxxg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=violin&tl=en&client=tw-ob",
       "fallback": "\ud83c\udfbb"
     },
     {
@@ -206,6 +234,7 @@
         "fruit"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWIezy-LqXvzVLLJgS6TivUQMtiEPRRxOvt8LlOMds2g&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=watermelon&tl=en&client=tw-ob",
       "fallback": "\ud83c\udf49"
     },
     {
@@ -214,6 +243,7 @@
       "word": "XYLOPHONE",
       "categories": [],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-kNm9EXNAHTxWXRvMueH0wESGh_ETye1c55a8fbF-OA&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=xylophone&tl=en&client=tw-ob",
       "fallback": "\ud83c\udfbc"
     },
     {
@@ -222,6 +252,7 @@
       "word": "YO-YO",
       "categories": [],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9tRV2uHm2PlkVM7LLxuoJHtvkjOUwV94MfjMQMqZyWg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=yo-yo&tl=en&client=tw-ob",
       "fallback": "\ud83e\ude80"
     },
     {
@@ -232,6 +263,7 @@
         "animal"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSH7LJUkaIT1KwD4GD_-aLpDO2aX7gHkDlC6OY6Omr_Ig&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=zebra&tl=en&client=tw-ob",
       "fallback": "\ud83e\udd93"
     },
     {
@@ -239,11 +271,11 @@
       "letter": "a",
       "word": "ALLIGATOR",
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-ntcOXIzWkWlNr1H6vIn1mt6fw8QvRkIUrLPqYapRfQ&s",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=alligator&tl=en&client=tw-ob",
       "fallback": "\ud83d\udc0a",
       "categories": [
         "animal"
-      ],
-      "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/6/60/En-us-alligator.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original"
+      ]
     },
     {
       "id": "d1046120-adfc-4a73-a7c6-b8950c79680a",
@@ -252,7 +284,7 @@
       "categories": [
         "animal"
       ],
-      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQGeJr7vbL8Nqzu0e_wcqXpYpUBzPbmOh4wanPbnj-eA&s=10\"",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQGeJr7vbL8Nqzu0e_wcqXpYpUBzPbmOh4wanPbnj-eA&s=10",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=bear&tl=en&client=tw-ob",
       "fallback": "\ud83d\udc3b"
     },
@@ -260,12 +292,12 @@
       "id": "d92cba94-9a8b-40c0-87d0-bbc68e22b184",
       "letter": "f",
       "word": "FROG",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIWI8HWva1RNSKdWSkyqaKytfqf0wcln2LKAnJl0SH0Q&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=frog&tl=en&client=tw-ob",
+      "fallback": "\ud83d\udc38",
       "categories": [
         "animal"
-      ],
-      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIWI8HWva1RNSKdWSkyqaKytfqf0wcln2LKAnJl0SH0Q&s=10",
-      "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Single_Frog_Croak.oga?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-      "fallback": "\ud83d\udc38"
+      ]
     },
     {
       "id": "86da4e8d-bac4-4c95-904a-bd9435386594",
@@ -293,40 +325,41 @@
       "id": "1dfec308-f587-4ac0-8b69-4b7de02c9d40",
       "letter": "i",
       "word": "IGUANA",
-      "categories": [
-        "animal"
-      ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJq0egJv61tQXFVgYKr0yofIRQ5OQA8o45r0eJFS2aoA&s=10",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=iguana&tl=en&client=tw-ob",
-      "fallback": "\ud83e\udd8e"
+      "fallback": "\ud83e\udd8e",
+      "categories": [
+        "animal"
+      ]
     },
     {
       "id": "cb4f6e0c-5e38-487e-accc-84830bd39513",
       "letter": "j",
       "word": "JAGUAR",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxs9W0eiklSewL3Xo30Zq2THYG_4neUjQ8OyZeAwkuWQ&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=jaguar&tl=en&client=tw-ob",
+      "fallback": "\ud83d\udc06",
       "categories": [
         "animal"
-      ],
-      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxs9W0eiklSewL3Xo30Zq2THYG_4neUjQ8OyZeAwkuWQ&s=10",
-      "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b4/Jaguar_saw.flac?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-      "fallback": "\ud83d\udc06"
+      ]
     },
     {
       "id": "c33c551a-670c-437b-8185-4b7f1d4b57d4",
       "letter": "k",
       "word": "KANGAROO",
-      "categories": [
-        "animal"
-      ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTywE0Ww3bVL5FyUKj029-3YtzsdHZ2oRVdjKPodRlSWg&s=10",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=kangaroo&tl=en&client=tw-ob",
-      "fallback": "\ud83e\udd98"
+      "fallback": "\ud83e\udd98",
+      "categories": [
+        "animal"
+      ]
     },
     {
       "id": "58e88507-a3a2-45e5-9c88-3cfbaa20de77",
       "letter": "n",
       "word": "NARWHAL",
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHm_mOHrkwCvbhFB912xAJ6geKv112PtNRzEN4cVx3DQ&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=narwhal&tl=en&client=tw-ob",
       "fallback": "\ud83d\udc0b",
       "categories": [
         "animal"
@@ -337,6 +370,7 @@
       "letter": "o",
       "word": "OWL",
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwrtm9swXhEXIG05dzXGil-ab0gJLi4Svi8ZDyJ5Nk9g&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=owl&tl=en&client=tw-ob",
       "fallback": "\ud83e\udd89",
       "categories": [
         "animal"
@@ -347,6 +381,7 @@
       "letter": "p",
       "word": "PENGUIN",
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGOeuK3u0vl4_XwVeTmxpGHRDlWX2nH3uZN_6EBCDoVw&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=penguin&tl=en&client=tw-ob",
       "fallback": "\ud83d\udc27",
       "categories": [
         "animal"
@@ -357,6 +392,7 @@
       "letter": "s",
       "word": "SNAKE",
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-E9Hlr7uSAmxTAKoqs6QsnZzIpvgRdvfbnSe7iFLvxw&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=snake&tl=en&client=tw-ob",
       "fallback": "\ud83d\udc0d",
       "categories": [
         "animal"
@@ -370,6 +406,7 @@
         "animal"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkgV_MQSLHm70sCf7p0bHA4XuqWuC_eWRg-Epmey_CiA&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=tiger&tl=en&client=tw-ob",
       "fallback": "\ud83d\udc2f"
     },
     {
@@ -377,6 +414,7 @@
       "letter": "w",
       "word": "WHALE",
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqIC2seQmdyCOD96O3VZ0bojNZPMBaRRZl5TqrgoJRZg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=whale&tl=en&client=tw-ob",
       "fallback": "\ud83d\udc33",
       "categories": [
         "animal"
@@ -387,6 +425,7 @@
       "letter": "y",
       "word": "YAK",
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8RODtLrxOu22cp6SbZ_VjfGHRVa-glk5HpQEm1iGVIQ&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=yak&tl=en&client=tw-ob",
       "fallback": "\ud83d\udc02",
       "categories": [
         "animal"
@@ -398,7 +437,7 @@
       "word": "GUITAR",
       "categories": [],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHMhxu018LzUXg-2SFw8E3xjZRcliIrtrS6ORjl2fKEA&s=10",
-      "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/b/b6/Wikipedia_guitar_solo.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=guitar&tl=en&client=tw-ob",
       "fallback": "\ud83c\udfb8"
     },
     {
@@ -409,15 +448,18 @@
         "fruit"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRY_67CDXGTMxvfmLYczGNX70WCPqtSJybuUIqFMTY_pA&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=pears&tl=en&client=tw-ob",
       "fallback": "\ud83c\udf50"
     },
     {
       "id": "153d7d08-f16d-4c9e-a5b6-0b46a314190f",
       "letter": "d",
       "word": "DINO",
-      "categories": [],
+      "categories": [
+        "animal"
+      ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNq23w5CvpeCVFt2DlPpz__x9evu5XleslxCxq1VRMNg&s=10",
-      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=dyno&tl=en&client=tw-ob",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=dino&tl=en&client=tw-ob",
       "fallback": "\ud83e\udd96"
     },
     {
@@ -426,6 +468,7 @@
       "word": "SWINGS",
       "categories": [],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQC_DOftIJ7Rjs-gqzGm39X2nV_G-FVaw7aw4T1qqcuzw&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=swings&tl=en&client=tw-ob",
       "fallback": "\u2753"
     },
     {
@@ -434,74 +477,622 @@
       "word": "SLIDES",
       "categories": [],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2fmNmBJwN5hzh0WMqJH7TRczG0Rv7c7DtcG0QfcM_Cg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=slides&tl=en&client=tw-ob",
       "fallback": "\u2753"
     },
     {
       "id": "fa9adafe-100d-4cbb-a70f-1a6a67e5c709",
       "letter": "p",
       "word": "PLANE",
-      "categories": [],
-      "imageUrl": "data:image/jpeg;base64,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",
+      "categories": [
+        "vehicle"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJHx2iBQYrVsluxUQXztAG2-MblOjPNIQhtpV2pl4c5g&s",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=plane&tl=en&client=tw-ob",
       "fallback": "\u2708\ufe0f"
     },
     {
       "id": "b5e293a0-e598-47bd-9b28-1491ca3f5de9",
       "letter": "f",
       "word": "FIRE TRUCK",
-      "categories": [],
+      "categories": [
+        "vehicle"
+      ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBEdlb2CnrgvJLBoVpmN3SeSxUyeMzuGEzRspLaekkeg&s=10",
-      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=fire%20truck&tl=en&client=tw-ob",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=fire+truck&tl=en&client=tw-ob",
       "fallback": "\u2753"
     },
     {
       "id": "62afbe12-6b65-424c-8a1a-f5a81746b13f",
       "letter": "p",
       "word": "POLICE CAR",
-      "categories": [],
+      "categories": [
+        "vehicle"
+      ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbjTwXz8G8LFSd4-C8Rp-O15dMrI7dc7V0kTdC1toTyA&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=police+car&tl=en&client=tw-ob",
       "fallback": "\u2753"
     },
     {
       "id": "7e321f8c-6dfc-4787-8071-ea8600da96ae",
       "letter": "d",
       "word": "DUMP TRUCK",
-      "categories": [],
+      "categories": [
+        "vehicle"
+      ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2zwKPayaLtXtXztLhSiEMaFjiE6GrfJfuylX1WVUBXg&s=10",
-      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=dump%20truck&tl=en&client=tw-ob",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=dump+truck&tl=en&client=tw-ob",
       "fallback": "\u2753"
     },
     {
       "id": "2cf6a527-0c73-420a-a3f2-9bf8e0170904",
       "letter": "c",
-      "word": "CONCRETE MIXER TRUCK",
-      "categories": [],
+      "word": "CONCRETE MIXER",
+      "categories": [
+        "vehicle"
+      ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeDbmOjyA7achUGal7UcKoxB_bpEhnke8fS3KsLC19XQ&s",
-      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=concrete%20mixer%20truck&tl=en&client=tw-ob",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=concrete+mixer&tl=en&client=tw-ob",
       "fallback": "\u2753"
     },
     {
       "id": "65ce5d74-0df4-4858-ac94-17feef720d4f",
       "letter": "e",
       "word": "EXCAVATOR",
-      "categories": [],
+      "categories": [
+        "vehicle"
+      ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2R0bpPwYMq4w5h2jmE7r0QjRRRKyXV9x79df2dj2fWg&s=10",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=excavator&tl=en&client=tw-ob",
       "fallback": "\u2753"
+    },
+    {
+      "id": "e72b7e1f-1189-41c4-9353-f38a00b5dbf1",
+      "letter": "l",
+      "word": "LAPTOP",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9e/MacBook_Neo_Indigo_Touch_ID.png",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=laptop&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "6203cc14-665c-405c-8997-6f4c78999fb7",
+      "letter": "m",
+      "word": "MANGO",
+      "categories": [
+        "fruit"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/74/Mangos_-_single_and_halved.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=mango&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "79b6fac9-94c0-46a4-b1d8-cbde357e3c37",
+      "letter": "c",
+      "word": "CHICKEN",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/84/Male_and_female_chicken_sitting_together.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=chicken&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "06365669-743d-478c-96fd-b871366979f6",
+      "letter": "n",
+      "word": "NOTEBOOK",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/ea/Notebooks.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=notebook&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "7d53ee45-9fd0-42f0-b9a3-8f1a3758af4b",
+      "letter": "a",
+      "word": "AMBULANCE",
+      "categories": [
+        "vehicle"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/00/MTA_Union_Tpke_and_164_St_54.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=ambulance&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "b0e54c81-0d7d-41fd-b3f2-718aca6ec372",
+      "letter": "a",
+      "word": "ANT",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Paraponera_clavata.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=ant&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "66f7a5da-ab6a-4317-b350-39644a433aa8",
+      "letter": "l",
+      "word": "LADY BUG",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/77/Coccinella-septempunctata-15-fws.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=lady+bug&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "939f08ec-1d64-459f-8e06-f06bc83fc25d",
+      "letter": "a",
+      "word": "AVOCADO",
+      "categories": [
+        "fruit"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Avocado_Hass_-_single_and_halved.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=avocado&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "51223ca0-af88-4cb6-913c-5c884f7b3166",
+      "letter": "a",
+      "word": "ASTRONAUT",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/91/Bruce_McCandless_II_during_EVA_in_1984.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=astronaut&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "46119abe-d649-4c76-b80d-71a0b8915f75",
+      "letter": "a",
+      "word": "APRON",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/ca/Preparing_the_Cake_%285285262061%29.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=apron&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "8a14dd23-8db3-4fe9-bbed-e431b3ce1667",
+      "letter": "b",
+      "word": "BAT",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/67/047_Indian_flying_fox_in_Keoladeo_National_Park_Photo_by_Giles_Laurent.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=bat&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "8e93646c-248d-4903-b5c4-e464979ecea3",
+      "letter": "b",
+      "word": "BAG",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/db/Pink_Birkin_bag.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=bag&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "6e6ed3a8-b31c-4c2c-adf5-92468243d426",
+      "letter": "b",
+      "word": "BUTTERFLY",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/73/Monarch_Butterfly_Danaus_plexippus_Male_2664px.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=butterfly&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "e65c4bab-eb02-49eb-ad4b-7df7e4f398dd",
+      "letter": "b",
+      "word": "BELL",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/37/Liberty_Bell_2017a.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=bell&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "072af49a-4133-48d6-8498-f34a5e2fb863",
+      "letter": "b",
+      "word": "BOX",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6c/Kentucky_Balikbayan_Box_Container_Loading_and_Shipping_Site.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=box&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "3068e01d-ea37-413c-8b9f-c546c4f829bb",
+      "letter": "b",
+      "word": "BLUEBERRY",
+      "categories": [
+        "fruit"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Vaccinium_myrtilloides_berries.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=blueberry&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "29fe69c6-2a2d-484b-b509-94cce1c798a4",
+      "letter": "b",
+      "word": "BANANA",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9b/Cavendish_Banana_DS.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=banana&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "1a50c042-7d84-4abe-b0d4-1daaeafb48b8",
+      "letter": "c",
+      "word": "CAR",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/1996_Porsche_911_993_GT2_-_Flickr_-_The_Car_Spy_%284%29.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=car&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "b8aa9ad4-f123-40bb-a41f-62c071fc72ca",
+      "letter": "c",
+      "word": "CAP",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/70/Casquette_marine.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=cap&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "d7bd7ec8-265a-465c-96ec-8120ac5511c4",
+      "letter": "c",
+      "word": "COW",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Cow_%28Fleckvieh_breed%29_Oeschinensee_Slaunger_2009-07-07.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=cow&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "20307b24-2814-4017-916e-eb7551c002cb",
+      "letter": "c",
+      "word": "CANDLE",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/aa/LA2_Skultuna_kontorsljusstake.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=candle&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "0d8bef90-cdef-43a7-ba6d-cf2b047f7338",
+      "letter": "c",
+      "word": "CHAIR",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Aeron_chair_Brooklyn_Museum.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=chair&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "0860a8a3-92e9-4822-86e3-7700b376ab55",
+      "letter": "c",
+      "word": "CLOUD",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3c/GoldenMedows.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=cloud&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "bac4e167-4d7a-4a10-94fa-0b70ac4f1d03",
+      "letter": "c",
+      "word": "CLOCK",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8b/2010-07-20_Black_windup_alarm_clock_face.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=clock&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "9c5f2718-0978-4670-9cf0-9c9a61c4bef0",
+      "letter": "c",
+      "word": "CANDY",
+      "categories": [
+        "food"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/10/Candy_in_Damascus.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=candy&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "92c44b30-646e-419b-8754-d6eede0d584c",
+      "letter": "c",
+      "word": "COOKIE",
+      "categories": [
+        "food"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1b/Oreo-Two-Cookies.png",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=cookie&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "83c3f5b8-0ce4-4f2d-8815-0154fe536d9a",
+      "letter": "c",
+      "word": "CAKE",
+      "categories": [
+        "food"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/04/Pound_layer_cake.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=cake&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "ee8beef9-438e-4494-9545-06ec5a4adaca",
+      "letter": "c",
+      "word": "CARROT",
+      "categories": [
+        "food"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a2/Vegetable-Carrot-Bundle-wStalks.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=carrot&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "d07c5874-d7b4-4212-a3e5-e235ebf646be",
+      "letter": "p",
+      "word": "PEN",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Surface_Pen.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=pen&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "ba9530f4-3759-4345-9376-601539dcf841",
+      "letter": "p",
+      "word": "PEPPA PIG",
+      "categories": [
+        "characters"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuNOf0a0vl34YO5JjVPjQZIHFQbiG0l-7gUEdi7RLr5A&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=peppa+pig&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "1bb0d332-dd7a-4001-b42f-f129452b2e4d",
+      "letter": "g",
+      "word": "GEORGE PIG",
+      "categories": [
+        "characters"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfoLZmoceJub7wiZVj02sKyySJRZrWqHIOAhUD6Qqj2Q&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=george+pig&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "9c542c42-e302-42b2-a77f-d084e4f806aa",
+      "letter": "d",
+      "word": "DADDY PIG",
+      "categories": [
+        "characters"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9o8QqgdfUK9Y4zQo1bdL_LDVV4Hl6Wx37nuUiwFPYEQ&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=daddy+pig&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "f3b13d01-11f1-4391-b042-82cf905aae42",
+      "letter": "m",
+      "word": "MUMMY PIG",
+      "categories": [
+        "characters"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJFBDbgXTciJrfZcpohfKPTARpHfZBXD7QldIVlis8lw&s=10",
+      "fallback": "\u2753",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=mummy+pig&tl=en&client=tw-ob"
+    },
+    {
+      "id": "ba029821-ae30-49de-8e36-13828bdb7b56",
+      "letter": "t",
+      "word": "TAYO",
+      "categories": [
+        "characters"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsgeFg7NiP3OKGGuAl0_UqE6UIJX6-JPtv56mSFayUdg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=tayo&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "014fad5b-ace5-4c5c-8861-c804f21011fa",
+      "letter": "b",
+      "word": "BUSTER BUS",
+      "categories": [
+        "characters"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3l49ncgy_Dd9RNm58RGqiUvHxSldquvbKa4SGxzfvUQ&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=buster+bus&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "745c5b25-d55e-4347-8349-936360c602fd",
+      "letter": "r",
+      "word": "MS RACHEL",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXUNvAMnsF5oPJuy9ZyDMKX1Bc3r6Byrg8-MvEvg4EEQ&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=ms+rachel&tl=en&client=tw-ob",
+      "fallback": "\u2753"
+    },
+    {
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "letter": "a",
+      "word": "ARROW",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Arrow_icon.svg/800px-Arrow_icon.svg.png",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=arrow&tl=en&client=tw-ob",
+      "fallback": "\u27a1\ufe0f"
+    },
+    {
+      "id": "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+      "letter": "d",
+      "word": "DOLL",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Matryoshka_Doll_%28cropped%29.jpg/800px-Matryoshka_Doll_%28cropped%29.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=doll&tl=en&client=tw-ob",
+      "fallback": "\ud83c\udf8e"
+    },
+    {
+      "id": "c3d4e5f6-a7b8-9012-cdef-345678901234",
+      "letter": "e",
+      "word": "EEL",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Eel_at_Churaumi_Aquarium.jpg/800px-Eel_at_Churaumi_Aquarium.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=eel&tl=en&client=tw-ob",
+      "fallback": "\ud83d\udc0d"
+    },
+    {
+      "id": "d4e5f6a7-b8c9-0123-defg-456789012345",
+      "letter": "e",
+      "word": "EGG",
+      "categories": [
+        "food"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Eggs_in_a_basket.jpg/800px-Eggs_in_a_basket.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=egg&tl=en&client=tw-ob",
+      "fallback": "\ud83e\udd5a"
+    },
+    {
+      "id": "e5f6a7b8-c9d0-1234-efgh-567890123456",
+      "letter": "f",
+      "word": "FLOWER",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Flower_poster_2.jpg/800px-Flower_poster_2.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=flower&tl=en&client=tw-ob",
+      "fallback": "\ud83c\udf38"
+    },
+    {
+      "id": "f6a7b8c9-d0e1-2345-fghi-678901234567",
+      "letter": "h",
+      "word": "HONEY",
+      "categories": [
+        "food"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Honey_comb.jpg/800px-Honey_comb.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=honey&tl=en&client=tw-ob",
+      "fallback": "\ud83c\udf6f"
+    },
+    {
+      "id": "a7b8c9d0-e1f2-3456-ghij-789012345678",
+      "letter": "j",
+      "word": "JELLYFISH",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Jellyfish_%28Chrysaora_achlyos%29.jpg/800px-Jellyfish_%28Chrysaora_achlyos%29.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=jellyfish&tl=en&client=tw-ob",
+      "fallback": "\ud83d\udc19"
+    },
+    {
+      "id": "b8c9d0e1-f2a3-4567-hijk-890123456789",
+      "letter": "k",
+      "word": "KOALA",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Koala_climbing_tree.jpg/800px-Koala_climbing_tree.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=koala&tl=en&client=tw-ob",
+      "fallback": "\ud83d\udc28"
+    },
+    {
+      "id": "c9d0e1f2-a3b4-5678-ijkl-901234567890",
+      "letter": "m",
+      "word": "MOON",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/FullMoon2010.jpg/800px-FullMoon2010.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=moon&tl=en&client=tw-ob",
+      "fallback": "\ud83c\udf19"
+    },
+    {
+      "id": "d0e1f2a3-b4c5-6789-jklm-012345678901",
+      "letter": "n",
+      "word": "NURSE",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Nurse_on_white_background.jpg/800px-Nurse_on_white_background.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=nurse&tl=en&client=tw-ob",
+      "fallback": "\ud83d\udc69\u200d\u2695\ufe0f"
+    },
+    {
+      "id": "e1f2a3b4-c5d6-7890-klmn-123456789012",
+      "letter": "o",
+      "word": "OCTOPUS",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Octopus2.jpg/800px-Octopus2.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=octopus&tl=en&client=tw-ob",
+      "fallback": "\ud83d\udc19"
+    },
+    {
+      "id": "f2a3b4c5-d6e7-8901-lmno-234567890123",
+      "letter": "q",
+      "word": "QUAIL",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Common_Quail_%28Coturnix_coturnix%29.jpg/800px-Common_Quail_%28Coturnix_coturnix%29.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=quail&tl=en&client=tw-ob",
+      "fallback": "\ud83d\udc26"
+    },
+    {
+      "id": "a3b4c5d6-e7f8-9012-mnop-345678901234",
+      "letter": "r",
+      "word": "RAINBOW",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Rainbow_after_storm.jpg/800px-Rainbow_after_storm.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=rainbow&tl=en&client=tw-ob",
+      "fallback": "\ud83c\udf08"
+    },
+    {
+      "id": "b4c5d6e7-f8a9-0123-nopq-456789012345",
+      "letter": "s",
+      "word": "STAR",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Star_%28star_burst_blue%29.png/800px-Star_%28star_burst_blue%29.png",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=star&tl=en&client=tw-ob",
+      "fallback": "\u2b50"
+    },
+    {
+      "id": "c5d6e7f8-a9b0-1234-opqr-567890123456",
+      "letter": "u",
+      "word": "UNICORN",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Unicorn_%28PSF%29.png/800px-Unicorn_%28PSF%29.png",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=unicorn&tl=en&client=tw-ob",
+      "fallback": "\ud83e\udd84"
+    },
+    {
+      "id": "d6e7f8a9-b0c1-2345-pqrs-678901234567",
+      "letter": "v",
+      "word": "VAN",
+      "categories": [
+        "vehicle"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Volkswagen_Transporter_T3_van_silver.jpg/800px-Volkswagen_Transporter_T3_van_silver.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=van&tl=en&client=tw-ob",
+      "fallback": "\ud83d\ude90"
+    },
+    {
+      "id": "e7f8a9b0-c1d2-3456-qrst-789012345678",
+      "letter": "x",
+      "word": "X-RAY",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/X-ray_of_hand.jpg/800px-X-ray_of_hand.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=x-ray&tl=en&client=tw-ob",
+      "fallback": "\ud83e\ude7b"
     }
   ],
   "categories": [
-    "mixed",
     "fruit",
-    "animal"
+    "animal",
+    "vehicle",
+    "food",
+    "characters"
   ],
   "config": {
     "title": "Alphabet Adventure",
     "instruction": "\u2328\ufe0f Press a letter!",
     "primary": "#6c63ff",
     "secondary": "#ff7eb3",
-    "letterDelay": 180,
-    "imageDelay": 250,
-    "soundEnabled": false
+    "letterDelay": 100,
+    "imageDelay": 200,
+    "soundEnabled": true
   },
-  "version": 1
+  "version": 2
 }

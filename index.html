@@ -875,6 +875,12 @@
                         <span class="material-icons" style="vertical-align: middle;">delete_forever</span> Reset Everything
 
                     </button>
+                    
+                    <button id="forceReloadButton" class="button button-secondary" style="margin-top: 10px;">
+
+                        <span class="material-icons" style="vertical-align: middle;">refresh</span> Force Reload
+
+                    </button>
 
 
                 </div>
@@ -1940,34 +1946,58 @@ window.copyUrl = function(id) {
     appState.config.keyboardListener = document.getElementById( "configKeyboardListener" ).checked;
     appState.config.maxAudioDuration = Number( document.getElementById( "configMaxAudioDuration" ).value ) || 3;
     saveState(); applyConfiguration(); showToast( "Configuration saved!" ); } ); /* ========================================================= JSON EXPORT ========================================================= */ document.getElementById( "downloadJsonButton" ) .addEventListener( "click", () => { downloadFile( JSON.stringify( appState, null, 2 ), "alphabet-adventure-backup.json", "application/json" ); showToast( "JSON backup downloaded!" ); } ); /* ========================================================= JSON IMPORT ========================================================= */ document.getElementById( "importJsonButton" ) .addEventListener( "click", () => { document.getElementById( "importJsonInput" ) .click(); } ); document.getElementById( "importJsonInput" ) .addEventListener( "change", event => { const file = event.target.files[0]; if (!file) { return; } const reader = new FileReader(); reader.onload = loadEvent => { try { const data = JSON.parse( loadEvent.target.result );
-        if ( !data.words || !data.categories || !data.config ) {
+        // Support importing either a full state object or just an array of words
+        let parsedData = data;
+        if (Array.isArray(parsedData)) {
+            parsedData = { words: parsedData, categories: [], config: appState.config };
+        }
+        if ( !parsedData.words ) {
             throw new Error( "Invalid file" );
         }
+        if ( !parsedData.categories ) parsedData.categories = [];
+        if ( !parsedData.config ) parsedData.config = appState.config;
         
-        confirmNative("Do you want to replace all existing data with the imported data?", () => {
-            // Migration and dedup
-            const migratedWords = [];
-            const seenWords = new Set();
-            data.words.forEach(w => {
+        confirmNative("Do you want to merge the imported data with your existing data?", () => {
+            // Merge Words
+            const seenWords = new Set(appState.words.map(w => w.word.toUpperCase()));
+            parsedData.words.forEach(w => {
+                if (!w || !w.word) return;
                 const wordUpper = w.word.toUpperCase();
                 if (!seenWords.has(wordUpper)) {
                     seenWords.add(wordUpper);
+                    
+                    if (!w.id) {
+                        w.id = "imported-" + Date.now() + "-" + Math.random().toString(36).substr(2, 9);
+                    }
+                    if (!w.letter) {
+                        w.letter = w.word.charAt(0).toLowerCase();
+                    } else {
+                        w.letter = w.letter.toLowerCase();
+                    }
+                    
                     if (typeof w.category === 'string') {
-                        if (w.category === 'mixed') {
-                            w.categories = [];
-                        } else {
-                            w.categories = [w.category];
-                        }
+                        w.categories = w.category === 'mixed' ? [] : [w.category];
                         delete w.category;
                     }
                     w.categories = (w.categories || []).filter(c => c !== 'mixed');
-                    migratedWords.push(w);
+                    
+                    appState.words.push(w);
                 }
             });
-            data.words = migratedWords;
 
-            appState = data; saveState(); renderAllSettings(); renderCategoryButtons(); applyConfiguration(); showToast( "Backup imported!" );
-        }); } catch (error) { console.error(error); } }; reader.readAsText( file ); } ); /* ========================================================= RESET ========================================================= */ document.getElementById( "resetAppButton" ) .addEventListener( "click", () => { const confirmed = confirm( "This will permanently reset all local changes. Continue?" ); if (!confirmed) { return; } appState = createDefaultState(); currentCategory = "all"; currentLetter = "a"; saveState(); applyConfiguration(); renderAllSettings(); renderCategoryButtons(); showToast( "Application reset." ); } ); /* ========================================================= DOWNLOAD FILE ========================================================= */ function downloadFile( content, fileName, mimeType ) { const blob = new Blob( [content], { type: mimeType } ); const url = URL.createObjectURL( blob ); const link = document.createElement( "a" ); link.href = url; link.download = fileName; document.body.appendChild( link ); link.click(); document.body.removeChild( link ); setTimeout( () => { URL.revokeObjectURL( url ); }, 1000 ); } /* ========================================================= HTML EXPORT The generated application contains: - Current data - Current configuration - Categories Because this is a self-contained application, the current page HTML can be exported directly. The exported page starts with the embedded application state. ========================================================= */ document.getElementById( "downloadAppButton" ) .addEventListener( "click", () => { const currentDocument = document.documentElement.outerHTML; /* * Embed state into the exported file. * The exported file will restore this state * into localStorage when opened. */ const stateScript = `
+            // Merge Categories
+            const seenCategories = new Set(appState.categories);
+            parsedData.categories.forEach(c => {
+                if (!seenCategories.has(c)) {
+                    seenCategories.add(c);
+                    appState.categories.push(c);
+                }
+            });
+
+            saveState(); renderAllSettings(); renderCategoryButtons(); applyConfiguration(); showToast( "Backup imported and merged!" );
+        }); } catch (error) { console.error(error); showToast("Invalid JSON file"); }
+        event.target.value = "";
+    }; reader.readAsText( file ); } ); /* ========================================================= RESET ========================================================= */ document.getElementById( "resetAppButton" ) .addEventListener( "click", () => { const confirmed = confirm( "This will permanently reset all local changes. Continue?" ); if (!confirmed) { return; } appState = createDefaultState(); currentCategory = "all"; currentLetter = "a"; saveState(); applyConfiguration(); renderAllSettings(); renderCategoryButtons(); showToast( "Application reset." ); } ); /* ========================================================= FORCE RELOAD ========================================================= */ document.getElementById("forceReloadButton").addEventListener("click", () => { window.location.reload(); }); /* ========================================================= DOWNLOAD FILE ========================================================= */ function downloadFile( content, fileName, mimeType ) { const blob = new Blob( [content], { type: mimeType } ); const url = URL.createObjectURL( blob ); const link = document.createElement( "a" ); link.href = url; link.download = fileName; document.body.appendChild( link ); link.click(); document.body.removeChild( link ); setTimeout( () => { URL.revokeObjectURL( url ); }, 1000 ); } /* ========================================================= HTML EXPORT The generated application contains: - Current data - Current configuration - Categories Because this is a self-contained application, the current page HTML can be exported directly. The exported page starts with the embedded application state. ========================================================= */ document.getElementById( "downloadAppButton" ) .addEventListener( "click", () => { const currentDocument = document.documentElement.outerHTML; /* * Embed state into the exported file. * The exported file will restore this state * into localStorage when opened. */ const stateScript = `
 <script>
 localStorage.setItem(
     ${JSON.stringify(STORAGE_KEY)},
