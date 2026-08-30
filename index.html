@@ -1320,81 +1320,10 @@ function playLetter(letter) {
     }
 } /* ========================================================= SHOW MISSING LETTER ========================================================= */ function showMissingLetter(letter) { wordContainer.innerHTML = ""; imageArea.innerHTML = ""; const message = document.createElement( "div" ); message.className = "fallback"; message.innerHTML = ` <div class="fallback-icon"> ❓ </div> <div class="fallback-text"> No word for ${letter.toUpperCase()} in this category yet. </div> `; imageArea.appendChild( message ); } /* ========================================================= IMAGE DISPLAY ========================================================= */ function showWordImage(data) { imageArea.innerHTML = ""; const wrapper = document.createElement( "div" ); wrapper.className = "image-wrapper"; /* * No image URL means * immediate fallback. */ if ( !data.imageUrl ) { showFallback( wrapper, data ); imageArea.appendChild( wrapper ); playSound(data); return; } const image = document.createElement( "img" ); image.className = "word-image"; image.src = data.imageUrl; image.alt = data.word; image.addEventListener( "error", () => { showFallback( wrapper, data ); }, { once: true } ); wrapper.appendChild( image ); imageArea.appendChild( wrapper ); playSound(data); } /* ========================================================= FALLBACK ========================================================= */ function showFallback( wrapper, data ) { wrapper.innerHTML = ""; const fallback = document.createElement( "div" ); fallback.className = "fallback"; const icon = document.createElement( "div" ); icon.className = "fallback-icon"; icon.textContent = data.fallback || "❓"; const text = document.createElement( "div" ); text.className = "fallback-text"; text.textContent = data.word; fallback.appendChild( icon ); fallback.appendChild( text ); wrapper.appendChild( fallback ); } /* ========================================================= SOUND ========================================================= */ 
 const audioCache = {};
-let currentAudioTimeout = null;
-let globalAudio = new Audio();
-let audioUnlocked = false;
-
-function unlockAudio() {
-    if (audioUnlocked) return;
-    audioUnlocked = true;
-    if (!audioContext) {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    if (audioContext.state === 'suspended') {
-        audioContext.resume();
-    }
-    
-    // We create a separate temporary audio element just for unlocking to avoid interrupting globalAudio
-document.addEventListener("keydown", unlockAudio, { capture: true });
-
-function stopCurrentAudio() {
-    if (currentAudioTimeout) {
-        clearTimeout(currentAudioTimeout);
-        currentAudioTimeout = null;
-    }
-    try {
-        if (!globalAudio.paused) {
-            globalAudio.pause();
-        }
-        return;
-    }
-    
-    let url = data.audioUrl;
-    
-    try {
-        if (!url) {
-            const cacheKey = "dynamic_url_" + data.word;
-            if (audioCache[cacheKey]) {
-                url = audioCache[cacheKey];
-            } else {
-                url = await getAnimalAudioUrl(data.word.toLowerCase());
-                audioCache[cacheKey] = url;
-            }
-            if (data.id) {
-                data.audioUrl = url;
-                saveState();
-                if (typeof renderWordTable === "function") {
-                    renderWordTable();
-                }
-            }
-        }
-        
-        stopCurrentAudio();
-        
-        globalAudio.src = url;
-        globalAudio.load(); 
-        globalAudio.currentTime = 0;
-        const playPromise = globalAudio.play();
-        if (playPromise !== undefined) {
-            playPromise.then(() => {
-                currentAudioTimeout = setTimeout(() => {
-                }, maxDur);
-            }).catch(e => {
-                const errStr = String(e);
-                if ((e && e.name === 'AbortError') || errStr.includes('AbortError')) {
-                    // Ignore expected aborts
-                    return;
-                }
-                console.log("Audio playback failed:", e);
-                playSyntheticSound();
-        const errStr = String(e);
-        gain.gain.exponentialRampToValueAtTime( 0.001, audioContext.currentTime + 0.25 ); 
-        oscillator.start(); oscillator.stop( audioContext.currentTime + 0.25 ); 
-    } catch (error) { 
-        console.log( "Audio unavailable" ); 
-    } 
-}
-
+function unlockAudio() { /* disabled */ }
+function stopCurrentAudio() { /* disabled */ }
+async function playSound(data) { /* disabled */ }
+function playSyntheticSound() { /* disabled */ }
 /* ========================================================= KEYBOARD ========================================================= */ 
 let keyboardLocked = false; 
 function handleKeyPress(key) { 
