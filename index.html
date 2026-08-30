@@ -1,87 +1,9 @@
-const audioCache = {};
-let currentAudioTimeout = null;
-let globalAudio = new Audio();
-let audioUnlocked = false;
-
-function unlockAudio() {
-    if (audioUnlocked) return;
-    audioUnlocked = true;
-    if (!audioContext) {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    }
-    if (audioContext.state === 'suspended') {
-        audioContext.resume();
-    }
-    globalAudio.src = "data:audio/wav;base64,UklGRigAAABXQVZFZm10IBIAAAABAAEARKwAAIhYAQACABAAAABkYXRhAgAAAAEA";
-    globalAudio.play().then(() => globalAudio.pause()).catch(e => {});
-}
-
-document.addEventListener("click", unlockAudio, { capture: true, once: true });
-document.addEventListener("keydown", unlockAudio, { capture: true, once: true });
-
-function stopCurrentAudio() {
-    if (currentAudioTimeout) {
-        clearTimeout(currentAudioTimeout);
-        currentAudioTimeout = null;
-    }
-    globalAudio.pause();
-    globalAudio.currentTime = 0;
-}
-
-async function playSound(data) {
-    if (appState.config.customAudioEnabled === false || !data) {
-        playSyntheticSound();
-        return;
-    }
-    
-    let url = data.audioUrl;
-    
-    try {
-        if (!url) {
-            const cacheKey = "dynamic_url_" + data.word;
-            if (audioCache[cacheKey]) {
-                url = audioCache[cacheKey];
-            } else {
-                url = await getAnimalAudioUrl(data.word.toLowerCase());
-                audioCache[cacheKey] = url;
-            }
-            if (data.id) {
-                data.audioUrl = url;
-                saveState();
-                if (typeof renderWordTable === "function") {
-                    renderWordTable();
-                }
-            }
-        }
-        
-        stopCurrentAudio();
-        
-        globalAudio.src = url;
-        globalAudio.currentTime = 0;
-        globalAudio.play().then(() => {
-            const maxDur = (appState.config.maxAudioDuration !== undefined ? appState.config.maxAudioDuration : 3) * 1000;
-            currentAudioTimeout = setTimeout(() => {
-                stopCurrentAudio();
-            }, maxDur);
-        }).catch(e => {
-            console.log("Audio playback failed:", e);
-            playSyntheticSound();
-        });
-    } catch(e) {
-        console.log("Audio error:", e);
-        playSyntheticSound();
-    }
-}<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en" style="--primary: #6c63ff; --secondary: #ff7eb3;"><head>
 
 <meta charset="UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Alphabet Adventure</title></head><body>
-<div id="initialLoadingScreen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:var(--background, #f5f7fa);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:opacity 0.5s ease;">
-  <div style="width: 50px; height: 50px; border: 5px solid var(--surface, #ffffff); border-top: 5px solid var(--primary, #6c63ff); border-radius: 50%; animation: spin 1s linear infinite;"></div>
-  <h2 style="margin-top: 20px; color: var(--text, #333333); font-family: sans-serif;">Loading Adventure...</h2>
-  <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
-</div>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -1398,24 +1320,32 @@ function playLetter(letter) {
     }
 } /* ========================================================= SHOW MISSING LETTER ========================================================= */ function showMissingLetter(letter) { wordContainer.innerHTML = ""; imageArea.innerHTML = ""; const message = document.createElement( "div" ); message.className = "fallback"; message.innerHTML = ` <div class="fallback-icon"> ❓ </div> <div class="fallback-text"> No word for ${letter.toUpperCase()} in this category yet. </div> `; imageArea.appendChild( message ); } /* ========================================================= IMAGE DISPLAY ========================================================= */ function showWordImage(data) { imageArea.innerHTML = ""; const wrapper = document.createElement( "div" ); wrapper.className = "image-wrapper"; /* * No image URL means * immediate fallback. */ if ( !data.imageUrl ) { showFallback( wrapper, data ); imageArea.appendChild( wrapper ); playSound(data); return; } const image = document.createElement( "img" ); image.className = "word-image"; image.src = data.imageUrl; image.alt = data.word; image.addEventListener( "error", () => { showFallback( wrapper, data ); }, { once: true } ); wrapper.appendChild( image ); imageArea.appendChild( wrapper ); playSound(data); } /* ========================================================= FALLBACK ========================================================= */ function showFallback( wrapper, data ) { wrapper.innerHTML = ""; const fallback = document.createElement( "div" ); fallback.className = "fallback"; const icon = document.createElement( "div" ); icon.className = "fallback-icon"; icon.textContent = data.fallback || "❓"; const text = document.createElement( "div" ); text.className = "fallback-text"; text.textContent = data.word; fallback.appendChild( icon ); fallback.appendChild( text ); wrapper.appendChild( fallback ); } /* ========================================================= SOUND ========================================================= */ 
 const audioCache = {};
-let currentlyPlayingAudio = null;
 let currentAudioTimeout = null;
+let globalAudio = new Audio();
+let audioUnlocked = false;
+
+function unlockAudio() {
+    if (audioUnlocked) return;
+    audioUnlocked = true;
+    if (!audioContext) {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    }
+    if (audioContext.state === 'suspended') {
+        audioContext.resume();
+    }
+    
+    // We create a separate temporary audio element just for unlocking to avoid interrupting globalAudio
+document.addEventListener("keydown", unlockAudio, { capture: true });
 
 function stopCurrentAudio() {
     if (currentAudioTimeout) {
         clearTimeout(currentAudioTimeout);
         currentAudioTimeout = null;
     }
-    if (currentlyPlayingAudio) {
-        currentlyPlayingAudio.pause();
-        currentlyPlayingAudio.currentTime = 0;
-        currentlyPlayingAudio = null;
-    }
-}
-
-async function playSound(data) {
-    if (appState.config.customAudioEnabled === false || !data) {
-        playSyntheticSound();
+    try {
+        if (!globalAudio.paused) {
+            globalAudio.pause();
+        }
         return;
     }
     
@@ -1439,43 +1369,25 @@ async function playSound(data) {
             }
         }
         
-        if (!audioCache[url]) {
-            audioCache[url] = new Audio(url);
-        }
-        
         stopCurrentAudio();
         
-        currentlyPlayingAudio = audioCache[url];
-        currentlyPlayingAudio.currentTime = 0;
-        currentlyPlayingAudio.play().then(() => {
-            const maxDur = (appState.config.maxAudioDuration !== undefined ? appState.config.maxAudioDuration : 3) * 1000;
-            currentAudioTimeout = setTimeout(() => {
-                if (currentlyPlayingAudio === audioCache[url]) {
-                    stopCurrentAudio();
+        globalAudio.src = url;
+        globalAudio.load(); 
+        globalAudio.currentTime = 0;
+        const playPromise = globalAudio.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                currentAudioTimeout = setTimeout(() => {
+                }, maxDur);
+            }).catch(e => {
+                const errStr = String(e);
+                if ((e && e.name === 'AbortError') || errStr.includes('AbortError')) {
+                    // Ignore expected aborts
+                    return;
                 }
-            }, maxDur);
-        }).catch(e => {
-            console.log("Audio playback failed:", e);
-            playSyntheticSound();
-        });
-    } catch(e) {
-        console.log("Audio error:", e);
-        playSyntheticSound();
-    }
-}
-
-function playSyntheticSound() {
-    stopCurrentAudio();
-    if ( !appState.config.soundEnabled ) { return; } 
-    try { 
-        if ( !audioContext ) { audioContext = new ( window.AudioContext || window.webkitAudioContext )(); } 
-        const oscillator = audioContext.createOscillator(); 
-        const gain = audioContext.createGain(); 
-        oscillator.connect( gain ); 
-        gain.connect( audioContext.destination ); 
-        oscillator.frequency.value = 700; 
-        oscillator.type = "sine"; 
-        gain.gain.setValueAtTime( 0.12, audioContext.currentTime ); 
+                console.log("Audio playback failed:", e);
+                playSyntheticSound();
+        const errStr = String(e);
         gain.gain.exponentialRampToValueAtTime( 0.001, audioContext.currentTime + 0.25 ); 
         oscillator.start(); oscillator.stop( audioContext.currentTime + 0.25 ); 
     } catch (error) { 
@@ -2297,23 +2209,10 @@ if ('serviceWorker' in navigator) {
 async function startApp() {
     appState = await loadState();
     
-    // Fetch seed data with retries in case deployment is still pending
-    let res = null;
-    let retries = 3;
-    while (retries > 0) {
-        try {
-            res = await fetch('alphabet-adventure-backup.json');
-            if (res.ok) break;
-        } catch (e) { }
-        retries--;
-        if (retries > 0) {
-            console.log("Retrying fetch of seed data...");
-            await new Promise(r => setTimeout(r, 2000));
-        }
-    }
-
-    if (res && res.ok) {
-        try {
+    // Fetch seed data
+    try {
+        const res = await fetch('seed-data.json');
+        if (res.ok) {
             const seedData = await res.json();
             const currentVersion = appState.config.seedVersion || 0;
             const newVersion = seedData.version || 1;
@@ -2358,21 +2257,12 @@ async function startApp() {
                     saveState();
                 });
             }
-        } catch (e) {
-            console.warn("Could not parse seed data", e);
         }
-    } else {
-        console.warn("Could not fetch seed data after retries");
+    } catch (e) {
+        console.warn("Could not fetch seed data", e);
     }
 
     initialize();
-    
-    // Remove loading screen
-    const loader = document.getElementById('initialLoadingScreen');
-    if (loader) {
-        loader.style.opacity = '0';
-        setTimeout(() => loader.remove(), 500);
-    }
 }
 startApp();
 </script>

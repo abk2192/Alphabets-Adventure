@@ -1,9 +1,8 @@
-const CACHE_NAME = 'alphabet-adventure-v2';
+const CACHE_NAME = 'alphabet-adventure-v1';
 const ASSETS_TO_CACHE = [
   './index.html',
   './manifest.json',
-  './icon.svg',
-  './alphabet-adventure-backup.json'
+  './icon.svg'
 ];
 
 self.addEventListener('install', event => {
