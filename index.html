@@ -77,6 +77,11 @@ async function playSound(data) {
 <meta charset="UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Alphabet Adventure</title></head><body>
+<div id="initialLoadingScreen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:var(--background, #f5f7fa);z-index:9999;display:flex;align-items:center;justify-content:center;flex-direction:column;transition:opacity 0.5s ease;">
+  <div style="width: 50px; height: 50px; border: 5px solid var(--surface, #ffffff); border-top: 5px solid var(--primary, #6c63ff); border-radius: 50%; animation: spin 1s linear infinite;"></div>
+  <h2 style="margin-top: 20px; color: var(--text, #333333); font-family: sans-serif;">Loading Adventure...</h2>
+  <style>@keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }</style>
+</div>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -2292,10 +2297,23 @@ if ('serviceWorker' in navigator) {
 async function startApp() {
     appState = await loadState();
     
-    // Fetch seed data
-    try {
-        const res = await fetch('alphabet-adventure-backup.json');
-        if (res.ok) {
+    // Fetch seed data with retries in case deployment is still pending
+    let res = null;
+    let retries = 3;
+    while (retries > 0) {
+        try {
+            res = await fetch('alphabet-adventure-backup.json');
+            if (res.ok) break;
+        } catch (e) { }
+        retries--;
+        if (retries > 0) {
+            console.log("Retrying fetch of seed data...");
+            await new Promise(r => setTimeout(r, 2000));
+        }
+    }
+
+    if (res && res.ok) {
+        try {
             const seedData = await res.json();
             const currentVersion = appState.config.seedVersion || 0;
             const newVersion = seedData.version || 1;
@@ -2340,12 +2358,21 @@ async function startApp() {
                     saveState();
                 });
             }
+        } catch (e) {
+            console.warn("Could not parse seed data", e);
         }
-    } catch (e) {
-        console.warn("Could not fetch seed data", e);
+    } else {
+        console.warn("Could not fetch seed data after retries");
     }
 
     initialize();
+    
+    // Remove loading screen
+    const loader = document.getElementById('initialLoadingScreen');
+    if (loader) {
+        loader.style.opacity = '0';
+        setTimeout(() => loader.remove(), 500);
+    }
 }
 startApp();
 </script>
