@@ -917,16 +917,11 @@ function spawnDraggableCard(wordObj, spawnX, spawnY) {
                     el.style.transform = `scale(${el.dataset.preDockScale || 1})`;
                 });
             } else if (card.dataset.groupId) {
-                if (card.dataset.tapState === "top") {
-                    card.removeAttribute("data-group-id");
-                    card.classList.remove("grouped-card");
-                    card.dataset.tapState = "bottom";
-                    card.style.zIndex = 1;
-                } else {
-                    canvasZIndexCounter++;
-                    card.style.zIndex = canvasZIndexCounter;
-                    card.dataset.tapState = "top";
-                }
+                canvasZIndexCounter++;
+                const groupId = card.dataset.groupId;
+                document.querySelectorAll(`[data-group-id="${groupId}"]`).forEach(el => {
+                    el.style.zIndex = canvasZIndexCounter;
+                });
             } else {
                 canvasZIndexCounter++;
                 card.style.zIndex = canvasZIndexCounter;

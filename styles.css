@@ -357,3 +357,7 @@
 .card-drag-handle:active {
     cursor: grabbing;
 }
+@media (max-width: 700px) {
+    .modal-overlay { padding: 10px; }
+    .modal { padding: 15px; border-radius: 16px; }
+}
