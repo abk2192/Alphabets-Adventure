@@ -26,9 +26,9 @@
     opacity: 0; 
     animation: letterAppear 0.5s cubic-bezier( 0.2, 1.4, 0.5, 1 ) forwards; 
 } .animated-letter.first-letter {
-    background: var(--secondary);
+    background: var(--primary);
     color: white;
-    box-shadow: 0 6px 0 #e85994, 0 10px 20px rgba(0,0,0,0.08);
+    box-shadow: 0 6px 0 rgba(0,0,0,0.2), 0 10px 20px rgba(0,0,0,0.08);
     font-size: clamp( 3rem, 9vw, 6.5rem );
     min-width: clamp(50px, 10vw, 80px);
     min-height: clamp(70px, 14vw, 100px);
