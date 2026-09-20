@@ -118,7 +118,7 @@ function showSingleImageFromMulti(data) {
             if (/^[a-zA-Z]$/.test(character)) {
                 element.style.cursor = "pointer";
                 element.addEventListener("click", () => {
-                    handleKeyPress(character.toLowerCase());
+                    handleKeyPress(character.toLowerCase(), true);
                 });
             }
             wordGroup.appendChild( element );
@@ -513,7 +513,8 @@ document.getElementById("storyCanvas").addEventListener("wheel", (e) => {
     const zoomAmount = e.deltaY > 0 ? 0.9 : 1.1;
     let newScale = canvasScale * zoomAmount;
     
-    // Max Zoom out limit bounded by cards
+    // Max Zoom out limit bounded by cards (Disabled)
+    /*
     let maxX = 0, maxY = 0;
     document.querySelectorAll(".story-card-item").forEach(c => {
         const w = c.clientWidth * parseFloat(c.dataset.scale || 1);
@@ -524,7 +525,9 @@ document.getElementById("storyCanvas").addEventListener("wheel", (e) => {
     
     const canvasEl = document.getElementById("storyCanvas");
     const minScale = Math.min(1, canvasEl.clientWidth / (maxX + 100), canvasEl.clientHeight / (maxY + 100));
-    newScale = Math.max(minScale, Math.min(newScale, 3)); 
+    */
+    const canvasEl = document.getElementById("storyCanvas");
+    newScale = Math.max(0.1, Math.min(newScale, 3)); 
 
     const rect = canvasEl.getBoundingClientRect();
     const mouseX = e.clientX - rect.left;
@@ -800,7 +803,8 @@ function spawnDraggableCard(wordObj, spawnX, spawnY) {
                 m.el.style.top = Math.max(0, m.startTop + dy) + "px";
             });
 
-            // Edge glow docking check
+            // Edge glow docking check disabled for now
+            /*
             if (!card.dataset.isDocked || card.dataset.isDocked === "false") {
                 const canvasRect = canvas.getBoundingClientRect();
                 const edgeThresh = 40;
@@ -823,6 +827,7 @@ function spawnDraggableCard(wordObj, spawnX, spawnY) {
                     dockTimer = null;
                 }
             }
+            */
         }
     });
     
@@ -961,6 +966,7 @@ canvasEl.addEventListener('touchmove', e => {
         const zoomFactor = dist / initialPinchDist;
         let newScale = initialPinchScale * zoomFactor;
         
+        /*
         let maxX = 0, maxY = 0;
         document.querySelectorAll(".story-card-item").forEach(c => {
             const w = c.clientWidth * parseFloat(c.dataset.scale || 1);
@@ -970,7 +976,8 @@ canvasEl.addEventListener('touchmove', e => {
         });
         
         const minScale = Math.min(1, canvasEl.clientWidth / (maxX + 100), canvasEl.clientHeight / (maxY + 100));
-        newScale = Math.max(minScale, Math.min(newScale, 3)); 
+        */
+        newScale = Math.max(0.1, Math.min(newScale, 3));
 
         const rect = canvasEl.getBoundingClientRect();
         const mouseX = ((e.touches[0].clientX + e.touches[1].clientX) / 2) - rect.left;
@@ -1524,7 +1531,7 @@ function renderVirtualKeyboard() {
         btn.className = "key-button";
         btn.textContent = letter;
         btn.addEventListener("click", () => {
-            handleKeyPress(letter.toLowerCase());
+            handleKeyPress(letter.toLowerCase(), true);
         });
         virtualKeyboard.appendChild(btn);
     });

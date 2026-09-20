@@ -61,7 +61,15 @@ window.appDB = {
 
     seedFromJSON: async function() {
         try {
-            const response = await fetch('./alphabet-adventure-backup4.json');
+            // Make path robust for GitHub Pages when trailing slash might be missing
+            let baseUrl = window.location.href;
+            if (baseUrl.endsWith('.html')) {
+                baseUrl = baseUrl.substring(0, baseUrl.lastIndexOf('/') + 1);
+            } else if (!baseUrl.endsWith('/')) {
+                baseUrl += '/';
+            }
+            const jsonUrl = new URL('alphabet-adventure-backup4.json', baseUrl).href;
+            const response = await fetch(jsonUrl);
             if (!response.ok) throw new Error("Could not fetch seed JSON");
             const data = await response.json();
             

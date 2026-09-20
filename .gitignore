@@ -1,7 +1,7 @@
-# Generated backups and custom apps
 alphabet-adventure-custom.html
 alphabet-adventure-backup*.json
 !alphabet-adventure-backup.json
+!alphabet-adventure-backup4.json
 
 # Temporary scripts
 *.py
