@@ -721,6 +721,7 @@ function performDock(edge, movingCards) {
         el.style.left = cx + "px";
         el.style.top = cy + "px";
         el.dataset.isDocked = "true";
+        canvasZIndexCounter++;
         el.style.zIndex = canvasZIndexCounter; 
     });
 }
@@ -856,8 +857,11 @@ function spawnDraggableCard(wordObj, spawnX, spawnY) {
                 clearTimeout(card.longPressTimer);
                 card.longPressTimer = null;
             }
-            canvasZIndexCounter++;
-            movingCards.forEach(m => m.el.style.zIndex = canvasZIndexCounter);
+            movingCards.sort((a,b) => parseInt(a.el.style.zIndex || 0) - parseInt(b.el.style.zIndex || 0));
+            movingCards.forEach(m => {
+                canvasZIndexCounter++;
+                m.el.style.zIndex = canvasZIndexCounter;
+            });
         }
         
         if (isDragging) {
@@ -921,12 +925,6 @@ function spawnDraggableCard(wordObj, spawnX, spawnY) {
                     el.style.left = (cx + parseFloat(el.dataset.preDockLeft || 0)) + "px";
                     el.style.top = (cy + parseFloat(el.dataset.preDockTop || 0)) + "px";
                     el.style.transform = `scale(${el.dataset.preDockScale || 1})`;
-                });
-            } else if (card.dataset.groupId) {
-                canvasZIndexCounter++;
-                const groupId = card.dataset.groupId;
-                document.querySelectorAll(`[data-group-id="${groupId}"]`).forEach(el => {
-                    el.style.zIndex = canvasZIndexCounter;
                 });
             } else {
                 canvasZIndexCounter++;
