@@ -32,7 +32,7 @@
         allBtn.classList.add("active");
     }
     allBtn.textContent = "All Categories";
-    allBtn.addEventListener("click", () => {
+    allBtn.addEventListener("pointerdown", () => {
         currentCategory = "all";
         renderCategoryButtons();
         playLetter(currentLetter);
@@ -81,7 +81,7 @@ function showMultiModeGrid(allData, letter) {
             <div style="font-weight:bold; font-family:'Fredoka', sans-serif; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(data.word)}</div>
         `;
         
-        card.addEventListener("click", () => {
+        card.addEventListener("pointerdown", () => {
             showSingleImageFromMulti(data);
         });
         
@@ -195,7 +195,8 @@ function renderStorySelectionGrid() {
         card.style.cursor = "pointer";
         card.style.textAlign = "center";
         card.innerHTML = `<h3>${story.title}</h3><p style="margin: 0; color: var(--muted);">${story.wordIds.length} words</p>`;
-        card.addEventListener("click", () => {
+        card.addEventListener("pointerdown", (e) => {
+            e.preventDefault();
             playStory(story.id);
         });
         grid.appendChild(card);
@@ -203,13 +204,14 @@ function renderStorySelectionGrid() {
 }
 
 /* ========================================================= SETTINGS EVENTS ========================================================= */ 
-if (document.getElementById("settingsButton")) document.getElementById("settingsButton").addEventListener("click", showSettingsView); 
+if (document.getElementById("settingsButton")) document.getElementById("settingsButton").addEventListener("pointerdown", (e) => { e.preventDefault(); showSettingsView(); }); 
 
-document.getElementById("backHomeBtn").addEventListener("click", showHomeView);
+document.getElementById("backHomeBtn").addEventListener("pointerdown", (e) => { e.preventDefault(); showHomeView(); });
 
-document.getElementById("homeLetterFunBtn").addEventListener("click", () => showGameView('single'));
-document.getElementById("homeWordsFunBtn").addEventListener("click", () => showGameView('multi'));
-document.getElementById("homeStoryModeBtn").addEventListener("click", () => {
+document.getElementById("homeLetterFunBtn").addEventListener("pointerdown", (e) => { e.preventDefault(); showGameView('single'); });
+document.getElementById("homeWordsFunBtn").addEventListener("pointerdown", (e) => { e.preventDefault(); showGameView('multi'); });
+document.getElementById("homeStoryModeBtn").addEventListener("pointerdown", (e) => {
+    e.preventDefault();
     if (!appState.stories || appState.stories.length === 0) {
         showToast("Please create a story in Settings first!");
         showSettingsView();
@@ -218,7 +220,7 @@ document.getElementById("homeStoryModeBtn").addEventListener("click", () => {
     }
     showStorySelectionView();
 });
-document.getElementById("homeSettingsBtn").addEventListener("click", showSettingsView); 
+document.getElementById("homeSettingsBtn").addEventListener("pointerdown", (e) => { e.preventDefault(); showSettingsView(); }); 
 /* ========================================================= SETTINGS TABS ========================================================= */ 
 document.querySelectorAll( ".settings-tab" ) .forEach( tab => { tab.addEventListener( "click", () => { const tabName = tab.dataset.tab; document.querySelectorAll( ".settings-tab" ) .forEach( item => item.classList.remove( "active" ) ); tab.classList.add( "active" ); document.querySelectorAll( ".settings-panel" ) .forEach( panel => panel.classList.remove( "active" ) ); document.getElementById( tabName + "Panel" ) .classList.add( "active" ); } ); } ); 
 /* ========================================================= SETTINGS RENDER ========================================================= */ 
@@ -475,7 +477,7 @@ function renderStoryBuilderWordPickers() {
         `;
         item.addEventListener("mouseover", () => item.style.borderColor = "var(--primary)");
         item.addEventListener("mouseout", () => item.style.borderColor = "#e1e5ee");
-        item.addEventListener("click", () => {
+        item.addEventListener("pointerdown", () => {
             selectedStoryWordIds.push(w.id);
             renderStorySelectedPreview();
         });
@@ -488,7 +490,7 @@ function renderStoryBuilderWordPickers() {
     addBtn.innerHTML = `<span class="material-icons" style="font-size: 2.5rem; color: var(--primary);">add_circle</span><div style="font-size: 0.85rem; font-weight: 800; color: var(--primary); margin-top: 5px;">Create Word</div>`;
     addBtn.addEventListener("mouseover", () => addBtn.style.borderColor = "var(--primary)");
     addBtn.addEventListener("mouseout", () => addBtn.style.borderColor = "#a0aabf");
-    addBtn.addEventListener("click", openWordModal);
+    addBtn.addEventListener("pointerdown", openWordModal);
     listContainer.appendChild(addBtn);
 }
 
@@ -498,9 +500,9 @@ window.removeWordFromStorySelection = function(index) {
 };
 
 document.getElementById("storyWordSearch").addEventListener("input", renderStoryBuilderWordPickers);
-document.getElementById("addStoryButton").addEventListener("click", () => openStoryModal(null));
-document.getElementById("closeStoryModal").addEventListener("click", closeStoryModal);
-document.getElementById("cancelStoryBtn").addEventListener("click", closeStoryModal);
+document.getElementById("addStoryButton").addEventListener("pointerdown", () => openStoryModal(null));
+document.getElementById("closeStoryModal").addEventListener("pointerdown", closeStoryModal);
+document.getElementById("cancelStoryBtn").addEventListener("pointerdown", closeStoryModal);
 
 document.getElementById("storyForm").addEventListener("submit", (e) => {
     e.preventDefault();
@@ -641,7 +643,7 @@ window.playNextStoryWord = function(spawnX, spawnY) {
     }
 };
 
-document.getElementById("storyResetCanvasBtn").addEventListener("click", () => {
+document.getElementById("storyResetCanvasBtn").addEventListener("pointerdown", () => {
     const canvasInner = document.getElementById("storyCanvasInner");
     const selBox = document.getElementById("selectionBox");
     canvasInner.innerHTML = "";
@@ -655,7 +657,7 @@ document.getElementById("storyResetCanvasBtn").addEventListener("click", () => {
     updateStoryPlayerUI();
 });
 
-document.getElementById("closeStoryPlayer").addEventListener("click", () => {
+document.getElementById("closeStoryPlayer").addEventListener("pointerdown", () => {
     document.getElementById("storyPlayerModal").classList.remove("active");
     activePlayingStory = null;
     stopCurrentAudio();
@@ -1056,13 +1058,13 @@ function confirmNative(message, callback) {
     document.getElementById("confirmModal").classList.add("active");
     confirmCallback = callback;
 }
-document.getElementById("closeConfirmModal").addEventListener("click", () => {
+document.getElementById("closeConfirmModal").addEventListener("pointerdown", () => {
     document.getElementById("confirmModal").classList.remove("active");
 });
-document.getElementById("confirmModalCancel").addEventListener("click", () => {
+document.getElementById("confirmModalCancel").addEventListener("pointerdown", () => {
     document.getElementById("confirmModal").classList.remove("active");
 });
-document.getElementById("confirmModalConfirm").addEventListener("click", () => {
+document.getElementById("confirmModalConfirm").addEventListener("pointerdown", () => {
     document.getElementById("confirmModal").classList.remove("active");
     if(confirmCallback) confirmCallback();
 });
@@ -1200,7 +1202,7 @@ function renderImageResults(imgs, append = false) {
         img.addEventListener("mouseover", () => img.style.border = "2px solid var(--primary)");
         img.addEventListener("mouseout", () => img.style.border = "2px solid transparent");
         
-        img.addEventListener("click", () => {
+        img.addEventListener("pointerdown", () => {
             let finalUrl = imgUrl;
             if (finalUrl.includes('/thumb/')) {
                 let parts = finalUrl.split('/');
@@ -1223,7 +1225,7 @@ function renderImageResults(imgs, append = false) {
         loadMore.style.gridColumn = "1 / -1";
         loadMore.style.marginTop = "10px";
         loadMore.textContent = "Load More Images...";
-        loadMore.addEventListener("click", async () => {
+        loadMore.addEventListener("pointerdown", async () => {
             currentSearchOffset += 24;
             loadMore.textContent = "Loading...";
             loadMore.disabled = true;
@@ -1265,7 +1267,7 @@ async function fetchImages(query, offset, append = false) {
     }
 }
 
-searchImagesBtn.addEventListener("click", async () => {
+searchImagesBtn.addEventListener("pointerdown", async () => {
     const query = document.getElementById("wordName").value.trim();
     if (!query) {
         showToast("Please enter a word first!");
@@ -1314,7 +1316,7 @@ async function getAnimalAudioUrl(animalName) {
   return `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en&q=${encodeURIComponent(animalName)}`;
 }
 
-document.getElementById("btnGoogleTTS").addEventListener("click", () => {
+document.getElementById("btnGoogleTTS").addEventListener("pointerdown", () => {
     const query = document.getElementById("wordName").value.trim().toLowerCase();
     if (!query) {
         showToast("Please enter a word first!");
@@ -1325,7 +1327,7 @@ document.getElementById("btnGoogleTTS").addEventListener("click", () => {
     showToast("Google TTS URL populated!");
 });
 
-document.getElementById("btnWikimedia").addEventListener("click", async () => {
+document.getElementById("btnWikimedia").addEventListener("pointerdown", async () => {
     const query = document.getElementById("wordName").value.trim().toLowerCase();
     if (!query) {
         showToast("Please enter a word first!");
@@ -1347,7 +1349,7 @@ document.getElementById("btnWikimedia").addEventListener("click", async () => {
     }
 });
 
-document.getElementById("previewWordBtn").addEventListener("click", () => {
+document.getElementById("previewWordBtn").addEventListener("pointerdown", () => {
     const word = document.getElementById("wordName").value.trim().toUpperCase();
     const imageUrl = document.getElementById("wordImageUrl").value.trim();
     const audioUrl = document.getElementById("wordAudioUrl").value.trim();
@@ -1438,25 +1440,25 @@ window.previewWordFromList = function(id) {
     playSound(word);
 };
 
-document.getElementById("closeStandalonePreviewBtn").addEventListener("click", () => {
+document.getElementById("closeStandalonePreviewBtn").addEventListener("pointerdown", () => {
     document.getElementById("standalonePreviewModal").classList.remove("active");
     stopCurrentAudio();
 });
 
-document.getElementById("standalonePreviewModal").addEventListener("click", (e) => {
+document.getElementById("standalonePreviewModal").addEventListener("pointerdown", (e) => {
     if (e.target.id === "standalonePreviewModal") {
         document.getElementById("standalonePreviewModal").classList.remove("active");
         stopCurrentAudio();
     }
 });
 
-document.getElementById("backToEditBtn").addEventListener("click", () => {
+document.getElementById("backToEditBtn").addEventListener("pointerdown", () => {
     document.getElementById("previewWordView").style.display = "none";
     document.getElementById("editWordView").style.display = "block";
     stopCurrentAudio();
 });
 
-document.getElementById("googleImagesBtn").addEventListener("click", () => {
+document.getElementById("googleImagesBtn").addEventListener("pointerdown", () => {
     const query = document.getElementById("wordName").value.trim();
     if (!query) {
         showToast("Please enter a word first!");
@@ -1495,7 +1497,7 @@ window.copyUrl = function(id) {
     if (typeof updateMuteButtonIcon === 'function') updateMuteButtonIcon();
     showToast( "Configuration saved!" ); } );
 
-document.getElementById("btnReplaceAllAudio").addEventListener("click", () => {
+document.getElementById("btnReplaceAllAudio").addEventListener("pointerdown", () => {
     let replacedCount = 0;
     appState.words.forEach(wordObj => {
         const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(wordObj.word.toLowerCase())}&tl=en&client=tw-ob`;
@@ -1613,7 +1615,7 @@ renderVirtualKeyboard();
 var isKidMode = false;
 var fullscreenElement = document.documentElement;
 
-document.getElementById("kidModeButton").addEventListener("click", () => {
+document.getElementById("kidModeButton").addEventListener("pointerdown", () => {
     isKidMode = true;
     if (fullscreenElement.requestFullscreen) {
         fullscreenElement.requestFullscreen().catch(e => console.log(e));
@@ -1649,7 +1651,7 @@ function cancelPinLock() {
     }
 }
 
-document.getElementById("submitPinBtn").addEventListener("click", () => {
+document.getElementById("submitPinBtn").addEventListener("pointerdown", () => {
     if (document.getElementById("pinInput").value === (appState.config.kidPin || "1234")) {
         // Success
         isKidMode = false;
@@ -1671,14 +1673,14 @@ document.getElementById("submitPinBtn").addEventListener("click", () => {
     }
 });
 
-document.getElementById("pinModal").addEventListener("click", (e) => {
+document.getElementById("pinModal").addEventListener("pointerdown", (e) => {
     if (e.target.id === "pinModal") {
         cancelPinLock();
     }
 });
 
 
-document.getElementById("cancelPinBtn").addEventListener("click", cancelPinLock);
+document.getElementById("cancelPinBtn").addEventListener("pointerdown", cancelPinLock);
 
 window.addEventListener("popstate", (e) => {
     if (isKidMode) {
@@ -1711,7 +1713,7 @@ currentLetterBadge.addEventListener("pointerdown", (e) => {
         playLetter(currentLetter);
     }
 });
-document.getElementById("instruction").addEventListener("click", (e) => {
+document.getElementById("instruction").addEventListener("pointerdown", (e) => {
     if (e.target === document.getElementById("instruction")) {
         if (typeof playLetter === "function") {
             playLetter(currentLetter);
@@ -1722,7 +1724,7 @@ document.getElementById("instruction").addEventListener("click", (e) => {
 /* =========================================================
    FORCE UPDATE
 ========================================================= */
-document.getElementById("forceUpdateButton").addEventListener("click", async () => {
+document.getElementById("forceUpdateButton").addEventListener("pointerdown", async () => {
     showToast("Checking for updates...");
     try {
         let baseUrl = window.location.href;
@@ -1781,7 +1783,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
-document.getElementById("closeDeltaModal").addEventListener("click", () => {
+document.getElementById("closeDeltaModal").addEventListener("pointerdown", () => {
     document.getElementById("deltaModal").classList.remove("active");
 });
 
@@ -1797,7 +1799,7 @@ function updateMuteButtonIcon() {
     }
 }
 
-document.getElementById("muteBtn").addEventListener("click", () => {
+document.getElementById("muteBtn").addEventListener("pointerdown", () => {
     appState.config.soundEnabled = !appState.config.soundEnabled;
     updateMuteButtonIcon();
     saveState();
