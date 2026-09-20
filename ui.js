@@ -415,13 +415,17 @@ function renderStorySelectedPreview() {
         if (!wordObj) return;
         
         const pill = document.createElement("div");
-        pill.style.cssText = "display: flex; align-items: center; gap: 6px; background: white; padding: 6px 12px; border-radius: 999px; border: 2px solid var(--primary); font-weight: 700; font-size: 0.9rem;";
+        pill.style.cssText = "position: relative; width: 100%; height: 80px; border-radius: 8px; overflow: hidden; border: 2px solid var(--primary); display: flex; flex-direction: column; background: white; user-select: none;";
+        
+        let visualHtml = wordObj.imageUrl 
+            ? `<img src="${escapeHtml(wordObj.imageUrl)}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.outerHTML='<div style=\\'font-size: 2rem;\\'>${escapeHtml(wordObj.fallback || '❓')}</div>'">` 
+            : `<div style="font-size: 2rem;">${escapeHtml(wordObj.fallback || "❓")}</div>`;
+
         pill.innerHTML = `
-            <span class="material-icons" style="color: var(--muted); cursor: grab; font-size: 1.2rem;">drag_indicator</span>
-            <span>${index + 1}.</span>
-            ${wordObj.imageUrl ? `<img src="${escapeHtml(wordObj.imageUrl)}" style="width: 28px; height: 28px; object-fit: cover; border-radius: 6px;" onerror="this.outerHTML='<span>${escapeHtml(wordObj.fallback || '❓')}</span>'">` : `<span>${escapeHtml(wordObj.fallback || "❓")}</span>`}
-            <span style="font-weight: 800;">${escapeHtml(wordObj.word)}</span>
-            <button type="button" style="background: none; border: none; cursor: pointer; color: var(--danger); font-weight: bold; margin-left: 8px;" onclick="removeWordFromStorySelection(${index})"><span class="material-icons">close</span></button>
+            <div style="position: absolute; top: 2px; left: 2px; background: rgba(0,0,0,0.6); color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 0.7rem; display: flex; align-items: center; justify-content: center; z-index: 2;">${index + 1}</div>
+            <button type="button" onclick="removeWordFromStorySelection(${index})" style="position: absolute; top: 2px; right: 2px; background: rgba(255,0,0,0.7); color: white; border: none; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; z-index: 2; cursor: pointer; padding: 0;"><span class="material-icons" style="font-size: 10px;">close</span></button>
+            <div style="flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden;">${visualHtml}</div>
+            <div style="background: rgba(255,255,255,0.9); font-size: 0.75rem; text-align: center; font-weight: bold; padding: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; position: absolute; bottom: 0; width: 100%; border-top: 1px solid rgba(0,0,0,0.1);">${escapeHtml(wordObj.word)}</div>
         `;
         
         pill.draggable = true;
@@ -477,7 +481,7 @@ function renderStoryBuilderWordPickers() {
         `;
         item.addEventListener("mouseover", () => item.style.borderColor = "var(--primary)");
         item.addEventListener("mouseout", () => item.style.borderColor = "#e1e5ee");
-        item.addEventListener("pointerdown", () => {
+        item.addEventListener("click", () => {
             selectedStoryWordIds.push(w.id);
             renderStorySelectedPreview();
         });
@@ -490,7 +494,7 @@ function renderStoryBuilderWordPickers() {
     addBtn.innerHTML = `<span class="material-icons" style="font-size: 2.5rem; color: var(--primary);">add_circle</span><div style="font-size: 0.85rem; font-weight: 800; color: var(--primary); margin-top: 5px;">Create Word</div>`;
     addBtn.addEventListener("mouseover", () => addBtn.style.borderColor = "var(--primary)");
     addBtn.addEventListener("mouseout", () => addBtn.style.borderColor = "#a0aabf");
-    addBtn.addEventListener("pointerdown", openWordModal);
+    addBtn.addEventListener("click", openWordModal);
     listContainer.appendChild(addBtn);
 }
 
@@ -1610,7 +1614,7 @@ renderVirtualKeyboard();
 var isKidMode = false;
 var fullscreenElement = document.documentElement;
 
-document.getElementById("kidModeButton").addEventListener("pointerdown", () => {
+function enterKidMode() {
     isKidMode = true;
     if (fullscreenElement.requestFullscreen) {
         fullscreenElement.requestFullscreen().catch(e => console.log(e));
@@ -1619,12 +1623,24 @@ document.getElementById("kidModeButton").addEventListener("pointerdown", () => {
     } else if (fullscreenElement.msRequestFullscreen) { /* IE11 */
         fullscreenElement.msRequestFullscreen();
     }
-    document.getElementById("kidModeButton").style.display = "none";
-    document.getElementById("settingsButton").style.display = "none";
+    const kidModeBtn = document.getElementById("kidModeButton");
+    if (kidModeBtn) kidModeBtn.style.display = "none";
+    
+    const storyKidModeBtn = document.getElementById("storyKidModeBtn");
+    if (storyKidModeBtn) storyKidModeBtn.style.display = "none";
+    
+    const settingsBtn = document.getElementById("settingsButton");
+    if (settingsBtn) settingsBtn.style.display = "none";
+    
     // Trap back button
     history.pushState({kidMode: true}, ""); 
     showToast("Kid Mode Activated!");
-});
+}
+
+document.getElementById("kidModeButton").addEventListener("pointerdown", enterKidMode);
+if (document.getElementById("storyKidModeBtn")) {
+    document.getElementById("storyKidModeBtn").addEventListener("pointerdown", enterKidMode);
+}
 
 function attemptExitKidMode() {
     document.getElementById("pinInput").value = "";
@@ -1651,7 +1667,12 @@ document.getElementById("submitPinBtn").addEventListener("pointerdown", () => {
         // Success
         isKidMode = false;
         document.getElementById("pinModal").classList.remove("active");
-        document.getElementById("kidModeButton").style.display = "inline-block";
+        
+        const kidModeBtn = document.getElementById("kidModeButton");
+        if (kidModeBtn) kidModeBtn.style.display = "inline-flex";
+        
+        const storyKidModeBtn = document.getElementById("storyKidModeBtn");
+        if (storyKidModeBtn) storyKidModeBtn.style.display = "inline-flex";
         if(gameView.classList.contains("active")) {
             document.getElementById("settingsButton").style.display = "inline-block";
         }
@@ -1787,14 +1808,16 @@ document.getElementById("closeDeltaModal").addEventListener("pointerdown", () =>
 ========================================================= */
 function updateMuteButtonIcon() {
     const btn = document.getElementById("muteBtn");
-    if (appState.config.soundEnabled) {
-        btn.innerHTML = '<span class="material-icons" style="vertical-align: middle;">volume_up</span>';
-    } else {
-        btn.innerHTML = '<span class="material-icons" style="vertical-align: middle;">volume_off</span>';
-    }
+    const storyBtn = document.getElementById("storyMuteBtn");
+    const html = appState.config.soundEnabled 
+        ? '<span class="material-icons" style="vertical-align: middle;">volume_up</span>' 
+        : '<span class="material-icons" style="vertical-align: middle;">volume_off</span>';
+    
+    if (btn) btn.innerHTML = html;
+    if (storyBtn) storyBtn.innerHTML = html;
 }
 
-document.getElementById("muteBtn").addEventListener("pointerdown", () => {
+function toggleMute() {
     appState.config.soundEnabled = !appState.config.soundEnabled;
     updateMuteButtonIcon();
     saveState();
@@ -1807,8 +1830,89 @@ document.getElementById("muteBtn").addEventListener("pointerdown", () => {
 
     if (appState.config.soundEnabled) {
         showToast("Sound Unmuted");
-        if (typeof playLetter === "function") playLetter(currentLetter);
+        // Only play letter if not in story mode
+        if (typeof playLetter === "function" && document.getElementById("gameView").classList.contains("active")) {
+            playLetter(currentLetter);
+        }
     } else {
         showToast("Sound Muted");
     }
-});
+}
+
+document.getElementById("muteBtn").addEventListener("pointerdown", toggleMute);
+if (document.getElementById("storyMuteBtn")) {
+    document.getElementById("storyMuteBtn").addEventListener("pointerdown", toggleMute);
+}
+
+window.openArrangeModal = function() {
+    document.getElementById("storyArrangeModal").classList.add("active");
+    renderStoryArrangeGrid();
+};
+
+window.closeArrangeModal = function() {
+    document.getElementById("storyArrangeModal").classList.remove("active");
+    renderStorySelectedPreview(); // re-render the mini preview
+};
+
+function renderStoryArrangeGrid() {
+    const container = document.getElementById("storyArrangeGrid");
+    container.innerHTML = "";
+    
+    if (selectedStoryWordIds.length === 0) {
+        container.innerHTML = `<span style="color: var(--muted); grid-column: 1 / -1;">No words in the sequence to arrange.</span>`;
+        return;
+    }
+    
+    selectedStoryWordIds.forEach((wordId, index) => {
+        const wordObj = appState.words.find(w => w.id === wordId);
+        if (!wordObj) return;
+        
+        const card = document.createElement("div");
+        card.style.cssText = "position: relative; width: 100%; height: 130px; border-radius: 12px; overflow: hidden; border: 3px solid var(--primary); display: flex; flex-direction: column; background: white; user-select: none; cursor: grab;";
+        
+        let visualHtml = wordObj.imageUrl 
+            ? `<img src="${escapeHtml(wordObj.imageUrl)}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.outerHTML='<div style=\\'font-size: 3rem;\\'>${escapeHtml(wordObj.fallback || '❓')}</div>'">` 
+            : `<div style="font-size: 3rem;">${escapeHtml(wordObj.fallback || "❓")}</div>`;
+
+        card.innerHTML = `
+            <div style="position: absolute; top: 4px; left: 4px; background: rgba(0,0,0,0.6); color: white; border-radius: 50%; width: 24px; height: 24px; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; z-index: 2; font-weight: bold;">${index + 1}</div>
+            <div style="flex: 1; display: flex; align-items: center; justify-content: center; overflow: hidden;">${visualHtml}</div>
+            <div style="background: rgba(255,255,255,0.9); font-size: 1rem; text-align: center; font-weight: bold; padding: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; position: absolute; bottom: 0; width: 100%; border-top: 1px solid rgba(0,0,0,0.1);">${escapeHtml(wordObj.word)}</div>
+        `;
+        
+        card.draggable = true;
+        
+        card.addEventListener("dragstart", (e) => {
+            e.dataTransfer.setData("text/plain", index);
+            e.dataTransfer.effectAllowed = "move";
+            card.style.opacity = "0.5";
+        });
+        
+        card.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = "move";
+            card.style.borderColor = "var(--success)";
+        });
+        
+        card.addEventListener("dragleave", () => {
+            card.style.borderColor = "var(--primary)";
+        });
+        
+        card.addEventListener("drop", (e) => {
+            e.preventDefault();
+            const draggedIndex = parseInt(e.dataTransfer.getData("text/plain"), 10);
+            if (!isNaN(draggedIndex) && draggedIndex !== index) {
+                const item = selectedStoryWordIds.splice(draggedIndex, 1)[0];
+                selectedStoryWordIds.splice(index, 0, item);
+                renderStoryArrangeGrid();
+            }
+        });
+        
+        card.addEventListener("dragend", () => {
+            card.style.opacity = "1";
+            card.style.borderColor = "var(--primary)";
+        });
+        
+        container.appendChild(card);
+    });
+}

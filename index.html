@@ -635,13 +635,17 @@
 <div id="storyPlayerModal" class="modal-overlay" style="z-index: 999; background: rgba(20,25,45,0.95);">
     <div class="modal" style="width: min(950px, 95vw); height: 88vh; display: flex; flex-direction: column; background: #f4f6fb;">
         <div class="modal-header" style="margin-bottom: 10px;">
-            <h2 id="storyPlayerTitle" class="modal-title">Story Mode</h2>
+            <h2 id="storyPlayerTitle" class="modal-title" style="flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">Story Mode</h2>
             <div style="display: flex; gap: 10px;">
-
+                <button id="storyMuteBtn" class="button button-secondary" title="Toggle Sound">
+                    <span class="material-icons" style="vertical-align: middle;">volume_up</span>
+                </button>
+                <button id="storyKidModeBtn" class="button button-success" title="Full Screen">
+                    <span class="material-icons" style="vertical-align: middle;">fullscreen</span>
+                </button>
                 <button id="closeStoryPlayer" class="button button-secondary" title="Close"><span class="material-icons" style="vertical-align: middle;">close</span></button>
             </div>
         </div>
-        
         <div id="storyCanvas" style="flex: 1; background: white; border: 2px dashed var(--border); border-radius: 20px; position: relative; overflow: hidden; box-shadow: inset 0 4px 12px rgba(0,0,0,0.05); user-select: none; touch-action: none; transition: box-shadow 0.3s;">
             <!-- INNER ZOOM/PAN LAYER -->
             <div id="storyCanvasInner" style="transform-origin: 0 0; transform: translate(0px, 0px) scale(1); left: 0; top: 0; width: 100%; height: 100%; position: absolute;">
@@ -678,15 +682,22 @@
                     <input id="storyNameInput" type="text" placeholder="e.g. Journey to the River" required>
                 </div>
                 <div class="form-group full">
-                    <label>Select Words in Sequence (Click to add in order)</label>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                        <label style="margin: 0;">Selected Sequence</label>
+                        <button type="button" class="button button-secondary button-small" onclick="openArrangeModal()" style="padding: 4px 8px; font-size: 0.8rem;">
+                            <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">fullscreen</span> Arrange
+                        </button>
+                    </div>
+                    <div id="storySelectedWordsPreview" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 10px; background: #f4f5fb; border-radius: 12px; max-height: 220px; overflow-y: auto; margin-bottom: 15px;">
+                        <span style="color: var(--muted); font-size: 0.9rem; grid-column: 1 / -1;">No words selected yet. Click words below to build your sequence.</span>
+                    </div>
+                    
+                    <label>Add Words to Sequence</label>
                     <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 10px;">
                         <input id="storyWordSearch" class="search-input" placeholder="Search available words..." style="flex: 1; min-width: 150px;">
                         <button type="button" class="button button-primary" style="margin: 0; white-space: nowrap; flex: 1; justify-content: center;" onclick="openWordModal()">
-                            <span class="material-icons" style="vertical-align: middle;">add</span> Add Word
+                            <span class="material-icons" style="vertical-align: middle;">add</span> Create Word
                         </button>
-                    </div>
-                    <div id="storySelectedWordsPreview" style="display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; background: #f4f5fb; border-radius: 12px; min-height: 50px; align-items: center; margin-bottom: 15px;">
-                        <span style="color: var(--muted); font-size: 0.9rem;">No words selected yet. Click words below to build your sequence.</span>
                     </div>
                     <div id="storyAvailableWordsList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; max-height: 250px; overflow-y: auto; padding: 5px; border: 1px solid var(--border); border-radius: 12px;"></div>
                 </div>
@@ -888,3 +899,15 @@
 </script>
 </body>
 </html>
+<!-- ===================================================== STORY ARRANGE MODAL ===================================================== -->
+<div id="storyArrangeModal" class="modal-overlay" style="z-index: 1000; background: #f4f6fb;">
+    <div class="modal modal-fullscreen" style="display: flex; flex-direction: column;">
+        <div class="modal-header">
+            <h2 class="modal-title">Arrange Story Sequence</h2>
+            <button class="button button-secondary" onclick="closeArrangeModal()"><span class="material-icons" style="vertical-align: middle;">close</span> Done</button>
+        </div>
+        <div style="margin-bottom: 15px; color: var(--muted); font-size: 0.9rem;">Drag and drop the cards below to rearrange the story sequence.</div>
+        <div id="storyArrangeGrid" style="flex: 1; display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 15px; overflow-y: auto; padding: 10px; background: white; border-radius: 12px; border: 2px dashed var(--border);">
+        </div>
+    </div>
+</div>
