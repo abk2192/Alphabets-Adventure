@@ -1,8 +1,14 @@
-const CACHE_NAME = 'alphabet-adventure-cache-v4';
+const CACHE_NAME = 'alphabet-adventure-cache-v5';
 const urlsToCache = [
+  './',
   './index.html',
   './manifest.json',
-  './icon.svg'
+  './icon.svg',
+  './app.js',
+  './ui.js',
+  './game.js',
+  './db.js',
+  './styles.css'
 ];
 
 self.addEventListener('install', event => {
@@ -15,10 +21,27 @@ self.addEventListener('install', event => {
 });
 
 self.addEventListener('fetch', event => {
+  if (event.request.url.startsWith('https://fonts.googleapis.com') ||
+      event.request.url.startsWith('https://fonts.gstatic.com')) {
+    event.respondWith(
+      caches.match(event.request).then(cachedResponse => {
+        if (cachedResponse) {
+          return cachedResponse;
+        }
+        return fetch(event.request).then(response => {
+          return caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, response.clone());
+            return response;
+          });
+        });
+      })
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request)
       .then(response => {
-        // Cache hit - return response
         if (response) {
           return response;
         }

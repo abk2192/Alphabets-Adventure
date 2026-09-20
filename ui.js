@@ -149,7 +149,7 @@ function showHomeView() {
     document.getElementById("backHomeBtn").style.display = "none";
     document.getElementById("kidModeButton").style.display = "none";
     document.getElementById("muteBtn").style.display = "none";
-    if (document.getElementById("kidModeMuteBtn")) document.getElementById("kidModeMuteBtn").style.display = "block";
+    if (document.getElementById("kidModeMuteBtn")) document.getElementById("kidModeMuteBtn").style.display = "none";
 }
 
 function showGameView(mode) { 
@@ -1546,7 +1546,7 @@ document.getElementById("btnReplaceAllAudio").addEventListener("click", () => {
         });
         data.words = migratedWords;
 
-        appState = data; saveState(); renderAllSettings(); renderCategoryButtons(); applyConfiguration(); showToast( "Backup imported!" ); } catch (error) { console.error(error); } }; reader.readAsText( file ); } ); /* ========================================================= RESET ========================================================= */ document.getElementById( "resetAppButton" ) .addEventListener( "click", () => { const confirmed = confirm( "This will permanently reset all local changes. Continue?" ); if (!confirmed) { return; } appState = createDefaultState(); currentCategory = "all"; currentLetter = "a"; saveState(); applyConfiguration(); renderAllSettings(); renderCategoryButtons(); showToast( "Application reset." ); } ); /* ========================================================= DOWNLOAD FILE ========================================================= */ function downloadFile( content, fileName, mimeType ) { const blob = new Blob( [content], { type: mimeType } ); const url = URL.createObjectURL( blob ); const link = document.createElement( "a" ); link.href = url; link.download = fileName; document.body.appendChild( link ); link.click(); document.body.removeChild( link ); setTimeout( () => { URL.revokeObjectURL( url ); }, 1000 ); } /* ========================================================= HTML EXPORT The generated application contains: - Current data - Current configuration - Categories Because this is a self-contained application, the current page HTML can be exported directly. The exported page starts with the embedded application state. ========================================================= */ document.getElementById( "downloadAppButton" ) .addEventListener( "click", () => { const currentDocument = document.documentElement.outerHTML; /* * Embed state into the exported file. * The exported file will restore this state * into localStorage when opened. */ const stateScript = `
+        appState = data; saveState(); renderAllSettings(); renderCategoryButtons(); applyConfiguration(); showToast( "Backup imported!" ); } catch (error) { console.error(error); } }; reader.readAsText( file ); } ); /* ========================================================= RESET ========================================================= */ document.getElementById( "resetAppButton" ) .addEventListener( "click", () => { const confirmed = confirm( "This will permanently reset all local changes. Continue?" ); if (!confirmed) { return; } appState = createDefaultState(); currentCategory = "all"; currentLetter = "a"; saveState(); applyConfiguration(); renderAllSettings(); renderCategoryButtons(); showToast( "Application reset." ); } ); /* ========================================================= DOWNLOAD FILE ========================================================= */ function downloadFile( content, fileName, mimeType ) { const blob = new Blob( [content], { type: mimeType } ); const url = URL.createObjectURL( blob ); const link = document.createElement( "a" ); link.href = url; link.download = fileName; document.body.appendChild( link ); link.click(); document.body.removeChild( link ); setTimeout( () => { URL.revokeObjectURL( url ); }, 1000 ); } /* ========================================================= HTML EXPORT The generated application contains: - Current data - Current configuration - Categories Because this is a self-contained application, the current page HTML can be exported directly. The exported page starts with the embedded application state. ========================================================= */ if (document.getElementById("downloadAppButton")) { document.getElementById("downloadAppButton").addEventListener("click", () => { const currentDocument = document.documentElement.outerHTML; /* * Embed state into the exported file. * The exported file will restore this state * into localStorage when opened. */ const stateScript = `
 <script>
 localStorage.setItem(
     ${JSON.stringify(STORAGE_KEY)},
@@ -1587,7 +1587,7 @@ localStorage.setItem(
         );
         showToast("Custom HTML app downloaded!");
     }
-});
+}); } /* end if */
 
 /* =========================================================
 INITIALIZATION
@@ -1635,6 +1635,12 @@ function enterKidMode() {
     const settingsBtn = document.getElementById("settingsButton");
     if (settingsBtn) settingsBtn.style.display = "none";
     
+    const appHeader = document.querySelector(".app-header");
+    if (appHeader) appHeader.style.display = "none";
+    
+    const kidMute = document.getElementById("kidModeMuteBtn");
+    if (kidMute) kidMute.style.display = "block";
+    
     // Trap back button
     history.pushState({kidMode: true}, ""); 
     showToast("Kid Mode Activated!");
@@ -1656,6 +1662,12 @@ function exitKidMode() {
     if(gameView.classList.contains("active")) {
         document.getElementById("settingsButton").style.display = "inline-block";
     }
+    
+    const appHeader = document.querySelector(".app-header");
+    if (appHeader) appHeader.style.display = "flex";
+    
+    const kidMute = document.getElementById("kidModeMuteBtn");
+    if (kidMute) kidMute.style.display = "none";
     if (document.fullscreenElement || document.webkitFullscreenElement) {
         if (document.exitFullscreen) {
             document.exitFullscreen().catch(e => console.log(e));
