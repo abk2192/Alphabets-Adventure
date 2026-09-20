@@ -174,6 +174,8 @@
    22. MODAL ========================================================= */ .modal-overlay { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; padding: 20px; background: rgba(20,25,45,0.55); z-index: 100; transition: 0.2s ease-in-out; } .modal-overlay.active { display: flex; } .modal { width: min( 700px, 100% ); max-height: 90vh; overflow-y: auto; background: white; border-radius: 24px; padding: 25px; box-shadow: 0 30px 80px rgba(0,0,0,0.3); transition: 0.3s ease-in-out; } .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; } .modal-title { margin: 0; font-family: "Fredoka", sans-serif; } 
 /* FULLSCREEN MODAL TOGGLE */
 .modal-fullscreen {
+    position: fixed !important;
+    inset: 0 !important;
     width: 100vw !important;
     height: 100vh !important;
     max-width: none !important;
@@ -181,6 +183,7 @@
     border-radius: 0 !important;
     margin: 0 !important;
     padding: 15px !important;
+    box-sizing: border-box !important;
 }
 
 /* ========================================================= 23. FORM ========================================================= */ .form-grid { display: grid; grid-template-columns: repeat( 2, 1fr ); gap: 15px; } .form-group { display: flex; flex-direction: column; gap: 7px; } .form-group.full { grid-column: 1 / -1; } .form-group label { font-weight: 800; font-size: 0.9rem; } .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 2px solid #e2e5ef; border-radius: 12px; font-family: inherit; font-size: 1rem; } .form-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 25px; } /* ========================================================= 24. CATEGORY MANAGER ========================================================= */ .category-list { display: grid; grid-template-columns: repeat( auto-fit, minmax(220px,1fr) ); gap: 15px; } .category-card { background: white; border-radius: 18px; padding: 18px; box-shadow: 0 5px 18px rgba(0,0,0,0.08); } .category-card h3 { margin: 0 0 8px; } /* ========================================================= 25. CONFIG ========================================================= */ .config-section { background: white; border-radius: 18px; padding: 20px; margin-bottom: 20px; } .config-section h3 { margin-top: 0; } /* ========================================================= 26. TOAST ========================================================= */ .toast { position: fixed; left: 50%; bottom: 25px; transform: translateX(-50%) translateY(120px); padding: 14px 22px; border-radius: 999px; background: #243047; color: white; font-weight: 700; z-index: 200; transition: 0.3s; } .toast.show { transform: translateX(-50%) translateY(0); } /* ========================================================= 27. MOBILE ========================================================= */ @media (max-width: 700px) {
@@ -197,7 +200,7 @@
     height: auto; 
 }
     .word-container { height: 140px; margin: 10px 0; align-content: center; }
-  .game-card, .settings-card { padding: 18px; border-radius: 24px; } .app-header { margin-bottom: 12px; } .logo { font-size: 1.2rem; }    .form-grid { grid-template-columns: 1fr; } .form-group.full { grid-column: auto; } .settings-header { align-items: flex-start; flex-direction: column; } } 
+  .game-card, .settings-card { padding: 18px; border-radius: 24px; } .app-header { margin-bottom: 12px; flex-wrap: wrap; justify-content: center; } .logo { font-size: 1.2rem; }    .form-grid { grid-template-columns: 1fr; } .form-group.full { grid-column: auto; } .settings-header { align-items: flex-start; flex-direction: column; } } 
 /* =========================================================
    VIRTUAL KEYBOARD
 ========================================================= */

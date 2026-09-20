@@ -497,12 +497,6 @@ document.getElementById("storyFullscreenBtn").addEventListener("click", (e) => {
 });
 
 
-document.getElementById("storyStickyToggleBtn").addEventListener("click", (e) => {
-    stickyMode = !stickyMode;
-    e.target.innerHTML = stickyMode ? "<span class=\"material-icons\" style=\"vertical-align: middle;\">layers</span> Sticky Mode: ON" : "<span class=\"material-icons\" style=\"vertical-align: middle;\">layers</span> Sticky Mode: OFF";
-    e.target.classList.toggle("button-success", stickyMode);
-    e.target.classList.toggle("button-secondary", !stickyMode);
-});
 
 function updateCanvasTransform() {
     document.getElementById("storyCanvasInner").style.transform = `translate(${canvasPanX}px, ${canvasPanY}px) scale(${canvasScale})`;
@@ -568,7 +562,7 @@ window.playStory = function(id) {
 
 function updateStoryPlayerUI() {
     const total = activePlayingStory.wordIds.length;
-    document.getElementById("storyStepIndicator").textContent = `Step ${Math.min(currentStoryStep + 1, total)} of ${total}`;
+    document.getElementById("storyStepIndicator").textContent = `${Math.min(currentStoryStep + 1, total)}/${total}`;
     
     
 }
@@ -673,7 +667,8 @@ function spawnDraggableCard(wordObj, spawnX, spawnY) {
     card.className = "story-card-item";
     
     // Flawless scaling layout without resize icon handle
-    card.style.cssText = `position: absolute; background: white; border: 3px solid var(--primary); border-radius: 24px 24px 6px 24px; padding: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center; gap: 8px; width: 150px; z-index: ${canvasZIndexCounter}; transform-origin: top left; transform: scale(1); touch-action: none; cursor: grab;`;
+    card.style.cssText = `position: absolute; background: white; border: 3px solid var(--primary); border-radius: 24px 24px 6px 24px; padding: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center; gap: 8px; width: 150px; z-index: ${canvasZIndexCounter}; transform-origin: top left; transform: scale(1); touch-action: none; cursor: grab; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none;`;
+    card.oncontextmenu = () => false;
     if (spawnX !== undefined && spawnY !== undefined) {
         card.style.left = spawnX + "px";
         card.style.top = spawnY + "px";
@@ -687,7 +682,7 @@ function spawnDraggableCard(wordObj, spawnX, spawnY) {
     
     let visualHtml = "";
     if (wordObj.imageUrl) {
-        visualHtml = `<div class="card-visual-layer" style="width: 100%; height: 90px; display: flex; align-items: center; justify-content: center; pointer-events: none;"><img src="${escapeHtml(wordObj.imageUrl)}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 8px;" onerror="this.style.display='none'"></div>`;
+        visualHtml = `<div class="card-visual-layer" style="width: 100%; height: 90px; display: flex; align-items: center; justify-content: center; pointer-events: none;"><img src="${escapeHtml(wordObj.imageUrl)}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 8px; -webkit-touch-callout: none; pointer-events: none; user-select: none; -webkit-user-select: none;" onerror="this.style.display='none'"></div>`;
     } else {
         visualHtml = `<div class="card-visual-layer" style="font-size: 2.5rem; height: 90px; display: flex; align-items: center; justify-content: center; pointer-events: none;">${escapeHtml(wordObj.fallback || "❓")}</div>`;
     }

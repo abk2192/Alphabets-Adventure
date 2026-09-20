@@ -45,7 +45,7 @@
         <span class="logo-icon">🌈</span>
         <span>Alphabet Adventure</span>
     </div>
-    <div style="display: flex; gap: 10px;">
+    <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end;">
         <button id="storyModeBtn" class="button button-secondary" title="Story Mode">
             <span class="material-icons" style="vertical-align: middle;">auto_stories</span> Story Mode
         </button>
@@ -626,8 +626,8 @@
         <div class="modal-header" style="margin-bottom: 10px;">
             <h2 id="storyPlayerTitle" class="modal-title">Story Mode</h2>
             <div style="display: flex; gap: 10px;">
-                <button id="storyFullscreenBtn" class="button button-secondary">🔲 Fullscreen</button>
-                <button id="closeStoryPlayer" class="button button-secondary"><span class="material-icons" style="vertical-align: middle;">close</span> Close</button>
+                <button id="storyFullscreenBtn" class="button button-secondary" title="Fullscreen"><span class="material-icons" style="vertical-align: middle;">fullscreen</span></button>
+                <button id="closeStoryPlayer" class="button button-secondary" title="Close"><span class="material-icons" style="vertical-align: middle;">close</span></button>
             </div>
         </div>
         
@@ -640,11 +640,11 @@
         </div>
 
         <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; flex-wrap: wrap; gap: 10px;">
-            <div id="storyStepIndicator" style="font-weight: 800; color: var(--muted);">Step 1 of 5</div>
+            <div id="storyStepIndicator" style="font-weight: 800; color: var(--muted);">1/5</div>
             
             <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
                 
-                <button id="storyStickyToggleBtn" class="button button-secondary"><span class="material-icons" style="vertical-align: middle;">layers</span> Sticky Mode: OFF</button>
+
                 <button id="storyResetCanvasBtn" class="button button-secondary"><span class="material-icons" style="vertical-align: middle;">restart_alt</span> Reset Canvas</button>
                 
             </div>
