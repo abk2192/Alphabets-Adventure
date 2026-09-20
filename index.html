@@ -383,6 +383,10 @@
                 <div class="config-section">
                     <h3><span class="material-icons" style="vertical-align: middle;">security</span> Security</h3>
                     <div class="form-grid">
+                        <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
+                            <input id="configKidPinEnabled" type="checkbox" style="width: auto;">
+                            <label style="margin: 0;">Enable Kid Mode PIN Lock</label>
+                        </div>
                         <div class="form-group">
                             <label>Kid Mode PIN (4 Digits)</label>
                             <input id="configKidPin" type="text" maxlength="4" pattern="[0-9]*" inputmode="numeric">
@@ -504,38 +508,7 @@
             <div id="exportPanel" class="settings-panel active">
 
 
-                <div class="config-section">
 
-
-                    <h3>
-
-                        <span class="material-icons" style="vertical-align: middle;">inventory_2</span> Download Your Custom App
-
-                    </h3>
-
-
-                    <p>
-
-                        Your current words,
-                        categories,
-                        image URLs
-                        and configuration will be embedded
-                        into a new standalone HTML file.
-
-                    </p>
-
-
-                    <br>
-
-
-                    <button id="downloadAppButton" class="button button-success">
-
-                        <span class="material-icons" style="vertical-align: middle;">download</span> Save Updated App / Download
-
-                    </button>
-
-
-                </div>
 
 
 
