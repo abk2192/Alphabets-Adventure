@@ -2,7 +2,7 @@
   "name": "Alphabet Adventure",
   "short_name": "AlphabetAdv",
   "description": "An interactive alphabet learning adventure",
-  "start_url": "alphabet-adventure-custom-story-mode-4.html",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#8ed1fc",
   "theme_color": "#6c63ff",

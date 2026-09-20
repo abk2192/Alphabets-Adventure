@@ -1628,3 +1628,17 @@ document.addEventListener("webkitfullscreenchange", () => {
 
 
 
+
+
+currentLetterBadge.addEventListener("click", () => {
+    if (typeof playLetter === "function") {
+        playLetter(currentLetter);
+    }
+});
+document.getElementById("instruction").addEventListener("click", (e) => {
+    if (e.target === document.getElementById("instruction")) {
+        if (typeof playLetter === "function") {
+            playLetter(currentLetter);
+        }
+    }
+});

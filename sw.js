@@ -1,6 +1,6 @@
-const CACHE_NAME = 'alphabet-adventure-cache-v1';
+const CACHE_NAME = 'alphabet-adventure-cache-v2';
 const urlsToCache = [
-  './alphabet-adventure-custom-story-mode-4.html',
+  './index.html',
   './manifest.json',
   './icon.svg'
 ];
