@@ -107,8 +107,7 @@ function playSyntheticSound() {
 
 /* ========================================================= KEYBOARD ========================================================= */ 
 var keyboardLocked = false; 
-function handleKeyPress(key, fromVirtual = false) { 
-    if (!fromVirtual && appState.config.keyboardListener === false) return;
+function handleKeyPress(key, fromVirtual = false) {
     if (keyboardLocked) return; 
     keyboardLocked = true; 
     
@@ -139,7 +138,8 @@ document.addEventListener( "keydown", event => {
     } 
 } ); 
 document.querySelectorAll(".key-button").forEach(btn => {
-    btn.addEventListener("click", () => {
+    btn.addEventListener("pointerdown", (e) => {
+        e.preventDefault();
         handleKeyPress(btn.textContent.toLowerCase(), true);
     });
 });

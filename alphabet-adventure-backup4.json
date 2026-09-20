@@ -19,7 +19,7 @@
         "animal"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWMKYq7ZwbLA7_4M3wuqGRFUjyUHlPFR__WtARVaeGvg&s=10",
-      "audioUrl": "https://www.myinstants.com/media/sounds/dog-barking-70796.mp3",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=dog&tl=en&client=tw-ob",
       "fallback": "🐶"
     },
     {
@@ -117,7 +117,7 @@
         "animal"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNq23w5CvpeCVFt2DlPpz__x9evu5XleslxCxq1VRMNg&s=10",
-      "audioUrl": "https://www.myinstants.com/media/sounds/dinosaur-roar-1.mp3",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=dino&tl=en&client=tw-ob",
       "fallback": "🦖"
     },
     {
@@ -135,7 +135,7 @@
       "word": "CAR",
       "categories": [],
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/1996_Porsche_911_993_GT2_-_Flickr_-_The_Car_Spy_%284%29.jpg",
-      "audioUrl": "https://www.myinstants.com/media/sounds/car-horn-1.mp3",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=car&tl=en&client=tw-ob",
       "fallback": "❓"
     },
     {
@@ -222,12 +222,12 @@
       "id": "248f7df9-b8dd-4b27-8c78-b126dcf42a70",
       "letter": "o",
       "word": "OWL",
-      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwrtm9swXhEXIG05dzXGil-ab0gJLi4Svi8ZDyJ5Nk9g&s=10",
-      "audioUrl": "https://www.myinstants.com/media/sounds/owl-sound.mp3",
-      "fallback": "🦉",
       "categories": [
         "animal"
-      ]
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwrtm9swXhEXIG05dzXGil-ab0gJLi4Svi8ZDyJ5Nk9g&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=owl&tl=en&client=tw-ob",
+      "fallback": "🦉"
     },
     {
       "id": "29fe69c6-2a2d-484b-b509-94cce1c798a4",
@@ -268,7 +268,7 @@
         "animal"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkgV_MQSLHm70sCf7p0bHA4XuqWuC_eWRg-Epmey_CiA&s=10",
-      "audioUrl": "https://www.myinstants.com/media/sounds/tiger-sound.mp3",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=tiger&tl=en&client=tw-ob",
       "fallback": "🐯"
     },
     {
@@ -315,12 +315,12 @@
       "id": "43b2a667-5b94-445b-9b15-2881eff826cb",
       "letter": "w",
       "word": "WHALE",
-      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqIC2seQmdyCOD96O3VZ0bojNZPMBaRRZl5TqrgoJRZg&s=10",
-      "audioUrl": "https://www.myinstants.com/media/sounds/whale-sound-4.mp3",
-      "fallback": "🐳",
       "categories": [
         "animal"
-      ]
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqIC2seQmdyCOD96O3VZ0bojNZPMBaRRZl5TqrgoJRZg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=whale&tl=en&client=tw-ob",
+      "fallback": "🐳"
     },
     {
       "id": "46119abe-d649-4c76-b80d-71a0b8915f75",
@@ -364,12 +364,12 @@
       "id": "4e933491-0b3f-4902-92c5-c57d073276e4",
       "letter": "s",
       "word": "SNAKE",
-      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-E9Hlr7uSAmxTAKoqs6QsnZzIpvgRdvfbnSe7iFLvxw&s=10",
-      "audioUrl": "https://www.myinstants.com/media/sounds/snake-rattle_1.mp3",
-      "fallback": "🐍",
       "categories": [
         "animal"
-      ]
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-E9Hlr7uSAmxTAKoqs6QsnZzIpvgRdvfbnSe7iFLvxw&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=snake&tl=en&client=tw-ob",
+      "fallback": "🐍"
     },
     {
       "id": "51223ca0-af88-4cb6-913c-5c884f7b3166",
@@ -419,7 +419,7 @@
         "vehicle"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbjTwXz8G8LFSd4-C8Rp-O15dMrI7dc7V0kTdC1toTyA&s=10",
-      "audioUrl": "https://www.myinstants.com/media/sounds/police-siren-1.mp3",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=police%20car&tl=en&client=tw-ob",
       "fallback": "❓"
     },
     {
@@ -501,7 +501,7 @@
         "animal"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf5YynXdOqJ1V6OGuFQjWjEf1uGMwVVbxH5unTKClGDQ&s=10",
-      "audioUrl": "https://www.myinstants.com/media/sounds/lion-roar-6217.mp3",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=lion&tl=en&client=tw-ob",
       "fallback": "🦁"
     },
     {
@@ -523,7 +523,7 @@
         "animal"
       ],
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/84/Male_and_female_chicken_sitting_together.jpg",
-      "audioUrl": "https://www.myinstants.com/media/sounds/chicken-cluck-1.mp3",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=chicken&tl=en&client=tw-ob",
       "fallback": "❓"
     },
     {
@@ -534,7 +534,7 @@
         "vehicle"
       ],
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/00/MTA_Union_Tpke_and_164_St_54.jpg",
-      "audioUrl": "https://www.myinstants.com/media/sounds/ambulance-sound-1.mp3",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=ambulance&tl=en&client=tw-ob",
       "fallback": "❓"
     },
     {
@@ -742,7 +742,7 @@
         "animal"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAtiaOuaFGUPWwx4wA_xvxzA0-ZmzEmReE9oXdkJD10keS0ItoSp_Jocd_pYGmMOoYXmrvgZtfPenmLiPU-8hkkAFCXIFWQDQuhGNsw52DjQ&s=10",
-      "audioUrl": "https://www.myinstants.com/media/sounds/horse-neigh-1_1.mp3",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=horse&tl=en&client=tw-ob",
       "fallback": "🐴"
     },
     {
@@ -782,7 +782,7 @@
         "vehicle"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBEdlb2CnrgvJLBoVpmN3SeSxUyeMzuGEzRspLaekkeg&s=10",
-      "audioUrl": "https://www.myinstants.com/media/sounds/fire-truck-siren-1.mp3",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=fire%20truck&tl=en&client=tw-ob",
       "fallback": "❓"
     },
     {
@@ -842,7 +842,7 @@
       "word": "CLOCK",
       "categories": [],
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8b/2010-07-20_Black_windup_alarm_clock_face.jpg",
-      "audioUrl": "https://www.myinstants.com/media/sounds/ticking-clock-1.mp3",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=clock&tl=en&client=tw-ob",
       "fallback": "❓"
     },
     {
@@ -853,7 +853,7 @@
         "animal"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8AttK-mTWvZ6-FYeVxyBl2uLA9emwIyuG0YCrH_Uy7Q&s=10",
-      "audioUrl": "https://www.myinstants.com/media/sounds/pig-sound.mp3",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=pig&tl=en&client=tw-ob",
       "fallback": "🐷"
     },
     {
@@ -935,7 +935,7 @@
         "animal"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQGeJr7vbL8Nqzu0e_wcqXpYpUBzPbmOh4wanPbnj-eA&s=10",
-      "audioUrl": "https://www.myinstants.com/media/sounds/bear-roar-7860.mp3",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=bear&tl=en&client=tw-ob",
       "fallback": "🐻"
     },
     {
@@ -957,7 +957,7 @@
         "animal"
       ],
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Cat_November_2010-1a.jpg/960px-Cat_November_2010-1a.jpg",
-      "audioUrl": "https://www.myinstants.com/media/sounds/cat-meow-3.mp3",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=cat&tl=en&client=tw-ob",
       "fallback": "🐱"
     },
     {
@@ -977,19 +977,19 @@
       "word": "COW",
       "categories": [],
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Cow_%28Fleckvieh_breed%29_Oeschinensee_Slaunger_2009-07-07.jpg",
-      "audioUrl": "https://www.myinstants.com/media/sounds/cow-2.mp3",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=cow&tl=en&client=tw-ob",
       "fallback": "❓"
     },
     {
       "id": "d92cba94-9a8b-40c0-87d0-bbc68e22b184",
       "letter": "f",
       "word": "FROG",
-      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIWI8HWva1RNSKdWSkyqaKytfqf0wcln2LKAnJl0SH0Q&s=10",
-      "audioUrl": "https://www.myinstants.com/media/sounds/frog-2.mp3",
-      "fallback": "🐸",
       "categories": [
         "animal"
-      ]
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIWI8HWva1RNSKdWSkyqaKytfqf0wcln2LKAnJl0SH0Q&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=frog&tl=en&client=tw-ob",
+      "fallback": "🐸"
     },
     {
       "id": "e1f2a3b4-c5d6-7890-klmn-123456789012",
@@ -1017,7 +1017,7 @@
       "word": "BELL",
       "categories": [],
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/37/Liberty_Bell_2017a.jpg",
-      "audioUrl": "https://www.myinstants.com/media/sounds/bell-ring-1.mp3",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=bell&tl=en&client=tw-ob",
       "fallback": "❓"
     },
     {
@@ -1101,7 +1101,7 @@
         "vehicle"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJHx2iBQYrVsluxUQXztAG2-MblOjPNIQhtpV2pl4c5g&s",
-      "audioUrl": "https://www.myinstants.com/media/sounds/airplane-flyby_3.mp3",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=plane&tl=en&client=tw-ob",
       "fallback": "✈️"
     }
   ],
@@ -1144,8 +1144,8 @@
     "secondary": "#ff7eb3",
     "letterDelay": 100,
     "imageDelay": 200,
-    "soundEnabled": false,
-    "customAudioEnabled": false,
+    "soundEnabled": true,
+    "customAudioEnabled": true,
     "kidPin": "1234",
     "lockDelay": 500,
     "keyboardListener": false,

@@ -117,7 +117,8 @@ function showSingleImageFromMulti(data) {
             element.style.animationDelay = ( globalLetterIndex * appState.config.letterDelay ) + "ms";
             if (/^[a-zA-Z]$/.test(character)) {
                 element.style.cursor = "pointer";
-                element.addEventListener("click", () => {
+                element.addEventListener("pointerdown", (e) => {
+                    e.preventDefault();
                     handleKeyPress(character.toLowerCase(), true);
                 });
             }
@@ -1446,7 +1447,27 @@ window.copyUrl = function(id) {
     appState.config.lockDelay = Number( document.getElementById( "configLockDelay" ).value ) || 500;
     appState.config.keyboardListener = document.getElementById( "configKeyboardListener" ).checked;
     appState.config.maxAudioDuration = Number( document.getElementById( "configMaxAudioDuration" ).value ) || 3;
-    saveState(); applyConfiguration(); showToast( "Configuration saved!" ); } ); /* ========================================================= JSON EXPORT ========================================================= */ document.getElementById( "downloadJsonButton" ) .addEventListener( "click", () => { downloadFile( JSON.stringify( appState, null, 2 ), "alphabet-adventure-backup.json", "application/json" ); showToast( "JSON backup downloaded!" ); } ); /* ========================================================= JSON IMPORT ========================================================= */ document.getElementById( "importJsonButton" ) .addEventListener( "click", () => { document.getElementById( "importJsonInput" ) .click(); } ); document.getElementById( "importJsonInput" ) .addEventListener( "change", event => { const file = event.target.files[0]; if (!file) { return; } const reader = new FileReader(); reader.onload = loadEvent => { try { const data = JSON.parse( loadEvent.target.result );
+    saveState(); applyConfiguration(); showToast( "Configuration saved!" ); } ); 
+
+document.getElementById("btnReplaceAllAudio").addEventListener("click", () => {
+    let replacedCount = 0;
+    appState.words.forEach(wordObj => {
+        const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(wordObj.word.toLowerCase())}&tl=en&client=tw-ob`;
+        if (wordObj.audioUrl !== url) {
+            wordObj.audioUrl = url;
+            replacedCount++;
+        }
+    });
+    if (replacedCount > 0) {
+        saveState();
+        if (typeof renderWordTable === "function") renderWordTable();
+        showToast(`Replaced audio for ${replacedCount} words!`);
+    } else {
+        showToast("All words already have Google TTS URLs.");
+    }
+});
+
+/* ========================================================= JSON EXPORT ========================================================= */ document.getElementById( "downloadJsonButton" ) .addEventListener( "click", () => { downloadFile( JSON.stringify( appState, null, 2 ), "alphabet-adventure-backup.json", "application/json" ); showToast( "JSON backup downloaded!" ); } ); /* ========================================================= JSON IMPORT ========================================================= */ document.getElementById( "importJsonButton" ) .addEventListener( "click", () => { document.getElementById( "importJsonInput" ) .click(); } ); document.getElementById( "importJsonInput" ) .addEventListener( "change", event => { const file = event.target.files[0]; if (!file) { return; } const reader = new FileReader(); reader.onload = loadEvent => { try { const data = JSON.parse( loadEvent.target.result );
         if ( !data.words || !data.categories || !data.config ) {
             throw new Error( "Invalid file" );
         }
@@ -1530,7 +1551,8 @@ function renderVirtualKeyboard() {
         const btn = document.createElement("button");
         btn.className = "key-button";
         btn.textContent = letter;
-        btn.addEventListener("click", () => {
+        btn.addEventListener("pointerdown", (e) => {
+            e.preventDefault(); // Prevents simulated mouse events and double firing
             handleKeyPress(letter.toLowerCase(), true);
         });
         virtualKeyboard.appendChild(btn);
@@ -1637,7 +1659,8 @@ document.addEventListener("webkitfullscreenchange", () => {
 
 
 
-currentLetterBadge.addEventListener("click", () => {
+currentLetterBadge.addEventListener("pointerdown", (e) => {
+    e.preventDefault();
     if (typeof playLetter === "function") {
         playLetter(currentLetter);
     }
