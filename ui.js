@@ -208,7 +208,6 @@ function renderStorySelectionGrid() {
 /* ========================================================= SETTINGS EVENTS ========================================================= */ 
 if (document.getElementById("settingsButton")) document.getElementById("settingsButton").addEventListener("click", (e) => { e.preventDefault(); showSettingsView(); }); 
 
-document.getElementById("backHomeBtn").addEventListener("click", (e) => { e.preventDefault(); showHomeView(); });
 
 document.getElementById("homeLetterFunBtn").addEventListener("click", (e) => { e.preventDefault(); showGameView('single'); });
 document.getElementById("homeWordsFunBtn").addEventListener("click", (e) => { e.preventDefault(); showGameView('multi'); });
@@ -1641,7 +1640,6 @@ function enterKidMode() {
     showToast("Kid Mode Activated!");
 }
 
-document.getElementById("kidModeButton").addEventListener("click", enterKidMode);
 if (document.getElementById("storyKidModeBtn")) {
     document.getElementById("storyKidModeBtn").addEventListener("click", enterKidMode);
 }
@@ -1851,7 +1849,6 @@ function toggleMute() {
     }
 }
 
-document.getElementById("muteBtn").addEventListener("click", toggleMute);
 if (document.getElementById("storyMuteBtn")) {
     document.getElementById("storyMuteBtn").addEventListener("click", toggleMute);
 }

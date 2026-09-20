@@ -18,7 +18,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&amp;family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-<link rel="stylesheet" href="styles.css?v=4">
+<link rel="stylesheet" href="styles.css?v=5">
 
 
 
@@ -49,13 +49,13 @@
         <span>Alphabet Adventure</span>
     </div>
     <div style="display: flex; gap: 10px; flex-wrap: nowrap; justify-content: flex-end;">
-        <button id="backHomeBtn" class="button button-secondary" style="display: none;" title="Back to Home">
+        <button id="backHomeBtn" class="button button-secondary" style="display: none;" title="Back to Home" onclick="showHomeView()">
             <span class="material-icons" style="vertical-align: middle;">home</span>
         </button>
-        <button id="muteBtn" class="button button-secondary" title="Toggle Sound" style="display: none;">
+        <button id="muteBtn" class="button button-secondary" title="Toggle Sound" style="display: none;" onclick="toggleMute()">
             <span class="material-icons" style="vertical-align: middle;">volume_up</span>
         </button>
-        <button id="kidModeButton" class="button button-success" title="Full Screen" style="display: none;">
+        <button id="kidModeButton" class="button button-success" title="Full Screen" style="display: none;" onclick="enterKidMode()">
             <span class="material-icons" style="vertical-align: middle;">fullscreen</span>
         </button>
     </div>
@@ -836,10 +836,10 @@
 
 
 
-<script src="db.js?v=4"></script>
-<script src="game.js?v=4"></script>
-<script src="ui.js?v=4"></script>
-<script src="app.js?v=4"></script>
+<script src="db.js?v=5"></script>
+<script src="game.js?v=5"></script>
+<script src="ui.js?v=5"></script>
+<script src="app.js?v=5"></script>
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
