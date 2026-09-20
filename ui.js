@@ -1480,14 +1480,16 @@ window.copyUrl = function(id) {
 };
 
 /* =========================================================
-     EDIT WORD Global because buttons use onclick. ========================================================= */  /* ========================================================= DELETE WORD ========================================================= */ window.deleteWord = function(id) { const item = appState.words.find( word => word.id === id ); if (!item) { return; } const confirmed = confirm( `Delete "${item.word}"?` ); if (!confirmed) { return; } appState.words = appState.words.filter( word => word.id !== id ); saveState(); renderWordTable(); showToast( "Word deleted." ); }; /* ========================================================= CATEGORY MANAGER ========================================================= */ function renderCategoryManager() { categoryList.innerHTML = ""; appState.categories.forEach( category => { const count = appState.words.filter( word => (word.categories || []).includes(category) ) .length; const card = document.createElement( "div" ); card.className = "category-card"; card.innerHTML = ` <h3> <span class="material-icons" style="font-size: 1.2rem; vertical-align: middle;">label</span> ${escapeHtml( formatCategoryName( category ) )} </h3> <p> ${count} words </p> <button class="button button-danger button-small" onclick="deleteCategory('${escapeHtml(category)}')" > <span class="material-icons" style="font-size: 1.2rem; vertical-align: middle;">delete</span> Remove Category </button> `; categoryList.appendChild( card ); } ); } /* ========================================================= ADD CATEGORY ========================================================= */ addCategoryButton.addEventListener( "click", () => { const category = newCategoryInput.value .trim() .toLowerCase() .replace( /\s+/g, "-" ); if (!category) { showToast( "Enter a category name." ); return; } if ( appState.categories.includes( category ) ) { showToast( "That category already exists." ); return; } appState.categories.push( category ); newCategoryInput.value = ""; saveState(); renderCategoryManager(); renderCategoryButtons(); showToast( "Category added!" ); } ); /* ========================================================= DELETE CATEGORY ========================================================= */ window.deleteCategory = function(category) { const wordCount = appState.words.filter( word => (word.categories || []).includes(category) ) .length; if ( wordCount > 0 ) { showToast( "Remove or move the words first." ); return; } if ( appState.categories.length <= 1 ) { showToast( "At least one category is required." ); return; } const confirmed = confirm( `Remove category "${category}"?` ); if (!confirmed) { return; } appState.categories = appState.categories.filter( item => item !== category ); if ( currentCategory === category ) { currentCategory = appState.categories[0]; } saveState(); renderCategoryManager(); renderCategoryButtons(); showToast( "Category removed." ); }; /* ========================================================= CONFIGURATION FORM ========================================================= */ function loadConfigurationForm() { document.getElementById( "configTitle" ).value = appState.config.title; document.getElementById( "configInstruction" ).value = appState.config.instruction; document.getElementById( "configPrimary" ).value = appState.config.primary; document.getElementById( "configSecondary" ).value = appState.config.secondary; document.getElementById( "configLetterDelay" ).value = appState.config.letterDelay; document.getElementById( "configImageDelay" ).value = appState.config.imageDelay; document.getElementById( "configSound" ).checked = appState.config.soundEnabled;
+     EDIT WORD Global because buttons use onclick. ========================================================= */  /* ========================================================= DELETE WORD ========================================================= */ window.deleteWord = function(id) { const item = appState.words.find( word => word.id === id ); if (!item) { return; } const confirmed = confirm( `Delete "${item.word}"?` ); if (!confirmed) { return; } appState.words = appState.words.filter( word => word.id !== id ); saveState(); renderWordTable(); showToast( "Word deleted." ); }; /* ========================================================= CATEGORY MANAGER ========================================================= */ function renderCategoryManager() { categoryList.innerHTML = ""; appState.categories.forEach( category => { const count = appState.words.filter( word => (word.categories || []).includes(category) ) .length; const card = document.createElement( "div" ); card.className = "category-card"; card.innerHTML = ` <h3> <span class="material-icons" style="font-size: 1.2rem; vertical-align: middle;">label</span> ${escapeHtml( formatCategoryName( category ) )} </h3> <p> ${count} words </p> <button class="button button-danger button-small" onclick="deleteCategory('${escapeHtml(category)}')" > <span class="material-icons" style="font-size: 1.2rem; vertical-align: middle;">delete</span> Remove Category </button> `; categoryList.appendChild( card ); } ); } /* ========================================================= ADD CATEGORY ========================================================= */ addCategoryButton.addEventListener( "click", () => { const category = newCategoryInput.value .trim() .toLowerCase() .replace( /\s+/g, "-" ); if (!category) { showToast( "Enter a category name." ); return; } if ( appState.categories.includes( category ) ) { showToast( "That category already exists." ); return; } appState.categories.push( category ); newCategoryInput.value = ""; saveState(); renderCategoryManager(); renderCategoryButtons(); showToast( "Category added!" ); } ); /* ========================================================= DELETE CATEGORY ========================================================= */ window.deleteCategory = function(category) { const wordCount = appState.words.filter( word => (word.categories || []).includes(category) ) .length; if ( wordCount > 0 ) { showToast( "Remove or move the words first." ); return; } if ( appState.categories.length <= 1 ) { showToast( "At least one category is required." ); return; } const confirmed = confirm( `Remove category "${category}"?` ); if (!confirmed) { return; } appState.categories = appState.categories.filter( item => item !== category ); if ( currentCategory === category ) { currentCategory = appState.categories[0]; } saveState(); renderCategoryManager(); renderCategoryButtons(); showToast( "Category removed." ); }; /* ========================================================= CONFIGURATION FORM ========================================================= */ function loadConfigurationForm() { document.getElementById( "configTitle" ).value = appState.config.title; document.getElementById( "configInstruction" ).value = appState.config.instruction; 
+    renderThemeSelector();
+    document.getElementById( "configLetterDelay" ).value = appState.config.letterDelay; document.getElementById( "configImageDelay" ).value = appState.config.imageDelay; document.getElementById( "configSound" ).checked = appState.config.soundEnabled;
     document.getElementById( "configCustomAudio" ).checked = appState.config.customAudioEnabled !== false;
     document.getElementById( "configKidPin" ).value = appState.config.kidPin || "1234";
     document.getElementById( "configKidPinEnabled" ).checked = appState.config.kidPinEnabled !== false;
     document.getElementById( "configLockDelay" ).value = appState.config.lockDelay !== undefined ? appState.config.lockDelay : 500;
     document.getElementById( "configKeyboardListener" ).checked = appState.config.keyboardListener !== false;
     document.getElementById( "configMaxAudioDuration" ).value = appState.config.maxAudioDuration !== undefined ? appState.config.maxAudioDuration : 3;
-} document.getElementById( "saveConfigButton" ) .addEventListener( "click", () => { appState.config.title = document.getElementById( "configTitle" ) .value .trim() || DEFAULT_CONFIG.title; appState.config.instruction = document.getElementById( "configInstruction" ) .value .trim() || DEFAULT_CONFIG.instruction; appState.config.primary = document.getElementById( "configPrimary" ) .value; appState.config.secondary = document.getElementById( "configSecondary" ) .value; appState.config.letterDelay = Number( document.getElementById( "configLetterDelay" ) .value ) || DEFAULT_CONFIG.letterDelay; appState.config.imageDelay = Number( document.getElementById( "configImageDelay" ) .value ) || DEFAULT_CONFIG.imageDelay; appState.config.soundEnabled = document.getElementById( "configSound" ) .checked;
+} document.getElementById( "saveConfigButton" ) .addEventListener( "click", () => { appState.config.title = document.getElementById( "configTitle" ) .value .trim() || "Alphabets Adventure"; appState.config.instruction = document.getElementById( "configInstruction" ) .value .trim() || "Tap on a letter to hear its sound and discover a word!"; appState.config.letterDelay = Number( document.getElementById( "configLetterDelay" ) .value ) || 600; appState.config.imageDelay = Number( document.getElementById( "configImageDelay" ) .value ) || 800; appState.config.soundEnabled = document.getElementById( "configSound" ) .checked;
     appState.config.customAudioEnabled = document.getElementById( "configCustomAudio" ).checked;
     appState.config.kidPin = document.getElementById( "configKidPin" ).value.trim() || "1234";
     appState.config.kidPinEnabled = document.getElementById( "configKidPinEnabled" ).checked;
@@ -1923,5 +1925,61 @@ function renderStoryArrangeGrid() {
         });
         
         container.appendChild(card);
+    });
+}
+
+const APP_THEMES = [
+    { name: "Ocean Explorer", primary: "#0ea5e9", secondary: "#e0f2fe" },
+    { name: "Forest Friend", primary: "#22c55e", secondary: "#dcfce7" },
+    { name: "Sunny Day", primary: "#f59e0b", secondary: "#fef3c7" },
+    { name: "Berry Sweet", primary: "#ec4899", secondary: "#fce7f3" },
+    { name: "Grape Vine", primary: "#8b5cf6", secondary: "#ede9fe" },
+    { name: "Cherry Red", primary: "#ef4444", secondary: "#fee2e2" },
+    { name: "Minty Fresh", primary: "#14b8a6", secondary: "#ccfbf1" },
+    { name: "Sunset Glow", primary: "#f97316", secondary: "#ffedd5" },
+    { name: "Magic Indigo", primary: "#6366f1", secondary: "#e0e7ff" },
+    { name: "Bubblegum", primary: "#f43f5e", secondary: "#ffe4e6" }
+];
+
+function renderThemeSelector() {
+    const container = document.getElementById("themeSelectionContainer");
+    if (!container) return;
+    container.innerHTML = "";
+    
+    APP_THEMES.forEach(theme => {
+        const btn = document.createElement("div");
+        const isActive = (appState.config.primary === theme.primary && appState.config.secondary === theme.secondary);
+        
+        btn.style.cssText = `
+            border: 3px solid ${isActive ? 'var(--text)' : 'transparent'};
+            border-radius: 12px;
+            padding: 8px;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+            background: #fff;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: 0.2s;
+        `;
+        
+        btn.innerHTML = `
+            <div style="width: 100%; height: 40px; border-radius: 6px; display: flex; overflow: hidden;">
+                <div style="flex: 1; background: ${theme.primary};"></div>
+                <div style="flex: 1; background: ${theme.secondary};"></div>
+            </div>
+            <span style="font-size: 0.85rem; font-weight: bold; text-align: center;">${theme.name}</span>
+        `;
+        
+        btn.onclick = () => {
+            appState.config.primary = theme.primary;
+            appState.config.secondary = theme.secondary;
+            renderThemeSelector();
+            applyConfiguration();
+            saveState(); // Ensure theme choice is saved immediately
+        };
+        
+        container.appendChild(btn);
     });
 }
