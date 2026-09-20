@@ -1,0 +1,1630 @@
+/* ========================================================= DOM REFERENCES ========================================================= */ const gameView = document.getElementById("gameView"); const settingsView = document.getElementById("settingsView"); const settingsButton = document.getElementById("settingsButton"); const backToGameButton = document.getElementById("backToGameButton"); const wordContainer = document.getElementById("wordContainer"); const imageArea = document.getElementById("imageArea"); const categoryControls = document.getElementById("categoryControls"); const currentLetterBadge = document.getElementById("currentLetterBadge"); const wordTableBody = document.getElementById("wordTableBody"); const wordSearch = document.getElementById("wordSearch"); const addWordButton = document.getElementById("addWordButton"); const wordModal = document.getElementById("wordModal"); const wordModalTitle = document.getElementById("wordModalTitle"); const closeWordModal = document.getElementById("closeWordModal"); const cancelWordButton = document.getElementById("cancelWordButton"); const wordForm = document.getElementById("wordForm"); const editingWordId = document.getElementById("editingWordId"); const wordLetter = document.getElementById("wordLetter"); const wordName = document.getElementById("wordName"); const wordCategory = document.getElementById("wordCategory"); const wordImageUrl = document.getElementById("wordImageUrl"); const wordFallback = document.getElementById("wordFallback"); const categoryList = document.getElementById("categoryList"); const newCategoryInput = document.getElementById("newCategoryInput"); const addCategoryButton = document.getElementById("addCategoryButton"); const toast = document.getElementById("toast"); /* ========================================================= PERSISTENCE ========================================================= */  function saveState() { window.appDB.saveFullState(appState); } /* ========================================================= TOAST ========================================================= */ let toastTimer = null; function showToast(message) { toast.textContent = message; toast.classList.add( "show" ); clearTimeout( toastTimer ); toastTimer = setTimeout( () => { toast.classList.remove( "show" ); }, 2500 ); } /* ========================================================= CONFIGURATION ========================================================= */ function applyConfiguration() { document.title = appState.config.title; const logoText = document.querySelector( ".logo span:last-child" );
+    if (logoText) logoText.textContent = appState.config.title; document.getElementById( "instruction" ).childNodes[0].textContent = appState.config.instruction + " "; document.documentElement.style.setProperty( "--primary", appState.config.primary ); document.documentElement.style.setProperty( "--secondary", appState.config.secondary ); } /* ========================================================= FIND WORD ========================================================= */ function getWordForLetter( letter, category ) {
+    let options = appState.words.filter( item => 
+        item.letter === letter && 
+        (category === "all" || (item.categories || []).includes(category))
+    );
+    
+    // Fallback if no words found in the specific category
+    if (options.length === 0) {
+        options = appState.words.filter( item => item.letter === letter );
+    }
+    
+    if (options.length === 0) return null;
+    
+    const lastId = lastSeenWordIds[letter];
+    let index = 0;
+    if (lastId) {
+        const lastIndex = options.findIndex(item => item.id === lastId);
+        if (lastIndex !== -1) {
+            index = (lastIndex + 1) % options.length;
+        }
+    }
+    
+    lastSeenWordIds[letter] = options[index].id;
+    return options[index];
+} /* ========================================================= CATEGORY BUTTONS ========================================================= */ function renderCategoryButtons() {
+    categoryControls.innerHTML = "";
+    
+    const allBtn = document.createElement("button");
+    allBtn.className = "category-button";
+    if (currentCategory === "all") {
+        allBtn.classList.add("active");
+    }
+    allBtn.textContent = "All Categories";
+    allBtn.addEventListener("click", () => {
+        currentCategory = "all";
+        renderCategoryButtons();
+        playLetter(currentLetter);
+    });
+    categoryControls.appendChild(allBtn);
+
+    appState.categories.forEach( category => { const button = document.createElement( "button" ); button.className = "category-button"; if ( category === currentCategory ) { button.classList.add( "active" ); } button.textContent = formatCategoryName( category ); button.addEventListener( "click", () => { currentCategory = category; renderCategoryButtons(); playLetter( currentLetter ); } ); categoryControls.appendChild( button ); } ); } function formatCategoryName( category ) { return category .replace( /-/g, " " ) .replace( /\b\w/g, char => char.toUpperCase() ); }
+
+function getAllWordsForLetter( letter, category ) {
+    let options = appState.words.filter( item => 
+        item.letter === letter && 
+        (category === "all" || (item.categories || []).includes(category))
+    );
+    if (options.length === 0) {
+        options = appState.words.filter( item => item.letter === letter );
+    }
+    return options;
+}
+
+function showMultiModeGrid(allData, letter) {
+    wordContainer.innerHTML = "";
+    imageArea.innerHTML = "";
+    clearTimeout(animationTimer);
+    
+    const span = document.createElement("span");
+    span.className = "animated-letter first-letter";
+    span.textContent = letter.toUpperCase();
+    wordContainer.appendChild(span);
+    
+    const grid = document.createElement("div");
+    grid.className = "multi-mode-grid";
+    
+    allData.forEach(data => {
+        const card = document.createElement("div");
+        card.className = "multi-mode-card";
+        
+        let visualHtml = "";
+        if (data.imageUrl) {
+            visualHtml = `<img loading="lazy" src="${escapeHtml(data.imageUrl)}" alt="${escapeHtml(data.word)}" onerror="this.style.display='none'">`;
+        } else {
+            visualHtml = `<div class="fallback-icon">${escapeHtml(data.fallback || "❓")}</div>`;
+        }
+        
+        card.innerHTML = `
+            ${visualHtml}
+            <div style="font-weight:bold; font-family:'Fredoka', sans-serif; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">${escapeHtml(data.word)}</div>
+        `;
+        
+        card.addEventListener("click", () => {
+            showSingleImageFromMulti(data);
+        });
+        
+        grid.appendChild(card);
+    });
+    
+    imageArea.appendChild(grid);
+}
+
+function showSingleImageFromMulti(data) {
+    wordContainer.innerHTML = "";
+    imageArea.innerHTML = "";
+    clearTimeout(animationTimer);
+    
+    const words = data.word.split(" ");
+    let globalLetterIndex = 0;
+    
+    words.forEach((wordStr) => {
+        const wordGroup = document.createElement("div");
+        wordGroup.style.display = "flex";
+        wordGroup.style.gap = "6px";
+        wordGroup.style.flexWrap = "wrap";
+        wordGroup.style.justifyContent = "center";
+        
+        const characters = wordStr.split("");
+        characters.forEach((character) => {
+            const element = document.createElement( "span" );
+            element.className = "animated-letter";
+            if (globalLetterIndex === 0) {
+                element.classList.add("first-letter");
+            }
+            element.textContent = character;
+            element.style.animationDelay = ( globalLetterIndex * appState.config.letterDelay ) + "ms";
+            if (/^[a-zA-Z]$/.test(character)) {
+                element.style.cursor = "pointer";
+                element.addEventListener("click", () => {
+                    handleKeyPress(character.toLowerCase());
+                });
+            }
+            wordGroup.appendChild( element );
+            globalLetterIndex++;
+        });
+        
+        wordContainer.appendChild(wordGroup);
+    });
+    
+    const totalDelay = globalLetterIndex * appState.config.letterDelay + appState.config.imageDelay;
+    animationTimer = setTimeout(() => { showWordImage(data); }, totalDelay);
+}
+
+
+/* ========================================================= VIEW MANAGEMENT ========================================================= */ 
+var gameMode = 'single';
+document.getElementById('modeToggleButton').addEventListener('click', (e) => {
+    const btn = e.currentTarget;
+    if (gameMode === 'single') {
+        gameMode = 'multi';
+        btn.innerHTML = '<span class="material-icons" style="vertical-align: middle;">grid_view</span>';
+    } else {
+        gameMode = 'single';
+        btn.innerHTML = '<span class="material-icons" style="vertical-align: middle;">shuffle</span>';
+    }
+});
+
+function showGameView() { 
+    settingsView.classList.remove( "active" ); 
+    gameView.classList.add( "active" ); 
+    settingsButton.style.display = "inline-block"; 
+    playLetter(currentLetter);
+} 
+function showSettingsView() { gameView.classList.remove( "active" ); settingsView.classList.add( "active" ); settingsButton.style.display = "none"; renderAllSettings(); } 
+
+/* ========================================================= SETTINGS EVENTS ========================================================= */ 
+settingsButton.addEventListener( "click", showSettingsView ); backToGameButton.addEventListener( "click", showGameView ); 
+/* ========================================================= SETTINGS TABS ========================================================= */ 
+document.querySelectorAll( ".settings-tab" ) .forEach( tab => { tab.addEventListener( "click", () => { const tabName = tab.dataset.tab; document.querySelectorAll( ".settings-tab" ) .forEach( item => item.classList.remove( "active" ) ); tab.classList.add( "active" ); document.querySelectorAll( ".settings-panel" ) .forEach( panel => panel.classList.remove( "active" ) ); document.getElementById( tabName + "Panel" ) .classList.add( "active" ); } ); } ); 
+/* ========================================================= SETTINGS RENDER ========================================================= */ 
+function renderAllSettings() { renderWordTable(); renderCategoryManager(); renderStoryManager(); loadConfigurationForm(); } 
+/* ========================================================= WORD TABLE ========================================================= */ 
+function renderWordTable() {
+    const search = wordSearch.value.toLowerCase().trim();
+    const filteredWords = appState.words.filter(item => {
+        return (
+            item.letter.toLowerCase().includes(search) ||
+            item.word.toLowerCase().includes(search) ||
+            (item.categories || []).some(c => c.toLowerCase().includes(search))
+        );
+    }).sort((a, b) => {
+        const letterCompare = a.letter.localeCompare(b.letter);
+        if (letterCompare !== 0) return letterCompare;
+        return a.word.localeCompare(b.word);
+    });
+
+    const container = document.getElementById("wordListContainer");
+    if (!container) return;
+    container.innerHTML = "";
+
+    const grouped = {};
+    filteredWords.forEach(w => {
+        const L = w.letter.toUpperCase();
+        if (!grouped[L]) grouped[L] = [];
+        grouped[L].push(w);
+    });
+
+    Object.keys(grouped).sort().forEach(letter => {
+        const section = document.createElement("div");
+        section.className = "letter-section";
+
+        const header = document.createElement("div");
+        header.className = "letter-header";
+        header.style.display = "flex";
+        header.style.alignItems = "center";
+        header.style.gap = "15px";
+
+        const title = document.createElement("h2");
+        title.textContent = letter;
+        title.style.margin = "0";
+
+        const addIcon = document.createElement("button");
+        addIcon.className = "button button-success button-small";
+        addIcon.innerHTML = `<span class="material-icons" style="font-size: 1rem; vertical-align: middle;">add</span> Add`;
+        addIcon.title = "Add word for " + letter;
+        addIcon.onclick = () => {
+            openWordModal();
+            document.getElementById("wordLetter").value = letter;
+            setTimeout(() => document.getElementById("wordName").focus(), 100);
+        };
+
+        header.appendChild(title);
+        header.appendChild(addIcon);
+        section.appendChild(header);
+
+        const cardsWrap = document.createElement("div");
+        cardsWrap.className = "letter-cards";
+
+        grouped[letter].forEach(item => {
+            const card = document.createElement("div");
+            card.className = "word-card";
+
+            const preview = item.imageUrl 
+                ? `<img class="word-card-image" loading="lazy" src="${escapeHtml(item.imageUrl)}" onerror="this.style.display='none'">` 
+                : `<div class="word-card-image" style="display:flex;align-items:center;justify-content:center;font-size:2.5rem;">${escapeHtml(item.fallback)}</div>`;
+
+            const catHtml = (item.categories || []).map(c => `<span class="category-label" style="background:#edf0f7;padding:2px 8px;border-radius:12px;font-size:0.8rem;margin-right:4px;color:var(--text);font-weight:bold;">${escapeHtml(c)}</span>`).join("");
+
+            card.innerHTML = `
+                <div class="word-card-title">${escapeHtml(item.word)}</div>
+                ${preview}
+                <div class="word-card-details">
+                    <div><strong>Fallback:</strong> <span style="font-size:1.1rem">${escapeHtml(item.fallback)}</span></div>
+                    <div><strong>Tags:</strong> ${catHtml || 'None'}</div>
+                    <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:300px;">
+                        <strong>URL:</strong> <a href="${escapeHtml(item.imageUrl || '#')}" target="_blank" style="color:var(--primary);text-decoration:none;">${escapeHtml(item.imageUrl || 'None')}</a>
+                    </div>
+                    <div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:300px;">
+                        <strong>Audio:</strong> <a href="${escapeHtml(item.audioUrl || '#')}" target="_blank" style="color:var(--primary);text-decoration:none;">${escapeHtml(item.audioUrl || 'None')}</a>
+                    </div>
+                </div>
+                <div class="word-card-actions">
+                    <button class="button button-secondary button-small" onclick="previewWordFromList('${item.id}')" title="Preview">
+                        <span class="material-icons" style="font-size: 1.2rem; vertical-align: middle;">visibility</span>
+                    </button>
+                    <button class="button button-primary button-small" onclick="editWord('${item.id}')" title="Edit">
+                        <span class="material-icons" style="font-size: 1.2rem; vertical-align: middle;">edit</span>
+                    </button>
+                    <button class="button button-danger button-small" onclick="deleteWord('${item.id}')" title="Delete">
+                        <span class="material-icons" style="font-size: 1.2rem; vertical-align: middle;">delete</span>
+                    </button>
+                </div>
+            `;
+            cardsWrap.appendChild(card);
+        });
+
+        section.appendChild(cardsWrap);
+        container.appendChild(section);
+    });
+}
+ 
+/* =========================================================
+   STORY MODE LOGIC
+========================================================= */
+var currentStoryEditingId = null;
+var selectedStoryWordIds = [];
+var activePlayingStory = null;
+var currentStoryStep = 0;
+var canvasZIndexCounter = 10;
+var stickyMode = false;
+
+// Zoom and Pan variables
+var canvasScale = 1;
+var canvasPanX = 0;
+var canvasPanY = 0;
+var canvasMode = 'pan'; // 'pan' or 'select'
+var dockTimer = null;
+
+function renderStoryManager() {
+    const container = document.getElementById("storyListContainer");
+    if (!container) return;
+    container.innerHTML = "";
+
+    if (!appState.stories || appState.stories.length === 0) {
+        container.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--muted); padding: 20px;">No stories created yet. Click "Create New Story" to start!</div>`;
+        return;
+    }
+
+    appState.stories.forEach(story => {
+        const card = document.createElement("div");
+        card.className = "category-card";
+        const wordCount = (story.wordIds || []).length;
+        
+        card.innerHTML = `
+            <h3><span class="material-icons" style="font-size: 1.2rem; vertical-align: middle;">auto_stories</span> ${escapeHtml(story.title)}</h3>
+            <p>${wordCount} words sequence</p>
+            <div style="display: flex; gap: 8px; margin-top: 10px;">
+                <button class="button button-success button-small" onclick="playStory('${story.id}')" style="flex:1;">
+                    <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">play_arrow</span> Play
+                </button>
+                <button class="button button-primary button-small" onclick="editStory('${story.id}')" title="Edit">
+                    <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">edit</span>
+                </button>
+                <button class="button button-danger button-small" onclick="deleteStory('${story.id}')" title="Delete">
+                    <span class="material-icons" style="font-size: 1rem; vertical-align: middle;">delete</span>
+                </button>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+}
+
+function openStoryModal(storyId = null) {
+    currentStoryEditingId = storyId;
+    selectedStoryWordIds = [];
+    document.getElementById("storyForm").reset();
+    
+    if (storyId) {
+        const story = appState.stories.find(s => s.id === storyId);
+        if (story) {
+            document.getElementById("storyModalTitle").textContent = "Edit Story";
+            document.getElementById("storyNameInput").value = story.title;
+            selectedStoryWordIds = [...(story.wordIds || [])];
+        }
+    } else {
+        document.getElementById("storyModalTitle").textContent = "Create Story";
+    }
+    
+    renderStoryBuilderWordPickers();
+    renderStorySelectedPreview();
+    document.getElementById("storyModal").classList.add("active");
+}
+
+function closeStoryModal() {
+    document.getElementById("storyModal").classList.remove("active");
+}
+
+function renderStorySelectedPreview() {
+    const previewContainer = document.getElementById("storySelectedWordsPreview");
+    previewContainer.innerHTML = "";
+    
+    if (selectedStoryWordIds.length === 0) {
+        previewContainer.innerHTML = `<span style="color: var(--muted); font-size: 0.9rem;">No words selected yet. Click words below to build your sequence.</span>`;
+        return;
+    }
+    
+    selectedStoryWordIds.forEach((wordId, index) => {
+        const wordObj = appState.words.find(w => w.id === wordId);
+        if (!wordObj) return;
+        
+        const pill = document.createElement("div");
+        pill.style.cssText = "display: flex; align-items: center; gap: 6px; background: white; padding: 6px 12px; border-radius: 999px; border: 2px solid var(--primary); font-weight: 700; font-size: 0.9rem;";
+        pill.innerHTML = `
+            <span class="material-icons" style="color: var(--muted); cursor: grab; font-size: 1.2rem;">drag_indicator</span>
+            <span>${index + 1}.</span>
+            ${wordObj.imageUrl ? `<img src="${escapeHtml(wordObj.imageUrl)}" style="width: 28px; height: 28px; object-fit: cover; border-radius: 6px;" onerror="this.outerHTML='<span>${escapeHtml(wordObj.fallback || '❓')}</span>'">` : `<span>${escapeHtml(wordObj.fallback || "❓")}</span>`}
+            <span style="font-weight: 800;">${escapeHtml(wordObj.word)}</span>
+            <button type="button" style="background: none; border: none; cursor: pointer; color: var(--danger); font-weight: bold; margin-left: 8px;" onclick="removeWordFromStorySelection(${index})"><span class="material-icons">close</span></button>
+        `;
+        
+        pill.draggable = true;
+        pill.dataset.index = index;
+        
+        pill.addEventListener("dragstart", (e) => {
+            e.dataTransfer.setData("text/plain", index);
+            e.dataTransfer.effectAllowed = "move";
+            pill.style.opacity = "0.5";
+        });
+        
+        pill.addEventListener("dragover", (e) => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = "move";
+            pill.style.borderColor = "var(--success)";
+        });
+        
+        pill.addEventListener("dragleave", () => {
+            pill.style.borderColor = "var(--primary)";
+        });
+        
+        pill.addEventListener("drop", (e) => {
+            e.preventDefault();
+            const draggedIndex = parseInt(e.dataTransfer.getData("text/plain"), 10);
+            if (!isNaN(draggedIndex) && draggedIndex !== index) {
+                const item = selectedStoryWordIds.splice(draggedIndex, 1)[0];
+                selectedStoryWordIds.splice(index, 0, item);
+                renderStorySelectedPreview();
+            }
+        });
+        
+        pill.addEventListener("dragend", () => {
+            pill.style.opacity = "1";
+            pill.style.borderColor = "var(--primary)";
+        });
+        previewContainer.appendChild(pill);
+    });
+}
+
+function renderStoryBuilderWordPickers() {
+    const listContainer = document.getElementById("storyAvailableWordsList");
+    const searchVal = (document.getElementById("storyWordSearch").value || "").toLowerCase().trim();
+    listContainer.innerHTML = "";
+    
+    const filtered = appState.words.filter(w => w.word.toLowerCase().includes(searchVal) || w.letter.toLowerCase().includes(searchVal));
+    
+    filtered.forEach(w => {
+        const item = document.createElement("div");
+        item.style.cssText = "background: white; border: 2px solid #e1e5ee; border-radius: 10px; padding: 8px; text-align: center; cursor: pointer; transition: 0.1s;";
+        item.innerHTML = `
+            ${w.imageUrl ? `<img src="${escapeHtml(w.imageUrl)}" style="width: 100%; height: 60px; object-fit: cover; border-radius: 6px; margin-bottom: 4px;" onerror="this.outerHTML='<div style=\'font-size: 1.5rem;\'>${escapeHtml(w.fallback || '❓')}</div>'">` : `<div style="font-size: 1.5rem;">${escapeHtml(w.fallback || "❓")}</div>`}
+            <div style="font-size: 0.85rem; font-weight: 800; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; padding-top: 4px;">${escapeHtml(w.word)}</div>
+        `;
+        item.addEventListener("mouseover", () => item.style.borderColor = "var(--primary)");
+        item.addEventListener("mouseout", () => item.style.borderColor = "#e1e5ee");
+        item.addEventListener("click", () => {
+            selectedStoryWordIds.push(w.id);
+            renderStorySelectedPreview();
+        });
+        listContainer.appendChild(item);
+    });
+    
+    // Add a big Create Word button at the end of the grid
+    const addBtn = document.createElement("div");
+    addBtn.style.cssText = "background: #f4f5fb; border: 2px dashed #a0aabf; border-radius: 10px; padding: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; transition: 0.1s; min-height: 90px;";
+    addBtn.innerHTML = `<span class="material-icons" style="font-size: 2.5rem; color: var(--primary);">add_circle</span><div style="font-size: 0.85rem; font-weight: 800; color: var(--primary); margin-top: 5px;">Create Word</div>`;
+    addBtn.addEventListener("mouseover", () => addBtn.style.borderColor = "var(--primary)");
+    addBtn.addEventListener("mouseout", () => addBtn.style.borderColor = "#a0aabf");
+    addBtn.addEventListener("click", openWordModal);
+    listContainer.appendChild(addBtn);
+}
+
+window.removeWordFromStorySelection = function(index) {
+    selectedStoryWordIds.splice(index, 1);
+    renderStorySelectedPreview();
+};
+
+document.getElementById("storyWordSearch").addEventListener("input", renderStoryBuilderWordPickers);
+document.getElementById("addStoryButton").addEventListener("click", () => openStoryModal(null));
+document.getElementById("closeStoryModal").addEventListener("click", closeStoryModal);
+document.getElementById("cancelStoryBtn").addEventListener("click", closeStoryModal);
+
+document.getElementById("storyForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const title = document.getElementById("storyNameInput").value.trim();
+    if (!title) {
+        showToast("Please enter a story title.");
+        return;
+    }
+    if (selectedStoryWordIds.length === 0) {
+        showToast("Please select at least one word for the story.");
+        return;
+    }
+    
+    if (currentStoryEditingId) {
+        const story = appState.stories.find(s => s.id === currentStoryEditingId);
+        if (story) {
+            story.title = title;
+            story.wordIds = [...selectedStoryWordIds];
+        }
+    } else {
+        const newStory = {
+            id: crypto.randomUUID(),
+            title: title,
+            wordIds: [...selectedStoryWordIds]
+        };
+        appState.stories.push(newStory);
+    }
+    
+    saveState();
+    renderStoryManager();
+    closeStoryModal();
+    showToast("Story saved successfully!");
+});
+
+window.editStory = function(id) {
+    openStoryModal(id);
+};
+
+window.deleteStory = function(id) {
+    confirmNative("Are you sure you want to delete this story?", () => {
+        appState.stories = appState.stories.filter(s => s.id !== id);
+        saveState();
+        renderStoryManager();
+        showToast("Story deleted.");
+    });
+};
+
+/* =========================================================
+   STORY PLAYER, DRAGGABLE CANVAS, PAN/ZOOM & DOCKING
+========================================================= */
+
+document.getElementById("storyFullscreenBtn").addEventListener("click", (e) => {
+    const modal = document.getElementById("storyPlayerModal").querySelector(".modal");
+    modal.classList.toggle("modal-fullscreen");
+    e.target.innerHTML = modal.classList.contains("modal-fullscreen") ? "<span class=\"material-icons\">fullscreen_exit</span>" : "<span class=\"material-icons\">fullscreen</span>";
+});
+
+
+document.getElementById("storyStickyToggleBtn").addEventListener("click", (e) => {
+    stickyMode = !stickyMode;
+    e.target.innerHTML = stickyMode ? "<span class=\"material-icons\" style=\"vertical-align: middle;\">layers</span> Sticky Mode: ON" : "<span class=\"material-icons\" style=\"vertical-align: middle;\">layers</span> Sticky Mode: OFF";
+    e.target.classList.toggle("button-success", stickyMode);
+    e.target.classList.toggle("button-secondary", !stickyMode);
+});
+
+function updateCanvasTransform() {
+    document.getElementById("storyCanvasInner").style.transform = `translate(${canvasPanX}px, ${canvasPanY}px) scale(${canvasScale})`;
+}
+
+// Mouse Wheel Zoom
+document.getElementById("storyCanvas").addEventListener("wheel", (e) => {
+    e.preventDefault();
+    const zoomAmount = e.deltaY > 0 ? 0.9 : 1.1;
+    let newScale = canvasScale * zoomAmount;
+    
+    // Max Zoom out limit bounded by cards
+    let maxX = 0, maxY = 0;
+    document.querySelectorAll(".story-card-item").forEach(c => {
+        const w = c.clientWidth * parseFloat(c.dataset.scale || 1);
+        const h = c.clientHeight * parseFloat(c.dataset.scale || 1);
+        maxX = Math.max(maxX, c.offsetLeft + w);
+        maxY = Math.max(maxY, c.offsetTop + h);
+    });
+    
+    const canvasEl = document.getElementById("storyCanvas");
+    const minScale = Math.min(1, canvasEl.clientWidth / (maxX + 100), canvasEl.clientHeight / (maxY + 100));
+    newScale = Math.max(minScale, Math.min(newScale, 3)); 
+
+    const rect = canvasEl.getBoundingClientRect();
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+
+    canvasPanX = mouseX - (mouseX - canvasPanX) * (newScale / canvasScale);
+    canvasPanY = mouseY - (mouseY - canvasPanY) * (newScale / canvasScale);
+    
+    canvasScale = newScale;
+    updateCanvasTransform();
+});
+
+window.playStory = function(id) {
+    const story = appState.stories.find(s => s.id === id);
+    if (!story || !story.wordIds || story.wordIds.length === 0) {
+        showToast("This story has no words configured!");
+        return;
+    }
+    
+    activePlayingStory = story;
+    currentStoryStep = 0;
+    canvasZIndexCounter = 10;
+    canvasScale = 1;
+    canvasPanX = 0;
+    canvasPanY = 0;
+    updateCanvasTransform();
+    
+    document.getElementById("storyPlayerTitle").textContent = story.title;
+    const canvasInner = document.getElementById("storyCanvasInner");
+    const selBox = document.getElementById("selectionBox");
+    canvasInner.innerHTML = "";
+    canvasInner.appendChild(selBox);
+    
+    document.getElementById("storyPlayerModal").classList.add("active");
+    updateStoryPlayerUI();
+};
+
+function updateStoryPlayerUI() {
+    const total = activePlayingStory.wordIds.length;
+    document.getElementById("storyStepIndicator").textContent = `Step ${Math.min(currentStoryStep + 1, total)} of ${total}`;
+    
+    
+}
+
+window.playNextStoryWord = function(spawnX, spawnY) {
+    if (!activePlayingStory) return;
+    if (currentStoryStep >= activePlayingStory.wordIds.length) return;
+    
+    const wordId = activePlayingStory.wordIds[currentStoryStep];
+    const wordObj = appState.words.find(w => w.id === wordId);
+    currentStoryStep++;
+    updateStoryPlayerUI();
+    
+    if (wordObj) {
+        spawnDraggableCard(wordObj, spawnX, spawnY);
+        playSound(wordObj);
+    }
+};
+
+document.getElementById("storyResetCanvasBtn").addEventListener("click", () => {
+    const canvasInner = document.getElementById("storyCanvasInner");
+    const selBox = document.getElementById("selectionBox");
+    canvasInner.innerHTML = "";
+    canvasInner.appendChild(selBox);
+    currentStoryStep = 0;
+    canvasZIndexCounter = 10;
+    canvasScale = 1;
+    canvasPanX = 0;
+    canvasPanY = 0;
+    updateCanvasTransform();
+    updateStoryPlayerUI();
+});
+
+document.getElementById("closeStoryPlayer").addEventListener("click", () => {
+    document.getElementById("storyPlayerModal").classList.remove("active");
+    activePlayingStory = null;
+    stopCurrentAudio();
+});
+
+function checkStickyCollisions(droppedEls) {
+    const allCards = Array.from(document.querySelectorAll(".story-card-item:not(.docked-bubble)"));
+    const droppedSet = new Set(droppedEls);
+    const otherCards = allCards.filter(c => !droppedSet.has(c));
+    
+    let collidedCards = new Set();
+    
+    droppedEls.forEach(dEl => {
+        const dRect = dEl.getBoundingClientRect();
+        otherCards.forEach(oEl => {
+            const oRect = oEl.getBoundingClientRect();
+            if (!(oRect.left > dRect.right || oRect.right < dRect.left || oRect.top > dRect.bottom || oRect.bottom < dRect.top)) {
+                collidedCards.add(oEl);
+            }
+        });
+    });
+    
+    if (collidedCards.size > 0) {
+        const newGroupId = "group_" + Date.now();
+        let allToMerge = new Set([...droppedEls, ...collidedCards]);
+        
+        collidedCards.forEach(c => {
+            const gId = c.dataset.groupId;
+            if (gId) {
+                document.querySelectorAll(`[data-group-id="${gId}"]`).forEach(sibling => allToMerge.add(sibling));
+            }
+        });
+        
+        allToMerge.forEach(c => {
+            c.dataset.groupId = newGroupId;
+            c.classList.add("grouped-card");
+            c.dataset.tapState = "bottom"; 
+        });
+    }
+}
+
+function performDock(edge, movingCards) {
+    const leader = movingCards[0].el;
+    const cx = leader.offsetLeft;
+    const cy = leader.offsetTop;
+    
+    movingCards.forEach(m => {
+        const el = m.el;
+        el.dataset.preDockLeft = el.offsetLeft - cx;
+        el.dataset.preDockTop = el.offsetTop - cy;
+        el.dataset.preDockScale = el.dataset.scale || 1;
+        el.dataset.preDockGroup = el.dataset.groupId || "";
+        
+        el.classList.add("docked-bubble");
+        el.style.left = cx + "px";
+        el.style.top = cy + "px";
+        el.dataset.isDocked = "true";
+        el.style.zIndex = canvasZIndexCounter; 
+    });
+}
+
+function spawnDraggableCard(wordObj, spawnX, spawnY) {
+    const canvas = document.getElementById("storyCanvas");
+    const canvasInner = document.getElementById("storyCanvasInner");
+    canvasZIndexCounter++;
+    
+    const card = document.createElement("div");
+    card.className = "story-card-item";
+    
+    // Flawless scaling layout without resize icon handle
+    card.style.cssText = `position: absolute; background: white; border: 3px solid var(--primary); border-radius: 24px 24px 6px 24px; padding: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); display: flex; flex-direction: column; align-items: center; gap: 8px; width: 150px; z-index: ${canvasZIndexCounter}; transform-origin: top left; transform: scale(1); touch-action: none; cursor: grab;`;
+    if (spawnX !== undefined && spawnY !== undefined) {
+        card.style.left = spawnX + "px";
+        card.style.top = spawnY + "px";
+    } else {
+        const centerX = (canvas.clientWidth / 2 - canvasPanX) / canvasScale - 75;
+        const centerY = (canvas.clientHeight / 2 - canvasPanY) / canvasScale - 80;
+        card.style.left = centerX + "px";
+        card.style.top = centerY + "px";
+    }
+
+    
+    let visualHtml = "";
+    if (wordObj.imageUrl) {
+        visualHtml = `<div class="card-visual-layer" style="width: 100%; height: 90px; display: flex; align-items: center; justify-content: center; pointer-events: none;"><img src="${escapeHtml(wordObj.imageUrl)}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 8px;" onerror="this.style.display='none'"></div>`;
+    } else {
+        visualHtml = `<div class="card-visual-layer" style="font-size: 2.5rem; height: 90px; display: flex; align-items: center; justify-content: center; pointer-events: none;">${escapeHtml(wordObj.fallback || "❓")}</div>`;
+    }
+    
+    card.innerHTML = `
+        ${visualHtml}
+        <div class="card-text-layer" style="font-family: 'Fredoka', sans-serif; font-weight: 800; font-size: 1rem; color: var(--text); pointer-events: none; text-align: center; line-height: 1.1;">${escapeHtml(wordObj.word)}</div>
+        <div class="card-resize-handle" style="position: absolute; bottom: 0; right: 0; width: 35px; height: 35px; cursor: se-resize; z-index: 5;"></div>
+    `;
+    card.dataset.scale = "1";
+
+    let isDragging = false;
+    let isResizing = false;
+    let isTap = true;
+    let startX, startY;
+    let initialScale = 1;
+    let movingCards = []; 
+    
+    // Resize Handler Isolation
+    const handle = card.querySelector(".card-resize-handle");
+    handle.addEventListener("pointerdown", (e) => {
+        isResizing = true;
+        startX = e.clientX;
+        initialScale = parseFloat(card.dataset.scale || 1);
+        try { handle.setPointerCapture(e.pointerId); } catch(err) {}
+        e.stopPropagation();
+        e.preventDefault();
+    });
+    
+    handle.addEventListener("pointermove", (e) => {
+        if (!isResizing) return;
+        const dx = (e.clientX - startX) / canvasScale;
+        const newScale = Math.max(0.4, Math.min(3, initialScale + (dx / 150)));
+        card.style.transform = `scale(${newScale})`;
+        card.dataset.scale = newScale;
+        e.stopPropagation();
+    });
+    
+    handle.addEventListener("pointerup", (e) => {
+        isResizing = false;
+        try { handle.releasePointerCapture(e.pointerId); } catch(err) {}
+        e.stopPropagation();
+    });
+    
+    // Drag & Group Handler
+    card.addEventListener("pointerdown", (e) => {
+        try { card.setPointerCapture(e.pointerId); } catch(err) {}
+        
+        startX = e.clientX;
+        startY = e.clientY;
+        isDragging = false;
+        isTap = true;
+        
+        card.dataset.longPressTriggered = "false";
+        card.longPressTimer = setTimeout(() => {
+            card.dataset.longPressTriggered = "true";
+            if (card.dataset.groupId) {
+                card.removeAttribute("data-group-id");
+                card.classList.remove("grouped-card");
+                card.dataset.tapState = "bottom";
+                canvasZIndexCounter++;
+                card.style.zIndex = canvasZIndexCounter;
+                
+                movingCards = [{ el: card, startLeft: card.offsetLeft, startTop: card.offsetTop }];
+                
+                card.style.transform = `scale(${(parseFloat(card.dataset.scale) || 1) * 1.1})`;
+                setTimeout(() => { card.style.transform = `scale(${card.dataset.scale || 1})`; }, 200);
+            }
+        }, 500);
+        
+        movingCards = [];
+        
+        if (card.dataset.isDocked === "true") {
+            movingCards.push({ el: card, startLeft: card.offsetLeft, startTop: card.offsetTop });
+        } else {
+            const groupId = card.dataset.groupId;
+            if (groupId) {
+                document.querySelectorAll(`[data-group-id="${groupId}"]`).forEach(el => {
+                    movingCards.push({ el, startLeft: el.offsetLeft, startTop: el.offsetTop });
+                });
+            } else if (card.classList.contains("selected-group-card")) {
+                document.querySelectorAll(".story-card-item.selected-group-card").forEach(el => {
+                    movingCards.push({ el, startLeft: el.offsetLeft, startTop: el.offsetTop });
+                });
+            } else {
+                movingCards.push({ el: card, startLeft: card.offsetLeft, startTop: card.offsetTop });
+            }
+        }
+        
+        card.style.cursor = "grabbing";
+    });
+    
+    card.addEventListener("pointermove", (e) => {
+        if (!e.buttons) return;
+        
+        // Correct mouse delta taking canvas zoom into account!
+        const dx = (e.clientX - startX) / canvasScale;
+        const dy = (e.clientY - startY) / canvasScale;
+        
+        if (isTap && (Math.abs(dx) > 2 || Math.abs(dy) > 2)) {
+            isTap = false;
+            isDragging = true;
+            if (card.longPressTimer && card.dataset.longPressTriggered === "false") {
+                clearTimeout(card.longPressTimer);
+                card.longPressTimer = null;
+            }
+            canvasZIndexCounter++;
+            movingCards.forEach(m => m.el.style.zIndex = canvasZIndexCounter);
+        }
+        
+        if (isDragging) {
+            movingCards.forEach(m => {
+                m.el.style.left = Math.max(0, m.startLeft + dx) + "px";
+                m.el.style.top = Math.max(0, m.startTop + dy) + "px";
+            });
+
+            // Edge glow docking check
+            if (!card.dataset.isDocked || card.dataset.isDocked === "false") {
+                const canvasRect = canvas.getBoundingClientRect();
+                const edgeThresh = 40;
+                let edge = null;
+                if (e.clientX - canvasRect.left < edgeThresh) edge = 'left';
+                else if (canvasRect.right - e.clientX < edgeThresh) edge = 'right';
+                else if (e.clientY - canvasRect.top < edgeThresh) edge = 'top';
+                else if (canvasRect.bottom - e.clientY < edgeThresh) edge = 'bottom';
+
+                if (edge) {
+                    canvas.dataset.glow = edge;
+                    if (!dockTimer) dockTimer = setTimeout(() => {
+                        performDock(edge, movingCards);
+                        isDragging = false; // force drop
+                        canvas.dataset.glow = "";
+                    }, 600);
+                } else {
+                    canvas.dataset.glow = "";
+                    clearTimeout(dockTimer);
+                    dockTimer = null;
+                }
+            }
+        }
+    });
+    
+    card.addEventListener("pointerup", (e) => {
+        if (card.longPressTimer) {
+             clearTimeout(card.longPressTimer);
+             card.longPressTimer = null;
+        }
+        try { card.releasePointerCapture(e.pointerId); } catch(err) {}
+        card.style.cursor = "grab";
+        
+        const canvas = document.getElementById("storyCanvas");
+        canvas.dataset.glow = "";
+        clearTimeout(dockTimer);
+        dockTimer = null;
+        
+        if (isTap && card.dataset.longPressTriggered === "false") {
+            if (card.dataset.isDocked === "true") {
+                const cx = card.offsetLeft;
+                const cy = card.offsetTop;
+                const siblings = Array.from(document.querySelectorAll(".docked-bubble")).filter(el => {
+                    return Math.abs(el.offsetLeft - cx) < 5 && Math.abs(el.offsetTop - cy) < 5;
+                });
+                
+                siblings.forEach(el => {
+                    el.classList.remove("docked-bubble");
+                    el.dataset.isDocked = "false";
+                    el.style.left = (cx + parseFloat(el.dataset.preDockLeft || 0)) + "px";
+                    el.style.top = (cy + parseFloat(el.dataset.preDockTop || 0)) + "px";
+                    el.style.transform = `scale(${el.dataset.preDockScale || 1})`;
+                });
+            } else if (card.dataset.groupId) {
+                if (card.dataset.tapState === "top") {
+                    card.removeAttribute("data-group-id");
+                    card.classList.remove("grouped-card");
+                    card.dataset.tapState = "bottom";
+                    card.style.zIndex = 1;
+                } else {
+                    canvasZIndexCounter++;
+                    card.style.zIndex = canvasZIndexCounter;
+                    card.dataset.tapState = "top";
+                }
+            } else {
+                canvasZIndexCounter++;
+                card.style.zIndex = canvasZIndexCounter;
+            }
+        } else if (isDragging && card.dataset.isDocked !== "true") {
+            checkStickyCollisions(movingCards.map(m => m.el));
+        }
+        
+        isDragging = false;
+        movingCards = [];
+    });
+
+    canvasInner.appendChild(card);
+}
+
+/* =========================================================
+   CANVAS PAN & SELECTION BOX (GROUPING)
+========================================================= */
+var isCanvasDragging = false;
+var isSelecting = false;
+var selStartX = 0, selStartY = 0;
+var panStartX = 0, panStartY = 0;
+var initialPanX = 0, initialPanY = 0;
+
+var canvasEl = document.getElementById("storyCanvas");
+var selBox = document.getElementById("selectionBox");
+var canvasHasPanned = false;
+
+canvasEl.addEventListener("pointerdown", (e) => {
+    if (e.target !== canvasEl && e.target.id !== "storyCanvasInner" && e.target.id !== "selectionBox") return;
+    
+    canvasHasPanned = false;
+    isCanvasDragging = true;
+    panStartX = e.clientX;
+    panStartY = e.clientY;
+    initialPanX = canvasPanX;
+    initialPanY = canvasPanY;
+    canvasEl.style.cursor = "grabbing";
+});
+
+canvasEl.addEventListener("pointermove", (e) => {
+    if (isCanvasDragging) {
+        const dx = e.clientX - panStartX;
+        const dy = e.clientY - panStartY;
+        if (Math.abs(dx) > 3 || Math.abs(dy) > 3) {
+            canvasHasPanned = true;
+        }
+        canvasPanX = initialPanX + dx;
+        canvasPanY = initialPanY + dy;
+        updateCanvasTransform();
+    }
+});
+
+window.addEventListener("pointerup", (e) => {
+    if (isCanvasDragging) {
+        isCanvasDragging = false;
+        canvasEl.style.cursor = "";
+        
+        if (!canvasHasPanned) {
+            if (e.target === canvasEl || e.target.id === "storyCanvasInner" || e.target.id === "selectionBox") {
+                if (typeof window.playNextStoryWord === "function") {
+                    const rect = canvasEl.getBoundingClientRect();
+                    const logicalX = (panStartX - rect.left - canvasPanX) / canvasScale - 75;
+                    const logicalY = (panStartY - rect.top - canvasPanY) / canvasScale - 80;
+                    window.playNextStoryWord(logicalX, logicalY);
+                }
+            }
+        }
+    }
+    
+    if (isSelecting) {
+        isSelecting = false;
+        selBox.style.display = "none";
+    }
+});
+
+// Pinch to Zoom support for mobile
+var initialPinchDist = null;
+var initialPinchScale = 1;
+
+canvasEl.addEventListener('touchstart', e => {
+    if (e.touches.length === 2) {
+        isSelecting = false;
+        isCanvasDragging = false;
+        initialPinchDist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+        initialPinchScale = canvasScale;
+    }
+}, {passive: false});
+
+canvasEl.addEventListener('touchmove', e => {
+    if (e.touches.length === 2) {
+        e.preventDefault();
+        const dist = Math.hypot(e.touches[0].clientX - e.touches[1].clientX, e.touches[0].clientY - e.touches[1].clientY);
+        const zoomFactor = dist / initialPinchDist;
+        let newScale = initialPinchScale * zoomFactor;
+        
+        let maxX = 0, maxY = 0;
+        document.querySelectorAll(".story-card-item").forEach(c => {
+            const w = c.clientWidth * parseFloat(c.dataset.scale || 1);
+            const h = c.clientHeight * parseFloat(c.dataset.scale || 1);
+            maxX = Math.max(maxX, c.offsetLeft + w);
+            maxY = Math.max(maxY, c.offsetTop + h);
+        });
+        
+        const minScale = Math.min(1, canvasEl.clientWidth / (maxX + 100), canvasEl.clientHeight / (maxY + 100));
+        newScale = Math.max(minScale, Math.min(newScale, 3)); 
+
+        const rect = canvasEl.getBoundingClientRect();
+        const mouseX = ((e.touches[0].clientX + e.touches[1].clientX) / 2) - rect.left;
+        const mouseY = ((e.touches[0].clientY + e.touches[1].clientY) / 2) - rect.top;
+
+        canvasPanX = mouseX - (mouseX - canvasPanX) * (newScale / canvasScale);
+        canvasPanY = mouseY - (mouseY - canvasPanY) * (newScale / canvasScale);
+        
+        canvasScale = newScale;
+        updateCanvasTransform();
+    }
+}, {passive: false});
+
+document.getElementById("storyModeBtn").addEventListener("click", () => {
+    if (!appState.stories || appState.stories.length === 0) {
+        showToast("Please create a story in Settings first!");
+        showSettingsView();
+        document.querySelector('[data-tab="stories"]').click();
+        return;
+    }
+    playStory(appState.stories[0].id);
+});
+ 
+/* =========================================================
+   RECOVERED FUNCTIONS
+========================================================= */
+
+var confirmCallback = null;
+function confirmNative(message, callback) {
+    document.getElementById("confirmModalMessage").textContent = message;
+    document.getElementById("confirmModal").classList.add("active");
+    confirmCallback = callback;
+}
+document.getElementById("closeConfirmModal").addEventListener("click", () => {
+    document.getElementById("confirmModal").classList.remove("active");
+});
+document.getElementById("confirmModalCancel").addEventListener("click", () => {
+    document.getElementById("confirmModal").classList.remove("active");
+});
+document.getElementById("confirmModalConfirm").addEventListener("click", () => {
+    document.getElementById("confirmModal").classList.remove("active");
+    if(confirmCallback) confirmCallback();
+});
+
+function escapeHtml(str) {
+    if (!str) return "";
+    return String(str)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+function populateWordCategoryCheckboxes() {
+    const container = document.getElementById("wordCategory");
+    container.innerHTML = "";
+    appState.categories.forEach(category => {
+        const label = document.createElement("label");
+        label.className = "checkbox-item";
+        label.innerHTML = `<input type="checkbox" value="${escapeHtml(category)}"><span>${escapeHtml(formatCategoryName(category))}</span>`;
+        container.appendChild(label);
+    });
+}
+
+function openWordModal() {
+    populateWordCategoryCheckboxes();
+    document.getElementById("wordForm").reset();
+    document.getElementById("editingWordId").value = "";
+    document.getElementById("wordModalTitle").textContent = "Add Word";
+    document.getElementById("editWordView").style.display = "block";
+    document.getElementById("previewWordView").style.display = "none";
+    wordModal.classList.add("active");
+}
+
+function closeModal() {
+    wordModal.classList.remove("active");
+    if(document.getElementById("imageSearchResults")) {
+        document.getElementById("imageSearchResults").style.display = "none";
+    }
+    stopCurrentAudio();
+}
+
+function editWord(id) {
+    const word = appState.words.find(w => w.id === id);
+    if(!word) return;
+    populateWordCategoryCheckboxes();
+    document.getElementById("editingWordId").value = word.id;
+    document.getElementById("wordLetter").value = word.letter;
+    document.getElementById("wordName").value = word.word;
+    document.getElementById("wordFallback").value = word.fallback || "";
+    document.getElementById("wordImageUrl").value = word.imageUrl || "";
+    document.getElementById("wordAudioUrl").value = word.audioUrl || "";
+    
+    const checkboxes = document.querySelectorAll('#wordCategory input[type="checkbox"]');
+    checkboxes.forEach(chk => {
+        chk.checked = (word.categories || []).includes(chk.value);
+    });
+    
+    document.getElementById("wordModalTitle").textContent = "Edit Word";
+    document.getElementById("editWordView").style.display = "block";
+    document.getElementById("previewWordView").style.display = "none";
+    wordModal.classList.add("active");
+}
+
+function deleteWord(id) {
+    confirmNative("Are you sure you want to delete this word?", () => {
+        appState.words = appState.words.filter(w => w.id !== id);
+        saveState();
+        renderWordTable();
+        renderCategoryButtons();
+        showToast("Word deleted.");
+    });
+}
+
+function deleteCategory(category) {
+    confirmNative("Are you sure you want to delete this category?", () => {
+        appState.categories = appState.categories.filter(c => c !== category);
+        appState.words.forEach(w => {
+            w.categories = (w.categories || []).filter(c => c !== category);
+        });
+        if(currentCategory === category) currentCategory = "all";
+        saveState();
+        renderAllSettings();
+        renderCategoryButtons();
+        showToast("Category deleted.");
+    });
+}
+
+wordSearch.addEventListener("input", renderWordTable);
+
+function populateCategorySelect() {
+
+    wordCategory.innerHTML = "";
+    appState.categories.forEach( category => {
+        const label = document.createElement("label");
+        label.className = "checkbox-item";
+        const checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        checkbox.value = category;
+        const span = document.createElement("span");
+        span.textContent = formatCategoryName(category);
+        label.appendChild(checkbox);
+        label.appendChild(span);
+        wordCategory.appendChild(label);
+    });
+} addWordButton.addEventListener( "click", () => { openWordModal(); } ); closeWordModal.addEventListener( "click", closeModal ); cancelWordButton.addEventListener( "click", closeModal ); /* =========================================================
+   IMAGE SEARCH
+========================================================= */
+var searchImagesBtn = document.getElementById("searchImagesBtn");
+var imageSearchResults = document.getElementById("imageSearchResults");
+var currentSearchQuery = "";
+var currentSearchOffset = 0;
+
+function renderImageResults(imgs, append = false) {
+    if (!append) {
+        imageSearchResults.innerHTML = "";
+    }
+    
+    const existingLoadMore = document.getElementById("loadMoreImagesBtn");
+    if (existingLoadMore) existingLoadMore.remove();
+
+    imgs.forEach(imgUrl => {
+        const img = document.createElement("img");
+        img.src = imgUrl;
+        img.style.width = "100%";
+        img.style.height = "80px";
+        img.style.objectFit = "cover";
+        img.style.borderRadius = "8px";
+        img.style.cursor = "pointer";
+        img.style.border = "2px solid transparent";
+        
+        img.onerror = () => { img.style.display = 'none'; };
+        
+        img.addEventListener("mouseover", () => img.style.border = "2px solid var(--primary)");
+        img.addEventListener("mouseout", () => img.style.border = "2px solid transparent");
+        
+        img.addEventListener("click", () => {
+            let finalUrl = imgUrl;
+            if (finalUrl.includes('/thumb/')) {
+                let parts = finalUrl.split('/');
+                parts.pop();
+                finalUrl = parts.join('/').replace('/thumb/', '/');
+            }
+            document.getElementById("wordImageUrl").value = finalUrl;
+            imageSearchResults.style.display = "none";
+            showToast("High-res image selected!");
+        });
+        
+        imageSearchResults.appendChild(img);
+    });
+    
+    if (imgs.length > 0) {
+        const loadMore = document.createElement("button");
+        loadMore.id = "loadMoreImagesBtn";
+        loadMore.type = "button";
+        loadMore.className = "button button-secondary";
+        loadMore.style.gridColumn = "1 / -1";
+        loadMore.style.marginTop = "10px";
+        loadMore.textContent = "Load More Images...";
+        loadMore.addEventListener("click", async () => {
+            currentSearchOffset += 24;
+            loadMore.textContent = "Loading...";
+            loadMore.disabled = true;
+            await fetchImages(currentSearchQuery, currentSearchOffset, true);
+        });
+        imageSearchResults.appendChild(loadMore);
+    }
+}
+
+async function fetchImages(query, offset, append = false) {
+    try {
+        const response = await fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&generator=search&gsrsearch=${encodeURIComponent(query)}&gsrlimit=24&gsroffset=${offset}&prop=pageimages&piprop=thumbnail&pithumbsize=400&origin=*`);
+        const data = await response.json();
+        
+        let imgs = [];
+        if (data.query && data.query.pages) {
+            const pages = Object.values(data.query.pages);
+            imgs = pages.filter(p => p.thumbnail && p.thumbnail.source).map(p => p.thumbnail.source);
+        }
+        
+        if (imgs.length === 0 && !append) {
+            imageSearchResults.innerHTML = "<div style='grid-column: 1/-1; text-align:center; padding: 20px; color: var(--muted);'>No images found. Please paste a URL manually.</div>";
+        } else if (imgs.length === 0 && append) {
+            const existingLoadMore = document.getElementById("loadMoreImagesBtn");
+            if (existingLoadMore) {
+                existingLoadMore.textContent = "No more images";
+                existingLoadMore.disabled = true;
+            }
+        } else {
+            renderImageResults(imgs, append);
+        }
+    } catch (err) {
+        if (!append) {
+            imageSearchResults.innerHTML = "<div style='grid-column: 1/-1; text-align:center; padding: 20px; color: var(--muted);'>Search failed. Please paste a URL manually.</div>";
+        } else {
+            const existingLoadMore = document.getElementById("loadMoreImagesBtn");
+            if (existingLoadMore) existingLoadMore.textContent = "Search failed.";
+        }
+    }
+}
+
+searchImagesBtn.addEventListener("click", async () => {
+    const query = document.getElementById("wordName").value.trim();
+    if (!query) {
+        showToast("Please enter a word first!");
+        return;
+    }
+    
+    currentSearchQuery = query;
+    currentSearchOffset = 0;
+    
+    searchImagesBtn.textContent = "⏳...";
+    searchImagesBtn.disabled = true;
+    imageSearchResults.style.display = "grid";
+    imageSearchResults.innerHTML = "<div style='grid-column: 1/-1; text-align:center; padding: 20px; color: var(--muted);'>Searching free images...</div>";
+    
+    await fetchImages(currentSearchQuery, currentSearchOffset, false);
+    
+searchImagesBtn.textContent = "🔍 Search";
+    searchImagesBtn.disabled = false;
+});
+
+async function getAnimalAudioUrl(animalName) {
+  const searchQuery = encodeURIComponent(`${animalName} filetype:audio`);
+  const searchUrl = `https://commons.wikimedia.org/w/api.php?action=query&list=search&srnamespace=6&srsearch=${searchQuery}&format=json&origin=*`;
+  
+  try {
+    const searchRes = await fetch(searchUrl);
+    const searchData = await searchRes.json();
+
+    if (searchData.query && searchData.query.search.length > 0) {
+      const fileTitle = searchData.query.search[0].title;
+      const fileUrlReq = `https://commons.wikimedia.org/w/api.php?action=query&titles=${encodeURIComponent(fileTitle)}&prop=imageinfo&iiprop=url&format=json&origin=*`;
+      const fileRes = await fetch(fileUrlReq);
+      const fileData = await fileRes.json();
+      
+      const pages = fileData.query.pages;
+      const pageId = Object.keys(pages)[0];
+      
+      if (pages[pageId].imageinfo && pages[pageId].imageinfo.length > 0) {
+        return pages[pageId].imageinfo[0].url; 
+      }
+    }
+  } catch (error) {
+    console.warn("Wikimedia API request failed, falling back to TTS...");
+  }
+
+  return `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en&q=${encodeURIComponent(animalName)}`;
+}
+
+document.getElementById("btnGoogleTTS").addEventListener("click", () => {
+    const query = document.getElementById("wordName").value.trim().toLowerCase();
+    if (!query) {
+        showToast("Please enter a word first!");
+        return;
+    }
+    const url = `https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(query)}&tl=en&client=tw-ob`;
+    document.getElementById("wordAudioUrl").value = url;
+    showToast("Google TTS URL populated!");
+});
+
+document.getElementById("btnWikimedia").addEventListener("click", async () => {
+    const query = document.getElementById("wordName").value.trim().toLowerCase();
+    if (!query) {
+        showToast("Please enter a word first!");
+        return;
+    }
+    const btn = document.getElementById("btnWikimedia");
+    const originalText = btn.innerHTML;
+    btn.textContent = "⏳...";
+    btn.disabled = true;
+    try {
+        const url = await getAnimalAudioUrl(query);
+        document.getElementById("wordAudioUrl").value = url;
+        showToast("Wikimedia URL populated!");
+    } catch (e) {
+        showToast("Failed to fetch Wikimedia URL");
+    } finally {
+        btn.innerHTML = originalText;
+        btn.disabled = false;
+    }
+});
+
+document.getElementById("previewWordBtn").addEventListener("click", () => {
+    const word = document.getElementById("wordName").value.trim().toUpperCase();
+    const imageUrl = document.getElementById("wordImageUrl").value.trim();
+    const audioUrl = document.getElementById("wordAudioUrl").value.trim();
+    const fallback = document.getElementById("wordFallback").value.trim() || "❓";
+    
+    if (!word) {
+        showToast("Please enter a word to preview.");
+        return;
+    }
+
+    document.getElementById("editWordView").style.display = "none";
+    document.getElementById("previewWordView").style.display = "block";
+    
+    const wordContainer = document.getElementById("previewWordContainer");
+    const imageArea = document.getElementById("previewImageArea");
+    
+    wordContainer.innerHTML = "";
+    for (let i = 0; i < word.length; i++) {
+        const span = document.createElement("span");
+        span.className = "animated-letter";
+        span.style.animationDelay = (i * 180) + "ms";
+        span.textContent = word[i];
+        wordContainer.appendChild(span);
+    }
+    
+    imageArea.innerHTML = "";
+    const wrapper = document.createElement("div");
+    wrapper.className = "image-wrapper";
+    
+    const tempWordData = { word, imageUrl, fallback, audioUrl };
+    
+    if (!imageUrl) {
+        showFallback(wrapper, tempWordData);
+        imageArea.appendChild(wrapper);
+    } else {
+        const image = document.createElement("img");
+        image.className = "word-image";
+        image.src = imageUrl;
+        image.alt = word;
+        image.addEventListener("error", () => {
+            showFallback(wrapper, tempWordData);
+        }, { once: true });
+        wrapper.appendChild(image);
+        imageArea.appendChild(wrapper);
+    }
+    
+    playSound(tempWordData);
+});
+
+window.previewWordFromList = function(id) {
+    const word = appState.words.find(w => w.id === id);
+    if (!word) return;
+    
+    const modal = document.getElementById("standalonePreviewModal");
+    const wordContainer = document.getElementById("standalonePreviewWordContainer");
+    const imageArea = document.getElementById("standalonePreviewImageArea");
+    
+    modal.classList.add("active");
+    
+    wordContainer.innerHTML = "";
+    for (let i = 0; i < word.word.length; i++) {
+        const span = document.createElement("span");
+        span.className = "animated-letter";
+        span.style.animationDelay = (i * 180) + "ms";
+        span.textContent = word.word[i];
+        wordContainer.appendChild(span);
+    }
+    
+    imageArea.innerHTML = "";
+    const wrapper = document.createElement("div");
+    wrapper.className = "image-wrapper";
+    
+    if (!word.imageUrl) {
+        showFallback(wrapper, word);
+        imageArea.appendChild(wrapper);
+    } else {
+        const image = document.createElement("img");
+        image.className = "word-image";
+        image.src = word.imageUrl;
+        image.alt = word.word;
+        image.addEventListener("error", () => {
+            showFallback(wrapper, word);
+        }, { once: true });
+        wrapper.appendChild(image);
+        imageArea.appendChild(wrapper);
+    }
+    
+    playSound(word);
+};
+
+document.getElementById("closeStandalonePreviewBtn").addEventListener("click", () => {
+    document.getElementById("standalonePreviewModal").classList.remove("active");
+    stopCurrentAudio();
+});
+
+document.getElementById("standalonePreviewModal").addEventListener("click", (e) => {
+    if (e.target.id === "standalonePreviewModal") {
+        document.getElementById("standalonePreviewModal").classList.remove("active");
+        stopCurrentAudio();
+    }
+});
+
+document.getElementById("backToEditBtn").addEventListener("click", () => {
+    document.getElementById("previewWordView").style.display = "none";
+    document.getElementById("editWordView").style.display = "block";
+    stopCurrentAudio();
+});
+
+document.getElementById("googleImagesBtn").addEventListener("click", () => {
+    const query = document.getElementById("wordName").value.trim();
+    if (!query) {
+        showToast("Please enter a word first!");
+        return;
+    }
+    window.open(`https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query + ' transparent background')}`, "_blank");
+});
+
+/* ========================================================= SAVE WORD ========================================================= */ wordForm.addEventListener( "submit", event => { event.preventDefault(); const letter = wordLetter.value .trim() .toLowerCase(); if ( !/^[a-z]$/.test( letter ) ) { showToast( "Please enter one letter from A to Z." ); return; } const newData = { letter: letter, word: wordName.value .trim() .toUpperCase(), categories: Array.from(wordCategory.querySelectorAll('input[type="checkbox"]:checked')).map(chk => chk.value), imageUrl: wordImageUrl.value .trim(), audioUrl: document.getElementById("wordAudioUrl").value.trim(), fallback: wordFallback.value .trim() || "❓" }; const existingId = editingWordId.value; if ( existingId ) { const index = appState.words.findIndex( item => item.id === existingId ); if ( index !== -1 ) { appState.words[index] = { id: existingId, ...newData }; } } else { appState.words.push({ id: crypto.randomUUID(), ...newData }); }    try { saveState(); renderWordTable(); renderCategoryButtons(); } catch(e) { console.error(e); } finally { if(typeof renderStoryBuilderWordPickers === 'function') renderStoryBuilderWordPickers(); closeModal(); showToast("Word saved!"); } } ); /* =========================================================
+     COPY URL
+========================================================= */
+window.copyUrl = function(id) {
+    const item = appState.words.find( word => word.id === id );
+    if (!item) return;
+    navigator.clipboard.writeText(item.imageUrl || "").then(() => {
+        showToast("URL copied to clipboard!");
+    }).catch(err => {
+        showToast("Failed to copy URL");
+    });
+};
+
+/* =========================================================
+     EDIT WORD Global because buttons use onclick. ========================================================= */  /* ========================================================= DELETE WORD ========================================================= */ window.deleteWord = function(id) { const item = appState.words.find( word => word.id === id ); if (!item) { return; } const confirmed = confirm( `Delete "${item.word}"?` ); if (!confirmed) { return; } appState.words = appState.words.filter( word => word.id !== id ); saveState(); renderWordTable(); showToast( "Word deleted." ); }; /* ========================================================= CATEGORY MANAGER ========================================================= */ function renderCategoryManager() { categoryList.innerHTML = ""; appState.categories.forEach( category => { const count = appState.words.filter( word => (word.categories || []).includes(category) ) .length; const card = document.createElement( "div" ); card.className = "category-card"; card.innerHTML = ` <h3> <span class="material-icons" style="font-size: 1.2rem; vertical-align: middle;">label</span> ${escapeHtml( formatCategoryName( category ) )} </h3> <p> ${count} words </p> <button class="button button-danger button-small" onclick="deleteCategory('${escapeHtml(category)}')" > <span class="material-icons" style="font-size: 1.2rem; vertical-align: middle;">delete</span> Remove Category </button> `; categoryList.appendChild( card ); } ); } /* ========================================================= ADD CATEGORY ========================================================= */ addCategoryButton.addEventListener( "click", () => { const category = newCategoryInput.value .trim() .toLowerCase() .replace( /\s+/g, "-" ); if (!category) { showToast( "Enter a category name." ); return; } if ( appState.categories.includes( category ) ) { showToast( "That category already exists." ); return; } appState.categories.push( category ); newCategoryInput.value = ""; saveState(); renderCategoryManager(); renderCategoryButtons(); showToast( "Category added!" ); } ); /* ========================================================= DELETE CATEGORY ========================================================= */ window.deleteCategory = function(category) { const wordCount = appState.words.filter( word => (word.categories || []).includes(category) ) .length; if ( wordCount > 0 ) { showToast( "Remove or move the words first." ); return; } if ( appState.categories.length <= 1 ) { showToast( "At least one category is required." ); return; } const confirmed = confirm( `Remove category "${category}"?` ); if (!confirmed) { return; } appState.categories = appState.categories.filter( item => item !== category ); if ( currentCategory === category ) { currentCategory = appState.categories[0]; } saveState(); renderCategoryManager(); renderCategoryButtons(); showToast( "Category removed." ); }; /* ========================================================= CONFIGURATION FORM ========================================================= */ function loadConfigurationForm() { document.getElementById( "configTitle" ).value = appState.config.title; document.getElementById( "configInstruction" ).value = appState.config.instruction; document.getElementById( "configPrimary" ).value = appState.config.primary; document.getElementById( "configSecondary" ).value = appState.config.secondary; document.getElementById( "configLetterDelay" ).value = appState.config.letterDelay; document.getElementById( "configImageDelay" ).value = appState.config.imageDelay; document.getElementById( "configSound" ).checked = appState.config.soundEnabled;
+    document.getElementById( "configCustomAudio" ).checked = appState.config.customAudioEnabled !== false;
+    document.getElementById( "configKidPin" ).value = appState.config.kidPin || "1234";
+    document.getElementById( "configLockDelay" ).value = appState.config.lockDelay !== undefined ? appState.config.lockDelay : 500;
+    document.getElementById( "configKeyboardListener" ).checked = appState.config.keyboardListener !== false;
+    document.getElementById( "configMaxAudioDuration" ).value = appState.config.maxAudioDuration !== undefined ? appState.config.maxAudioDuration : 3;
+} document.getElementById( "saveConfigButton" ) .addEventListener( "click", () => { appState.config.title = document.getElementById( "configTitle" ) .value .trim() || DEFAULT_CONFIG.title; appState.config.instruction = document.getElementById( "configInstruction" ) .value .trim() || DEFAULT_CONFIG.instruction; appState.config.primary = document.getElementById( "configPrimary" ) .value; appState.config.secondary = document.getElementById( "configSecondary" ) .value; appState.config.letterDelay = Number( document.getElementById( "configLetterDelay" ) .value ) || DEFAULT_CONFIG.letterDelay; appState.config.imageDelay = Number( document.getElementById( "configImageDelay" ) .value ) || DEFAULT_CONFIG.imageDelay; appState.config.soundEnabled = document.getElementById( "configSound" ) .checked;
+    appState.config.customAudioEnabled = document.getElementById( "configCustomAudio" ).checked;
+    appState.config.kidPin = document.getElementById( "configKidPin" ).value.trim() || "1234";
+    appState.config.lockDelay = Number( document.getElementById( "configLockDelay" ).value ) || 500;
+    appState.config.keyboardListener = document.getElementById( "configKeyboardListener" ).checked;
+    appState.config.maxAudioDuration = Number( document.getElementById( "configMaxAudioDuration" ).value ) || 3;
+    saveState(); applyConfiguration(); showToast( "Configuration saved!" ); } ); /* ========================================================= JSON EXPORT ========================================================= */ document.getElementById( "downloadJsonButton" ) .addEventListener( "click", () => { downloadFile( JSON.stringify( appState, null, 2 ), "alphabet-adventure-backup.json", "application/json" ); showToast( "JSON backup downloaded!" ); } ); /* ========================================================= JSON IMPORT ========================================================= */ document.getElementById( "importJsonButton" ) .addEventListener( "click", () => { document.getElementById( "importJsonInput" ) .click(); } ); document.getElementById( "importJsonInput" ) .addEventListener( "change", event => { const file = event.target.files[0]; if (!file) { return; } const reader = new FileReader(); reader.onload = loadEvent => { try { const data = JSON.parse( loadEvent.target.result );
+        if ( !data.words || !data.categories || !data.config ) {
+            throw new Error( "Invalid file" );
+        }
+        if (!data.stories) {
+            data.stories = structuredClone(DEFAULT_STORIES);
+        }
+        
+        // Migration and dedup
+        const migratedWords = [];
+        const seenWords = new Set();
+        data.words.forEach(w => {
+            const wordUpper = w.word.toUpperCase();
+            if (!seenWords.has(wordUpper)) {
+                seenWords.add(wordUpper);
+                if (typeof w.category === 'string') {
+                    if (w.category === 'mixed') {
+                        w.categories = [];
+                    } else {
+                        w.categories = [w.category];
+                    }
+                    delete w.category;
+                }
+                w.categories = (w.categories || []).filter(c => c !== 'mixed');
+                migratedWords.push(w);
+            }
+        });
+        data.words = migratedWords;
+
+        appState = data; saveState(); renderAllSettings(); renderCategoryButtons(); applyConfiguration(); showToast( "Backup imported!" ); } catch (error) { console.error(error); } }; reader.readAsText( file ); } ); /* ========================================================= RESET ========================================================= */ document.getElementById( "resetAppButton" ) .addEventListener( "click", () => { const confirmed = confirm( "This will permanently reset all local changes. Continue?" ); if (!confirmed) { return; } appState = createDefaultState(); currentCategory = "all"; currentLetter = "a"; saveState(); applyConfiguration(); renderAllSettings(); renderCategoryButtons(); showToast( "Application reset." ); } ); /* ========================================================= DOWNLOAD FILE ========================================================= */ function downloadFile( content, fileName, mimeType ) { const blob = new Blob( [content], { type: mimeType } ); const url = URL.createObjectURL( blob ); const link = document.createElement( "a" ); link.href = url; link.download = fileName; document.body.appendChild( link ); link.click(); document.body.removeChild( link ); setTimeout( () => { URL.revokeObjectURL( url ); }, 1000 ); } /* ========================================================= HTML EXPORT The generated application contains: - Current data - Current configuration - Categories Because this is a self-contained application, the current page HTML can be exported directly. The exported page starts with the embedded application state. ========================================================= */ document.getElementById( "downloadAppButton" ) .addEventListener( "click", () => { const currentDocument = document.documentElement.outerHTML; /* * Embed state into the exported file. * The exported file will restore this state * into localStorage when opened. */ const stateScript = `
+<script>
+localStorage.setItem(
+    ${JSON.stringify(STORAGE_KEY)},
+    ${JSON.stringify(JSON.stringify(appState))}
+);
+<\/script>
+`;
+
+    const finalHtml = currentDocument.replace('</bo' + 'dy>', stateScript + '\n</bo' + 'dy>');
+
+    if (window.showSaveFilePicker) {
+        window.showSaveFilePicker({
+            suggestedName: 'alphabet-adventure-custom.html',
+            types: [{
+                description: 'HTML Document',
+                accept: { 'text/html': ['.html'] },
+            }],
+        }).then(async handle => {
+            const writable = await handle.createWritable();
+            await writable.write("<!DOCTYPE html>\n" + finalHtml);
+            await writable.close();
+            showToast("Saved to file successfully!");
+        }).catch(err => {
+            if (err.name !== 'AbortError') {
+                downloadFile(
+                    "<!DOCTYPE html>\n" + finalHtml,
+                    "alphabet-adventure-custom.html",
+                    "text/html"
+                );
+                showToast("Custom HTML app downloaded!");
+            }
+        });
+    } else {
+        downloadFile(
+            "<!DOCTYPE html>\n" + finalHtml,
+            "alphabet-adventure-custom.html",
+            "text/html"
+        );
+        showToast("Custom HTML app downloaded!");
+    }
+});
+
+/* =========================================================
+INITIALIZATION
+========================================================= */
+var virtualKeyboard = document.getElementById("virtualKeyboard");
+function renderVirtualKeyboard() {
+    if (!virtualKeyboard) return;
+    virtualKeyboard.innerHTML = "";
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
+    letters.forEach(letter => {
+        const btn = document.createElement("button");
+        btn.className = "key-button";
+        btn.textContent = letter;
+        btn.addEventListener("click", () => {
+            handleKeyPress(letter.toLowerCase());
+        });
+        virtualKeyboard.appendChild(btn);
+    });
+}
+renderVirtualKeyboard();
+
+
+/* =========================================================
+   KID MODE (FULLSCREEN LOCK)
+========================================================= */
+var isKidMode = false;
+var fullscreenElement = document.documentElement;
+
+document.getElementById("kidModeButton").addEventListener("click", () => {
+    isKidMode = true;
+    if (fullscreenElement.requestFullscreen) {
+        fullscreenElement.requestFullscreen().catch(e => console.log(e));
+    } else if (fullscreenElement.webkitRequestFullscreen) { /* Safari */
+        fullscreenElement.webkitRequestFullscreen();
+    } else if (fullscreenElement.msRequestFullscreen) { /* IE11 */
+        fullscreenElement.msRequestFullscreen();
+    }
+    document.getElementById("kidModeButton").style.display = "none";
+    document.getElementById("settingsButton").style.display = "none";
+    // Trap back button
+    history.pushState({kidMode: true}, ""); 
+    showToast("Kid Mode Activated!");
+});
+
+function attemptExitKidMode() {
+    document.getElementById("pinInput").value = "";
+    document.getElementById("pinError").style.display = "none";
+    document.getElementById("pinModal").classList.add("active");
+}
+
+function cancelPinLock() {
+    document.getElementById("pinModal").classList.remove("active");
+    if (isKidMode) {
+        history.pushState({kidMode: true}, "");
+        if (fullscreenElement.requestFullscreen) {
+            fullscreenElement.requestFullscreen().catch(e => console.log(e));
+        } else if (fullscreenElement.webkitRequestFullscreen) {
+            fullscreenElement.webkitRequestFullscreen();
+        } else if (fullscreenElement.msRequestFullscreen) {
+            fullscreenElement.msRequestFullscreen();
+        }
+    }
+}
+
+document.getElementById("submitPinBtn").addEventListener("click", () => {
+    if (document.getElementById("pinInput").value === (appState.config.kidPin || "1234")) {
+        // Success
+        isKidMode = false;
+        document.getElementById("pinModal").classList.remove("active");
+        document.getElementById("kidModeButton").style.display = "inline-block";
+        if(gameView.classList.contains("active")) {
+            document.getElementById("settingsButton").style.display = "inline-block";
+        }
+        if (document.fullscreenElement || document.webkitFullscreenElement) {
+            if (document.exitFullscreen) {
+                document.exitFullscreen().catch(e => console.log(e));
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            }
+        }
+    } else {
+        showToast("Incorrect PIN!");
+        cancelPinLock();
+    }
+});
+
+document.getElementById("pinModal").addEventListener("click", (e) => {
+    if (e.target.id === "pinModal") {
+        cancelPinLock();
+    }
+});
+
+
+document.getElementById("cancelPinBtn").addEventListener("click", cancelPinLock);
+
+window.addEventListener("popstate", (e) => {
+    if (isKidMode) {
+        attemptExitKidMode();
+    }
+});
+
+document.addEventListener("fullscreenchange", () => {
+    if (isKidMode && !document.fullscreenElement) {
+        attemptExitKidMode();
+    }
+});
+document.addEventListener("webkitfullscreenchange", () => {
+    if (isKidMode && !document.webkitFullscreenElement) {
+        attemptExitKidMode();
+    }
+});
+
+
+
+
+
+
+

@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en" style="--primary: #6c63ff; --secondary: #ff7eb3;"><head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Alphabet Adventure</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#6c63ff">
+<link rel="apple-touch-icon" href="icon.svg">
+</head><body>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&amp;family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+<link rel="stylesheet" href="styles.css">
+
+
+
+
+
+
+<div id="app">
+
+<div class="background-decoration">
+
+    <div class="bubble"></div>
+
+    <div class="bubble"></div>
+
+    <div class="bubble"></div>
+
+</div>
+
+
+
+<!-- =================================================
+     HEADER
+================================================= -->
+
+<header class="app-header">
+    <div class="logo">
+        <span class="logo-icon">🌈</span>
+        <span>Alphabet Adventure</span>
+    </div>
+    <div style="display: flex; gap: 10px;">
+        <button id="storyModeBtn" class="button button-secondary" title="Story Mode">
+            <span class="material-icons" style="vertical-align: middle;">auto_stories</span> Story Mode
+        </button>
+        <button id="modeToggleButton" class="button button-secondary" title="Toggle Mode">
+            <span class="material-icons" style="vertical-align: middle;">shuffle</span>
+        </button>
+        <button id="kidModeButton" class="button button-success" title="Full Screen">
+            <span class="material-icons" style="vertical-align: middle;">fullscreen</span>
+        </button>
+        <button id="settingsButton" class="button button-secondary" style="display: none;" title="Settings">
+            <span class="material-icons" style="vertical-align: middle;">settings</span>
+        </button>
+    </div>
+</header>
+
+
+
+<main class="main-container">
+
+
+    <!-- =============================================
+         GAME VIEW
+    ============================================== -->
+
+    <section id="gameView" class="view">
+
+
+        <div class="game-card">
+
+
+            <div id="instruction" class="instruction" style="display: none;">⌨️ Press a letter! <span id="currentLetterBadge" class="letter-badge">A</span>
+
+            </div>
+
+
+
+            <div id="wordContainer" class="word-container"><span class="animated-letter" style="animation-delay: 0ms;">A</span><span class="animated-letter" style="animation-delay: 180ms;">P</span><span class="animated-letter" style="animation-delay: 360ms;">P</span><span class="animated-letter" style="animation-delay: 540ms;">L</span><span class="animated-letter" style="animation-delay: 720ms;">E</span></div>
+
+
+
+            <div id="imageArea" class="image-area"><div class="image-wrapper"><img class="word-image" src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9CQiQTwDM0icaz7ZLMEj5drPCU_Q3UnLSdaROGKjSVg&amp;s=10" alt="APPLE"></div></div>
+
+
+
+            
+
+
+        </div>
+
+
+    <div id="virtualKeyboard" class="virtual-keyboard"><button class="key-button">A</button><button class="key-button">B</button><button class="key-button">C</button><button class="key-button">D</button><button class="key-button">E</button><button class="key-button">F</button><button class="key-button">G</button><button class="key-button">H</button><button class="key-button">I</button><button class="key-button">J</button><button class="key-button">K</button><button class="key-button">L</button><button class="key-button">M</button><button class="key-button">N</button><button class="key-button">O</button><button class="key-button">P</button><button class="key-button">Q</button><button class="key-button">R</button><button class="key-button">S</button><button class="key-button">T</button><button class="key-button">U</button><button class="key-button">V</button><button class="key-button">W</button><button class="key-button">X</button><button class="key-button">Y</button><button class="key-button">Z</button></div>
+    </section>
+
+
+
+    <!-- =============================================
+         SETTINGS VIEW
+    ============================================== -->
+
+    <section id="settingsView" class="view active">
+
+
+        <div class="settings-card">
+
+
+            <div class="settings-header">
+
+
+                <div>
+
+                    <h1 class="settings-title">
+
+                        <span class="material-icons" style="vertical-align: middle;">settings</span> Settings
+
+                    </h1>
+
+                    <div>
+
+                        Manage words,
+                        images,
+                        categories
+                        and app settings.
+
+                    </div>
+
+                </div>
+
+
+
+                <button id="backToGameButton" class="button button-primary" title="Back to Game">
+
+                    <span class="material-icons" style="vertical-align: middle;">sports_esports</span> Back to Game
+
+                </button>
+
+
+            </div>
+
+
+
+            <!-- TABS -->
+
+            <div class="settings-tabs">
+
+
+                <button class="settings-tab" data-tab="words">
+
+                    <span class="material-icons" style="vertical-align: middle;">menu_book</span> Words
+
+                </button>
+
+
+                <button class="settings-tab" data-tab="categories">
+
+                    <span class="material-icons" style="vertical-align: middle;">label</span> Categories
+
+                </button>
+
+                <button class="settings-tab" data-tab="stories">
+                    <span class="material-icons" style="vertical-align: middle;">auto_stories</span> Stories
+                </button>
+
+
+                <button class="settings-tab" data-tab="configuration">
+
+                    <span class="material-icons" style="vertical-align: middle;">palette</span> Configuration
+
+                </button>
+
+
+                <button class="settings-tab active" data-tab="export">
+
+                    <span class="material-icons" style="vertical-align: middle;">save</span> Export
+
+                </button>
+
+
+            </div>
+
+
+
+            <!-- =====================================
+                 WORDS PANEL
+            ====================================== -->
+
+            <div id="wordsPanel" class="settings-panel">
+
+
+                <div class="toolbar">
+
+
+                    <input id="wordSearch" class="search-input" placeholder="Search letter, word or category...">
+
+
+                    <button id="addWordButton" class="button button-success">
+
+                        <span class="material-icons" style="vertical-align: middle;">add</span> Add Word
+
+                    </button>
+
+
+                </div>
+
+
+
+                <div id="wordListContainer" class="word-list-container"></div>
+
+
+            </div>
+
+
+
+            <!-- =====================================
+                 CATEGORIES PANEL
+            ====================================== -->
+
+            <div id="categoriesPanel" class="settings-panel">
+
+
+                <div class="toolbar">
+
+
+                    <input id="newCategoryInput" class="search-input" placeholder="New category name...">
+
+
+                    <button id="addCategoryButton" class="button button-success">
+
+                        <span class="material-icons" style="vertical-align: middle;">add</span> Add Category
+
+                    </button>
+
+
+                </div>
+
+
+
+                <div id="categoryList" class="category-list"></div>
+
+
+            </div>
+
+
+
+            <!-- =====================================
+                 STORIES PANEL
+            ====================================== -->
+
+            <div id="storiesPanel" class="settings-panel">
+                <div class="toolbar">
+                    <button id="addStoryButton" class="button button-success">
+                        <span class="material-icons" style="vertical-align: middle;">add</span> Create New Story
+                    </button>
+                </div>
+                <div id="storyListContainer" class="category-list"></div>
+            </div>
+
+
+
+            <!-- =====================================
+                 CONFIGURATION PANEL
+            ====================================== -->
+
+            <div id="configurationPanel" class="settings-panel">
+
+                <div class="config-section">
+                    <h3>
+                        <span class="material-icons" style="vertical-align: middle;">category</span> Practice Category
+                    </h3>
+                    <p style="margin-top:0; color:var(--muted);">
+                        Choose which category to practice during the game.
+                    </p>
+                    <div id="categoryControls" class="category-controls" style="justify-content: flex-start;"></div>
+                </div>
+
+
+
+                <div class="config-section">
+
+
+                    <h3>
+
+                        <span class="material-icons" style="vertical-align: middle;">palette</span> Game Appearance
+
+                    </h3>
+
+
+                    <div class="form-grid">
+
+
+                        <div class="form-group">
+
+                            <label>
+
+                                Application Title
+
+                            </label>
+
+
+                            <input id="configTitle" type="text">
+
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label>
+
+                                Instruction Text
+
+                            </label>
+
+
+                            <input id="configInstruction" type="text">
+
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label>
+
+                                Primary Colour
+
+                            </label>
+
+
+                            <input id="configPrimary" type="color">
+
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label>
+
+                                Secondary Colour
+
+                            </label>
+
+
+                            <input id="configSecondary" type="color">
+
+
+                        </div>
+
+
+                    </div>
+
+
+                </div>
+
+
+
+                <div class="config-section">
+                    <h3><span class="material-icons" style="vertical-align: middle;">security</span> Security</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Kid Mode PIN (4 Digits)</label>
+                            <input id="configKidPin" type="text" maxlength="4" pattern="[0-9]*" inputmode="numeric">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="config-section">
+                    <h3><span class="material-icons" style="vertical-align: middle;">animation</span> Animation</h3>
+
+
+                    <div class="form-grid">
+
+
+                        <div class="form-group">
+
+                            <label>
+
+                                Letter Delay (ms)
+
+                            </label>
+
+
+                            <input id="configLetterDelay" type="number" min="0" max="2000">
+
+
+                        </div>
+
+
+
+                        <div class="form-group">
+
+                            <label>
+
+                                Image Delay (ms)
+
+                            </label>
+
+
+                            <input id="configImageDelay" type="number" min="0" max="5000">
+
+
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                Input Lock Delay (ms)
+                            </label>
+                            <input id="configLockDelay" type="number" min="0" max="5000">
+                        </div>
+
+                        <div class="form-group">
+                            <label>
+                                Max Audio Duration (sec)
+                            </label>
+                            <input id="configMaxAudioDuration" type="number" min="1" max="60" step="0.5">
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+                <div class="config-section">
+                    <h3><span class="material-icons" style="vertical-align: middle;">keyboard</span> Input</h3>
+                    <div class="form-group">
+                        <label>
+                            <input id="configKeyboardListener" type="checkbox">
+                            Enable words listener (listen for letter taps)
+                        </label>
+                    </div>
+                </div>
+
+
+
+                <div class="config-section">
+
+
+                    <h3>
+
+                        <span class="material-icons" style="vertical-align: middle;">volume_up</span> Audio
+
+                    </h3>
+
+
+                    <div class="form-group">
+                        <label>
+                            <input id="configSound" type="checkbox">
+                            Enable synthetic sound effects
+                        </label>
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            <input id="configCustomAudio" type="checkbox">
+                            Enable custom word audio (e.g. animal sounds)
+                        </label>
+                    </div>
+
+
+                </div>
+
+
+
+                <button id="saveConfigButton" class="button button-primary">
+
+                    <span class="material-icons" style="vertical-align: middle;">save</span> Save Configuration
+
+                </button>
+
+
+            </div>
+
+
+
+            <!-- =====================================
+                 EXPORT PANEL
+            ====================================== -->
+
+            <div id="exportPanel" class="settings-panel active">
+
+
+                <div class="config-section">
+
+
+                    <h3>
+
+                        <span class="material-icons" style="vertical-align: middle;">inventory_2</span> Download Your Custom App
+
+                    </h3>
+
+
+                    <p>
+
+                        Your current words,
+                        categories,
+                        image URLs
+                        and configuration will be embedded
+                        into a new standalone HTML file.
+
+                    </p>
+
+
+                    <br>
+
+
+                    <button id="downloadAppButton" class="button button-success">
+
+                        <span class="material-icons" style="vertical-align: middle;">download</span> Save Updated App / Download
+
+                    </button>
+
+
+                </div>
+
+
+
+                <div class="config-section">
+
+
+                    <h3>
+
+                        <span class="material-icons" style="vertical-align: middle;">backup</span> Backup Data
+
+                    </h3>
+
+
+                    <p>
+
+                        Download your data as JSON.
+                        You can later restore it.
+
+                    </p>
+
+
+                    <br>
+
+
+                    <button id="downloadJsonButton" class="button button-secondary">
+
+                        Download JSON Backup
+
+                    </button>
+
+
+                    <input id="importJsonInput" type="file" accept=".json" style="display:none">
+
+
+                    <button id="importJsonButton" class="button button-primary">
+
+                        Import JSON Backup
+
+                    </button>
+
+
+                </div>
+
+
+
+                <div class="config-section">
+
+
+                    <h3>
+
+                        <span class="material-icons" style="vertical-align: middle;">warning</span> Reset Application
+
+                    </h3>
+
+
+                    <p>
+
+                        Restore the original built-in
+                        alphabet data.
+                        <strong>
+                            This cannot be undone.
+                        </strong>
+
+                    </p>
+
+
+                    <br>
+
+
+                    <button id="resetAppButton" class="button button-danger">
+
+                        <span class="material-icons" style="vertical-align: middle;">delete_forever</span> Reset Everything
+
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+
+    </section>
+
+
+</main>
+
+</div>
+
+
+
+
+<!-- ===================================================== STORY PLAYER MODAL ===================================================== -->
+<div id="storyPlayerModal" class="modal-overlay" style="z-index: 999; background: rgba(20,25,45,0.95);">
+    <div class="modal" style="width: min(950px, 95vw); height: 88vh; display: flex; flex-direction: column; background: #f4f6fb;">
+        <div class="modal-header" style="margin-bottom: 10px;">
+            <h2 id="storyPlayerTitle" class="modal-title">Story Mode</h2>
+            <div style="display: flex; gap: 10px;">
+                <button id="storyFullscreenBtn" class="button button-secondary">🔲 Fullscreen</button>
+                <button id="closeStoryPlayer" class="button button-secondary"><span class="material-icons" style="vertical-align: middle;">close</span> Close</button>
+            </div>
+        </div>
+        
+        <div id="storyCanvas" style="flex: 1; background: white; border: 2px dashed var(--border); border-radius: 20px; position: relative; overflow: hidden; box-shadow: inset 0 4px 12px rgba(0,0,0,0.05); user-select: none; touch-action: none; transition: box-shadow 0.3s;">
+            <!-- INNER ZOOM/PAN LAYER -->
+            <div id="storyCanvasInner" style="transform-origin: 0 0; transform: translate(0px, 0px) scale(1); left: 0; top: 0; width: 100%; height: 100%; position: absolute;">
+                <div id="selectionBox" style="position: absolute; border: 2px dashed var(--primary); background: rgba(108,99,255,0.1); display: none; pointer-events: none; z-index: 9999;"></div>
+                <!-- Draggable cards spawn here -->
+            </div>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 15px; flex-wrap: wrap; gap: 10px;">
+            <div id="storyStepIndicator" style="font-weight: 800; color: var(--muted);">Step 1 of 5</div>
+            
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+                
+                <button id="storyStickyToggleBtn" class="button button-secondary"><span class="material-icons" style="vertical-align: middle;">layers</span> Sticky Mode: OFF</button>
+                <button id="storyResetCanvasBtn" class="button button-secondary"><span class="material-icons" style="vertical-align: middle;">restart_alt</span> Reset Canvas</button>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===================================================== STORY BUILDER MODAL ===================================================== -->
+<div id="storyModal" class="modal-overlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 id="storyModalTitle" class="modal-title">Create Story</h2>
+            <button id="closeStoryModal" class="button button-secondary"><span class="material-icons" style="vertical-align: middle;">close</span> Close</button>
+        </div>
+        <form id="storyForm">
+            <input id="editingStoryId" type="hidden" value="">
+            <div class="form-grid">
+                <div class="form-group full">
+                    <label>Story Title</label>
+                    <input id="storyNameInput" type="text" placeholder="e.g. Journey to the River" required>
+                </div>
+                <div class="form-group full">
+                    <label>Select Words in Sequence (Click to add in order)</label>
+                    <div style="display: flex; gap: 10px; margin-bottom: 10px;">
+                        <input id="storyWordSearch" class="search-input" placeholder="Search available words..." style="flex: 1;">
+                        <button type="button" class="button button-primary" style="margin: 0; white-space: nowrap;" onclick="openWordModal()">
+                            <span class="material-icons" style="vertical-align: middle;">add</span> Add Word
+                        </button>
+                    </div>
+                    <div id="storySelectedWordsPreview" style="display: flex; flex-wrap: wrap; gap: 8px; padding: 10px; background: #f4f5fb; border-radius: 12px; min-height: 50px; align-items: center; margin-bottom: 15px;">
+                        <span style="color: var(--muted); font-size: 0.9rem;">No words selected yet. Click words below to build your sequence.</span>
+                    </div>
+                    <div id="storyAvailableWordsList" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; max-height: 250px; overflow-y: auto; padding: 5px; border: 1px solid var(--border); border-radius: 12px;"></div>
+                </div>
+            </div>
+            <div class="form-actions">
+                <button type="button" id="cancelStoryBtn" class="button button-secondary">Cancel</button>
+                <button type="submit" class="button button-primary">💾 Save Story</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+<!-- ===================================================== WORD MODAL ===================================================== -->
+
+
+    <!-- =====================================
+         CONFIRM MODAL
+    ====================================== -->
+    
+    <!-- =====================================
+         PIN MODAL
+    ====================================== -->
+    <div id="pinModal" class="modal-overlay" style="z-index: 9999; background: rgba(20,25,45,0.95);">
+        <div class="modal" style="width: 320px; text-align: center;">
+            <h2 style="margin-bottom: 10px;">Enter PIN to Exit</h2>
+            <p style="margin-bottom: 20px; color: var(--muted);">Enter the PIN you set in Settings (default: 1234)</p>
+            <div style="display: flex; justify-content: center; margin-bottom: 10px;">
+                <input id="pinInput" type="password" inputmode="numeric" pattern="[0-9]*" maxlength="4" style="width: 150px; font-size: 2rem; text-align: center; letter-spacing: 10px;">
+            </div>
+            <p id="pinError" style="color: red; display: none; margin-bottom: 15px;">Incorrect PIN</p>
+            <div class="form-actions" style="justify-content: center; display: flex; gap: 10px;">
+                <button id="cancelPinBtn" class="button button-secondary">Cancel</button>
+                <button id="submitPinBtn" class="button button-primary">Unlock</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="confirmModal" class="modal-overlay" style="z-index: 200;">
+        <div class="modal" style="width: 400px;">
+            <div class="modal-header">
+                <h2 id="confirmModalTitle" class="modal-title">Confirm</h2>
+                <button id="closeConfirmModal" class="button button-secondary"><span class="material-icons" style="vertical-align: middle;">close</span></button>
+            </div>
+            <p id="confirmModalMessage" style="margin-bottom: 20px; font-size: 1.1rem;"></p>
+            <div class="form-actions" style="justify-content: flex-end; gap: 10px; display: flex;">
+                <button id="confirmModalCancel" class="button button-secondary">Cancel</button>
+                <button id="confirmModalConfirm" class="button button-danger">Confirm</button>
+            </div>
+        </div>
+    </div>
+<div id="standalonePreviewModal" class="modal-overlay">
+    <div class="modal" style="width: auto; max-width: 90vw; background: transparent; box-shadow: none;">
+        <div style="background: white; border-radius: 24px; padding: 25px; box-shadow: 0 30px 80px rgba(0,0,0,0.3); margin-bottom: 15px;">
+            <div class="game-card" style="box-shadow: none; margin:0; padding:0; background:transparent;">
+                <div id="standalonePreviewWordContainer" class="word-container"></div>
+                <div id="standalonePreviewImageArea" class="image-area"></div>
+            </div>
+        </div>
+        <div style="text-align: center;">
+            <button id="closeStandalonePreviewBtn" class="button button-primary" style="font-size: 1.2rem; padding: 12px 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);">
+                <span class="material-icons" style="vertical-align: middle;">close</span> Close Preview
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="wordModal" class="modal-overlay">
+
+<div class="modal">
+
+
+    <div class="modal-header">
+
+
+        <h2 id="wordModalTitle" class="modal-title">Add Word</h2>
+
+
+        <button id="closeWordModal" class="button button-secondary">
+
+            <span class="material-icons" style="vertical-align: middle;">close</span> Close
+
+        </button>
+
+
+    </div>
+
+
+
+    <form id="wordForm">
+        <input id="editingWordId" type="hidden" value="">
+
+        <!-- EDIT VIEW -->
+        <div id="editWordView">
+            <div class="form-grid">
+                <div class="form-group">
+                    <label>Letter</label>
+                    <input id="wordLetter" type="text" maxlength="1" required="" oninput="this.value = this.value.toLowerCase()">
+                </div>
+                <div class="form-group">
+                    <label>Word</label>
+                    <input id="wordName" type="text" required="" oninput="this.value = this.value.toUpperCase()">
+                </div>
+                <div class="form-group full">
+                    <label>Category</label>
+                    <div id="wordCategory" class="checkbox-group"><label class="checkbox-item"><input type="checkbox" value="mixed"><span>Mixed</span></label><label class="checkbox-item"><input type="checkbox" value="fruit"><span>Fruit</span></label><label class="checkbox-item"><input type="checkbox" value="animal"><span>Animal</span></label></div>
+                </div>
+                <div class="form-group full">
+                    <label>Image URL</label>
+                    <div style="display: flex; gap: 8px;">
+                        <input id="wordImageUrl" type="url" placeholder="https://example.com/image.jpg" style="flex: 1;">
+                        <button type="button" id="searchImagesBtn" class="button button-secondary" style="margin: 0; white-space: nowrap; padding: 0 15px;">🔍 Search</button>
+                        <button type="button" id="googleImagesBtn" class="button button-secondary" style="margin: 0; white-space: nowrap; padding: 0 15px;" title="Open Google Images in a new tab">🌐 Google</button>
+                    </div>
+                    <div id="imageSearchResults" style="display: none; grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); gap: 10px; margin-top: 15px; max-height: 220px; overflow-y: auto; background: rgba(0,0,0,0.02); border: 1px solid var(--border); padding: 10px; border-radius: 12px;"></div>
+                </div>
+                <div class="form-group full">
+                    <label>Audio URL (Optional, e.g. animal sound)</label>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                        <input id="wordAudioUrl" type="url" placeholder="https://example.com/sound.mp3" style="flex: 1; min-width: 200px;">
+                        <button type="button" id="btnGoogleTTS" class="button button-secondary" style="margin: 0; white-space: nowrap; padding: 0 15px;" title="Fetch audio from Google TTS">🌐 Google TTS</button>
+                        <button type="button" id="btnWikimedia" class="button button-secondary" style="margin: 0; white-space: nowrap; padding: 0 15px;" title="Fetch audio from Wikimedia">🦁 Wiki Audio</button>
+                    </div>
+                </div>
+                <div class="form-group full">
+                    <label>Fallback Emoji</label>
+                    <input id="wordFallback" type="text" placeholder="Example: 🐒">
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="button" id="previewWordBtn" class="button button-secondary"><span class="material-icons" style="vertical-align: middle;">visibility</span> Preview</button>
+                <div style="flex: 1;"></div>
+                <button type="button" id="cancelWordButton" class="button button-secondary">Cancel</button>
+                <button type="submit" class="button button-primary"><span class="material-icons" style="vertical-align: middle;">save</span> Save Word</button>
+            </div>
+        </div>
+
+        <!-- PREVIEW VIEW -->
+        <div id="previewWordView" style="display: none;">
+            <div style="padding: 30px 10px; background: #fafafa; border-radius: 12px; border: 2px dashed #e2e5ef; margin-bottom: 20px;">
+                <div class="game-card" style="box-shadow: none; margin:0; padding:0; background:transparent;">
+                    <div id="previewWordContainer" class="word-container"></div>
+                    <div id="previewImageArea" class="image-area"></div>
+                </div>
+            </div>
+            <div class="form-actions" style="justify-content: center;">
+                <button type="button" id="backToEditBtn" class="button button-primary"><span class="material-icons" style="vertical-align: middle;">arrow_back</span> Back to Edit</button>
+            </div>
+        </div>
+    </form>
+
+
+</div>
+
+</div>
+
+
+
+
+<!-- ===================================================== TOAST ===================================================== -->
+
+<div id="toast" class="toast">JSON backup downloaded!</div>
+
+
+
+
+
+
+
+
+
+
+<script src="db.js"></script>
+<script src="game.js"></script>
+<script src="ui.js"></script>
+<script src="app.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').then(registration => {
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      }, err => {
+        console.log('ServiceWorker registration failed: ', err);
+      });
+    });
+  }
+</script>
+</body>
+</html>

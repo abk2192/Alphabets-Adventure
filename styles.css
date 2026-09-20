@@ -1,0 +1,354 @@
+/* ========================================================= 1. DESIGN VARIABLES ========================================================= */ :root { --primary: #6c63ff; --primary-dark: #5148d8; --secondary: #ff7eb3; --accent: #ffd166; --success: #4ecdc4; --danger: #ff5d73; --background: linear-gradient( 135deg, #8ed1fc, #b7a7ff ); --card: rgba(255,255,255,0.88); --text: #25324a; --muted: #6b7280; --border: rgba(255,255,255,0.7); --shadow: 0 20px 60px rgba(48, 44, 91, 0.22); --radius-lg: 32px; --radius-md: 20px; --radius-sm: 14px; } /* ========================================================= 2. RESET ========================================================= */ * { box-sizing: border-box; } html { min-height: 100%; } body { margin: 0; min-height: 100vh; min-height: calc(var(--vh, 1vh) * 100); font-family: "Nunito", sans-serif; color: var(--text); background: var(--background); } /* ========================================================= 3. APP ========================================================= */ #app { min-height: 100vh; min-height: calc(var(--vh, 1vh) * 100); padding: 20px; } /* ========================================================= 4. BACKGROUND DECORATION ========================================================= */ .background-decoration { position: fixed; inset: 0; pointer-events: none; overflow: hidden; z-index: -1; } .bubble { position: absolute; border-radius: 50%; background: rgba(255,255,255,0.16); animation: floatBubble 12s infinite ease-in-out; } .bubble:nth-child(1) { width: 180px; height: 180px; left: 5%; top: 8%; } .bubble:nth-child(2) { width: 260px; height: 260px; right: 5%; bottom: 5%; animation-delay: -5s; } .bubble:nth-child(3) { width: 100px; height: 100px; right: 25%; top: 10%; animation-delay: -2s; } @keyframes floatBubble { 0%, 100% { transform: translateY(0) rotate(0deg); } 50% { transform: translateY(-30px) rotate(15deg); } } /* ========================================================= 5. HEADER ========================================================= */ .app-header { width: 100%; max-width: 1200px; margin: 0 auto 20px; display: flex; align-items: center; justify-content: space-between; gap: 15px; } .logo { display: flex; align-items: center; gap: 12px; color: white; font-family: "Fredoka", sans-serif; font-size: 1.5rem; font-weight: 700; text-shadow: 0 3px 10px rgba(0,0,0,0.15); } .logo-icon { font-size: 2rem; } /* ========================================================= 6. MAIN CONTAINER ========================================================= */ .main-container { width: 100%; max-width: 1200px; margin: auto; } /* ========================================================= 7. VIEWS ========================================================= */ .view { display: none; } .view.active { display: block; } /* ========================================================= 8. GAME CARD ========================================================= */ .game-card { background: var(--card); backdrop-filter: blur(18px); border: 2px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 30px; text-align: center; } /* ========================================================= 9. INSTRUCTION ========================================================= */ .instruction { display: inline-flex; align-items: center; gap: 10px; padding: 12px 24px; border-radius: 999px; background: #fff6b7; font-family: "Fredoka", sans-serif; font-size: clamp( 1.1rem, 3vw, 1.6rem ); font-weight: 600; box-shadow: 0 5px 0 #e6c95c; } /* ========================================================= 10. LETTER BADGE ========================================================= */ .letter-badge { display: inline-flex; align-items: center; justify-content: center; width: 54px; height: 54px; border-radius: 50%; background: linear-gradient( 135deg, var(--primary), var(--secondary) ); color: white; font-family: "Fredoka", sans-serif; font-size: 1.7rem; font-weight: 700; box-shadow: 0 8px 18px rgba(108,99,255,0.3); } /* ========================================================= 11. WORD AREA ========================================================= */ .word-container { 
+    height: 180px; 
+    align-content: center; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    flex-wrap: wrap; 
+    gap: 15px 25px; /* row-gap, col-gap (spacing between words) */
+    margin: 25px 0; 
+} /* ========================================================= 12. LETTER ANIMATION ========================================================= */ .animated-letter { 
+    display: inline-flex; 
+    align-items: center; 
+    justify-content: center; 
+    min-width: clamp(35px, 8vw, 62px); 
+    min-height: clamp(50px, 11vw, 82px); 
+    padding: 2px 10px; 
+    border-radius: 16px; 
+    background: white; 
+    font-family: "Fredoka", sans-serif; 
+    font-size: clamp( 2.2rem, 7vw, 5rem ); 
+    font-weight: 700; 
+    color: var(--primary); 
+    box-shadow: 0 6px 0 #d8d4ff, 0 10px 20px rgba(0,0,0,0.08); 
+    opacity: 0; 
+    animation: letterAppear 0.5s cubic-bezier( 0.2, 1.4, 0.5, 1 ) forwards; 
+} .animated-letter.first-letter {
+    background: var(--secondary);
+    color: white;
+    box-shadow: 0 6px 0 #e85994, 0 10px 20px rgba(0,0,0,0.08);
+    font-size: clamp( 3rem, 9vw, 6.5rem );
+    min-width: clamp(50px, 10vw, 80px);
+    min-height: clamp(70px, 14vw, 100px);
+} @keyframes letterAppear { from { opacity: 0; transform: translateY(-80px) rotate(-15deg) scale(0.4); } to { opacity: 1; transform: translateY(0) rotate(0deg) scale(1); } } /* ========================================================= 13. IMAGE AREA ========================================================= */ .image-area { height: 400px; display: flex; align-items: center; justify-content: center; padding: 20px; border-radius: 28px; background: linear-gradient( 135deg, rgba(108,99,255,0.1), rgba(255,126,179,0.1) ); } .image-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    max-width: 100%;
+    max-height: 100%;
+    min-width: 0;
+    min-height: 0;
+} @keyframes imagePop { from { opacity: 0; transform: scale(0.2) rotate(-10deg); } to { opacity: 1; transform: scale(1) rotate(0deg); } } .word-image {
+    max-width: 100%;
+    max-height: 100%;
+    height: auto;
+    width: auto;
+    display: block;
+    /* Move styling here */
+    border-radius: 28px;
+    background: white;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    animation: imagePop 0.6s cubic-bezier( 0.2, 1.5, 0.5, 1 );
+} /* ========================================================= 14. FALLBACK ========================================================= */ .fallback {
+    min-width: 250px;
+    min-height: 250px;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    padding: 30px;
+    background: linear-gradient( 135deg, #fff9e5, #eaf8ff );
+    /* Bring back wrapper styles */
+    border-radius: 28px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.15);
+    animation: imagePop 0.6s cubic-bezier( 0.2, 1.5, 0.5, 1 );
+} .fallback-icon { font-size: clamp( 6rem, 22vw, 12rem ); } .fallback-text { font-family: "Fredoka", sans-serif; font-size: 1.2rem; color: var(--muted); } /* ========================================================= 15. CATEGORY BUTTONS ========================================================= */ .category-controls { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; margin: 25px 0; } .category-button { border: none; border-radius: 999px; padding: 12px 20px; background: white; color: var(--text); font-family: "Nunito", sans-serif; font-weight: 800; font-size: 1rem; cursor: pointer; box-shadow: 0 5px 12px rgba(0,0,0,0.08); transition: 0.2s; } .category-button:hover { transform: translateY(-2px); } .category-button.active { background: linear-gradient( 135deg, var(--primary), var(--primary-dark) ); color: white; } /* ========================================================= 16. BUTTONS ========================================================= */ .button { border: none; border-radius: var(--radius-sm); padding: 12px 18px; font-family: "Nunito", sans-serif; font-weight: 800; font-size: 1rem; cursor: pointer; transition: 0.2s; } .button:hover { transform: translateY(-2px); } .button:active { transform: translateY(1px); } .button-primary { background: var(--primary); color: white; } .button-success { background: var(--success); color: #073a38; } .button-danger { background: var(--danger); color: white; } .button-secondary { background: #edf0f7; color: var(--text); } .button-small { padding: 8px 12px; font-size: 0.9rem; } /* ========================================================= 17. SETTINGS ========================================================= */ .settings-card { background: var(--card); border: 2px solid var(--border); border-radius: var(--radius-lg); box-shadow: var(--shadow); padding: 25px; } .settings-header { display: flex; justify-content: space-between; align-items: center; gap: 15px; margin-bottom: 25px; } .settings-title { margin: 0; font-family: "Fredoka", sans-serif; font-size: 2rem; } /* ========================================================= 18. SETTINGS TABS ========================================================= */ .settings-tabs { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; } .settings-tab { padding: 10px 16px; border: none; border-radius: 999px; background: #edf0f7; cursor: pointer; font-weight: 800; } .settings-tab.active { background: var(--primary); color: white; } /* ========================================================= 19. SETTINGS PANELS ========================================================= */ .settings-panel { display: none; } .settings-panel.active { display: block; } /* ========================================================= 20. WORD TOOLBAR ========================================================= */ .toolbar { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-bottom: 20px; } .search-input { flex: 1; min-width: 220px; padding: 12px 16px; border: 2px solid #e1e5ee; border-radius: 14px; font-family: inherit; font-size: 1rem; } 
+/* =========================================================
+   21. WORD CARDS (REPLACED TABLE)
+========================================================= */
+.word-list-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    max-height: 60vh;
+    overflow-y: auto;
+    padding-right: 10px;
+}
+.letter-section {
+    background: transparent;
+}
+.letter-header {
+    font-family: "Fredoka", sans-serif;
+    font-size: 2rem;
+    color: var(--primary);
+    border-bottom: 3px solid var(--primary);
+    padding-bottom: 5px;
+    margin-bottom: 15px;
+    margin-top: 0;
+}
+.letter-cards {
+    display: grid;
+    gap: 15px;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+}
+.word-card {
+    background: white;
+    border: 2px solid #e1e5ee;
+    border-radius: 16px;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+.word-card-title {
+    font-weight: 800;
+    font-size: 1.1rem;
+    text-align: center;
+    color: var(--text);
+}
+.word-card-image {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 10px;
+    background: #f4f5fb;
+}
+.word-card-actions {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+}
+.word-card-actions button {
+    flex: 1;
+    padding: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+}
+.word-card-details {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+@media (min-width: 701px) {
+    .letter-cards {
+        grid-template-columns: 1fr;
+    }
+    .word-card {
+        flex-direction: row;
+        align-items: center;
+        padding: 15px;
+    }
+    .word-card-title {
+        flex: 0 0 150px;
+        text-align: left;
+        font-size: 1.2rem;
+    }
+    .word-card-image {
+        width: 80px;
+        height: 80px;
+        flex-shrink: 0;
+    }
+    .word-card-details {
+        display: flex;
+        flex: 1;
+        padding: 0 15px;
+    }
+    .word-card-actions {
+        width: auto;
+    }
+}
+
+/* =========================================================
+   22. MODAL ========================================================= */ .modal-overlay { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; padding: 20px; background: rgba(20,25,45,0.55); z-index: 100; transition: 0.2s ease-in-out; } .modal-overlay.active { display: flex; } .modal { width: min( 700px, 100% ); max-height: 90vh; overflow-y: auto; background: white; border-radius: 24px; padding: 25px; box-shadow: 0 30px 80px rgba(0,0,0,0.3); transition: 0.3s ease-in-out; } .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; } .modal-title { margin: 0; font-family: "Fredoka", sans-serif; } 
+/* FULLSCREEN MODAL TOGGLE */
+.modal-fullscreen {
+    width: 100vw !important;
+    height: 100vh !important;
+    max-width: none !important;
+    max-height: none !important;
+    border-radius: 0 !important;
+    margin: 0 !important;
+    padding: 15px !important;
+}
+
+/* ========================================================= 23. FORM ========================================================= */ .form-grid { display: grid; grid-template-columns: repeat( 2, 1fr ); gap: 15px; } .form-group { display: flex; flex-direction: column; gap: 7px; } .form-group.full { grid-column: 1 / -1; } .form-group label { font-weight: 800; font-size: 0.9rem; } .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px; border: 2px solid #e2e5ef; border-radius: 12px; font-family: inherit; font-size: 1rem; } .form-actions { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 10px; margin-top: 25px; } /* ========================================================= 24. CATEGORY MANAGER ========================================================= */ .category-list { display: grid; grid-template-columns: repeat( auto-fit, minmax(220px,1fr) ); gap: 15px; } .category-card { background: white; border-radius: 18px; padding: 18px; box-shadow: 0 5px 18px rgba(0,0,0,0.08); } .category-card h3 { margin: 0 0 8px; } /* ========================================================= 25. CONFIG ========================================================= */ .config-section { background: white; border-radius: 18px; padding: 20px; margin-bottom: 20px; } .config-section h3 { margin-top: 0; } /* ========================================================= 26. TOAST ========================================================= */ .toast { position: fixed; left: 50%; bottom: 25px; transform: translateX(-50%) translateY(120px); padding: 14px 22px; border-radius: 999px; background: #243047; color: white; font-weight: 700; z-index: 200; transition: 0.3s; } .toast.show { transform: translateX(-50%) translateY(0); } /* ========================================================= 27. MOBILE ========================================================= */ @media (max-width: 700px) {
+    body { height: 100dvh; height: calc(var(--vh, 1vh) * 100); overflow: hidden; }
+    #app { height: 100dvh; height: calc(var(--vh, 1vh) * 100); overflow-y: auto; display: flex; flex-direction: column; padding: 12px; padding-bottom: max(24px, env(safe-area-inset-bottom)); }
+    .main-container { flex: 1; display: flex; flex-direction: column; min-height: 0; height: 0; }
+    #gameView.active { flex: 1; display: flex; flex-direction: column; min-height: 0; height: 0; justify-content: space-between; }
+    .game-card { flex: 1; display: flex; flex-direction: column; min-height: 0; height: 0; margin-bottom: 12px; }
+    .image-area { flex: 1; height: 0; min-height: 0; display: flex; padding: 12px; justify-content: center; align-items: center; }
+    .word-image { 
+    max-width: 100%; 
+    max-height: 100%; 
+    width: auto; 
+    height: auto; 
+}
+    .word-container { height: 140px; margin: 10px 0; align-content: center; }
+  .game-card, .settings-card { padding: 18px; border-radius: 24px; } .app-header { margin-bottom: 12px; } .logo { font-size: 1.2rem; }    .form-grid { grid-template-columns: 1fr; } .form-group.full { grid-column: auto; } .settings-header { align-items: flex-start; flex-direction: column; } } 
+/* =========================================================
+   VIRTUAL KEYBOARD
+========================================================= */
+.virtual-keyboard {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 25px;
+}
+.key-button {
+    width: 44px;
+    height: 44px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: white;
+    color: var(--primary);
+    font-family: "Fredoka", sans-serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    transition: 0.1s;
+}
+.key-button:active {
+    transform: translateY(2px);
+    background: var(--primary);
+    color: white;
+}
+@media (min-width: 768px) {
+    .virtual-keyboard {
+        display: none;
+    }
+}
+.checkbox-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 8px 0;
+}
+.checkbox-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-family: "Nunito", sans-serif;
+    font-weight: 600;
+}
+.checkbox-item input[type="checkbox"] {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    cursor: pointer;
+}
+.locked-key {
+    background: var(--secondary) !important;
+    color: white !important;
+    transform: scale(0.95);
+    opacity: 0.8;
+}
+.multi-mode-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 15px;
+    width: 100%;
+    max-height: 380px;
+    overflow-y: auto;
+    padding: 10px;
+}
+.multi-mode-card {
+    background: white;
+    border-radius: 12px;
+    padding: 10px;
+    cursor: pointer;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    transition: transform 0.2s;
+}
+.multi-mode-card:hover {
+    transform: translateY(-3px);
+}
+.multi-mode-card img {
+    width: 100%;
+    height: 70px;
+    object-fit: contain;
+    border-radius: 8px;
+    margin-bottom: 5px;
+}
+.multi-mode-card .fallback-icon {
+    font-size: 2.5rem;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* =========================================================
+   STORY CANVAS SPECIFICS
+========================================================= */
+.story-card-item {
+    touch-action: none;
+    transition: border-color 0.2s, box-shadow 0.2s, border-radius 0.3s;
+}
+.grouped-card {
+    border-color: var(--success) !important;
+    box-shadow: 0 0 15px rgba(78, 205, 196, 0.4), 0 10px 25px rgba(0,0,0,0.15) !important;
+}
+
+/* EDGE GLOW EFFECTS */
+#storyCanvas[data-glow="left"] { box-shadow: inset 40px 0 40px -20px var(--accent); }
+#storyCanvas[data-glow="right"] { box-shadow: inset -40px 0 40px -20px var(--accent); }
+#storyCanvas[data-glow="top"] { box-shadow: inset 0 40px 40px -20px var(--accent); }
+#storyCanvas[data-glow="bottom"] { box-shadow: inset 0 -40px 40px -20px var(--accent); }
+
+/* DOCKED BUBBLE (EDGE COLLAPSE) */
+.docked-bubble {
+    width: 85px !important;
+    height: 85px !important;
+    border-radius: 50% !important;
+    padding: 0 !important;
+    border-width: 4px !important;
+    overflow: hidden !important;
+    transform: scale(1) !important;
+    justify-content: center !important;
+    gap: 0 !important;
+}
+.docked-bubble .card-text-layer, .docked-bubble .card-resize-handle, .docked-bubble .card-drag-handle { 
+    display: none !important; 
+}
+.docked-bubble .card-visual-layer { 
+    height: 100% !important; 
+}
+.docked-bubble img {
+    object-fit: cover !important;
+    border-radius: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+.card-drag-handle {
+    width: calc(100% + 24px); 
+    height: 24px; 
+    background: #e1e5ee; 
+    border-radius: 20px 20px 0 0; 
+    margin: -12px -12px 8px -12px; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    cursor: grab; 
+    color: #a0aabf;
+}
+.card-drag-handle:active {
+    cursor: grabbing;
+}
