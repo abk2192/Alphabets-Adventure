@@ -3,7 +3,10 @@
 
 <meta charset="UTF-8">
 <meta name="referrer" content="no-referrer">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><title>Alphabet Adventure</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Alphabet Adventure</title>
 <link rel="manifest" href="manifest.json">
 <meta name="theme-color" content="#6c63ff">
 <link rel="apple-touch-icon" href="icon.svg">
@@ -15,7 +18,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&amp;family=Nunito:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="styles.css?v=2">
 
 
 
@@ -106,7 +109,8 @@
     <section id="gameView" class="view">
 
 
-        <div class="game-card">
+        <div class="game-card" style="position: relative;">
+<button id="kidModeMuteBtn" class="button button-secondary" style="position: absolute; top: 10px; right: 10px; display: none; z-index: 10;" title="Toggle Sound"><span class="material-icons" style="vertical-align: middle;">volume_up</span></button>
 
 
             <div id="instruction" class="instruction" style="display: none;">⌨️ Press a letter! <span id="currentLetterBadge" class="letter-badge">A</span>
@@ -832,10 +836,10 @@
 
 
 
-<script src="db.js"></script>
-<script src="game.js"></script>
-<script src="ui.js"></script>
-<script src="app.js"></script>
+<script src="db.js?v=2"></script>
+<script src="game.js?v=2"></script>
+<script src="ui.js?v=2"></script>
+<script src="app.js?v=2"></script>
 <script>
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {

@@ -149,6 +149,7 @@ function showHomeView() {
     document.getElementById("backHomeBtn").style.display = "none";
     document.getElementById("kidModeButton").style.display = "none";
     document.getElementById("muteBtn").style.display = "none";
+    if (document.getElementById("kidModeMuteBtn")) document.getElementById("kidModeMuteBtn").style.display = "block";
 }
 
 function showGameView(mode) { 
@@ -160,6 +161,7 @@ function showGameView(mode) {
     document.getElementById("backHomeBtn").style.display = "inline-flex";
     document.getElementById("kidModeButton").style.display = "inline-flex";
     document.getElementById("muteBtn").style.display = "inline-flex";
+    if (document.getElementById("kidModeMuteBtn")) document.getElementById("kidModeMuteBtn").style.display = "none";
     updateMuteButtonIcon();
     playLetter(currentLetter);
 }
@@ -1820,12 +1822,13 @@ document.getElementById("closeDeltaModal").addEventListener("pointerdown", () =>
 function updateMuteButtonIcon() {
     const btn = document.getElementById("muteBtn");
     const storyBtn = document.getElementById("storyMuteBtn");
+    const kidBtn = document.getElementById("kidModeMuteBtn");
     const html = appState.config.soundEnabled 
         ? '<span class="material-icons" style="vertical-align: middle;">volume_up</span>' 
         : '<span class="material-icons" style="vertical-align: middle;">volume_off</span>';
-    
     if (btn) btn.innerHTML = html;
     if (storyBtn) storyBtn.innerHTML = html;
+    if (kidBtn) kidBtn.innerHTML = html;
 }
 
 function toggleMute() {
@@ -1853,6 +1856,9 @@ function toggleMute() {
 document.getElementById("muteBtn").addEventListener("pointerdown", toggleMute);
 if (document.getElementById("storyMuteBtn")) {
     document.getElementById("storyMuteBtn").addEventListener("pointerdown", toggleMute);
+}
+if (document.getElementById("kidModeMuteBtn")) {
+    document.getElementById("kidModeMuteBtn").addEventListener("pointerdown", toggleMute);
 }
 
 window.openArrangeModal = function() {
@@ -1928,20 +1934,20 @@ function renderStoryArrangeGrid() {
     });
 }
 
-const APP_THEMES = [
-    { name: "Ocean Explorer", primary: "#0ea5e9", secondary: "#e0f2fe" },
-    { name: "Forest Friend", primary: "#22c55e", secondary: "#dcfce7" },
-    { name: "Sunny Day", primary: "#f59e0b", secondary: "#fef3c7" },
-    { name: "Berry Sweet", primary: "#ec4899", secondary: "#fce7f3" },
-    { name: "Grape Vine", primary: "#8b5cf6", secondary: "#ede9fe" },
-    { name: "Cherry Red", primary: "#ef4444", secondary: "#fee2e2" },
-    { name: "Minty Fresh", primary: "#14b8a6", secondary: "#ccfbf1" },
-    { name: "Sunset Glow", primary: "#f97316", secondary: "#ffedd5" },
-    { name: "Magic Indigo", primary: "#6366f1", secondary: "#e0e7ff" },
-    { name: "Bubblegum", primary: "#f43f5e", secondary: "#ffe4e6" }
-];
-
 function renderThemeSelector() {
+    const APP_THEMES = [
+        { name: "Ocean Explorer", primary: "#0ea5e9", secondary: "#e0f2fe" },
+        { name: "Forest Friend", primary: "#22c55e", secondary: "#dcfce7" },
+        { name: "Sunny Day", primary: "#f59e0b", secondary: "#fef3c7" },
+        { name: "Berry Sweet", primary: "#ec4899", secondary: "#fce7f3" },
+        { name: "Grape Vine", primary: "#8b5cf6", secondary: "#ede9fe" },
+        { name: "Cherry Red", primary: "#ef4444", secondary: "#fee2e2" },
+        { name: "Minty Fresh", primary: "#14b8a6", secondary: "#ccfbf1" },
+        { name: "Sunset Glow", primary: "#f97316", secondary: "#ffedd5" },
+        { name: "Magic Indigo", primary: "#6366f1", secondary: "#e0e7ff" },
+        { name: "Bubblegum", primary: "#f43f5e", secondary: "#ffe4e6" }
+    ];
+    
     const container = document.getElementById("themeSelectionContainer");
     if (!container) return;
     container.innerHTML = "";
