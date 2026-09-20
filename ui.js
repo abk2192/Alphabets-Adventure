@@ -845,11 +845,13 @@ function spawnDraggableCard(wordObj, spawnX, spawnY) {
     card.addEventListener("pointermove", (e) => {
         if (!e.buttons) return;
         
-        // Correct mouse delta taking canvas zoom into account!
         const dx = (e.clientX - startX) / canvasScale;
         const dy = (e.clientY - startY) / canvasScale;
         
-        if (isTap && (Math.abs(dx) > 2 || Math.abs(dy) > 2)) {
+        const pixelDx = e.clientX - startX;
+        const pixelDy = e.clientY - startY;
+        
+        if (isTap && (Math.abs(pixelDx) > 10 || Math.abs(pixelDy) > 10)) {
             isTap = false;
             isDragging = true;
             if (card.longPressTimer && card.dataset.longPressTriggered === "false") {
@@ -1660,7 +1662,8 @@ function exitKidMode() {
     const storyKidModeBtn = document.getElementById("storyKidModeBtn");
     if (storyKidModeBtn) storyKidModeBtn.style.display = "inline-flex";
     if(gameView.classList.contains("active")) {
-        document.getElementById("settingsButton").style.display = "inline-block";
+        const settingsBtn = document.getElementById("settingsButton");
+        if (settingsBtn) settingsBtn.style.display = "inline-block";
     }
     
     const appHeader = document.querySelector(".app-header");
