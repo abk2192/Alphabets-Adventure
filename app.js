@@ -18,11 +18,7 @@ async function initialize() {
         if (typeof renderCategoryButtons === 'function') renderCategoryButtons();
         if (typeof renderVirtualKeyboard === 'function') renderVirtualKeyboard();
         
-        if (window.appState.words && window.appState.words.length > 0) {
-            if (typeof playLetter === 'function') playLetter(window.currentLetter);
-        } else {
-            if (typeof showMissingLetter === 'function') showMissingLetter(window.currentLetter);
-        }
+
     } catch (error) {
         console.error("Initialization failed:", error);
         if (typeof showToast === 'function') showToast("Failed to load application data.");

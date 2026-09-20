@@ -1103,6 +1103,46 @@
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJHx2iBQYrVsluxUQXztAG2-MblOjPNIQhtpV2pl4c5g&s",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=plane&tl=en&client=tw-ob",
       "fallback": "✈️"
+    },
+    {
+      "id": "2a66ea6f-f520-459d-921b-89bd14c1918d",
+      "letter": "d",
+      "word": "DUCK",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjFz5EzdL3TqBb1wUJfv8PTh0tPgoPTDue8Vhf1RSdbg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=duck&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "7c050fb2-2588-4366-b922-d64f8a3a8cee",
+      "letter": "d",
+      "word": "DUCKLING",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZBzPDTYaEfUo6xbV0OjSY22_eK_aCfL939QYK-pUc_Q&s=10",
+      "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/5/58/The_Ugly_Duckling_narrated_by_ravenotation.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "fallback": "❓"
+    },
+    {
+      "id": "2ac18b9b-e90b-4b5e-b52a-9b98c2e138ef",
+      "letter": "b",
+      "word": "BRIDGE",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBU8Ug5cZe_sPXB_6lf0FU7lRrfUb0DuYUdqFBLZsT1w&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=bridge&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "fe2640ce-ea0e-4510-a437-c9e9c7761b00",
+      "letter": "r",
+      "word": "RIVER",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYNkr5orGhtBjvWpHaE4TYXzo-NDhBQb6M5S-imQIr1w&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=river&tl=en&client=tw-ob",
+      "fallback": "❓"
     }
   ],
   "categories": [
@@ -1134,7 +1174,15 @@
     {
       "id": "default-story-1",
       "title": "Journey to the River",
-      "wordIds": []
+      "wordIds": [
+        "2a66ea6f-f520-459d-921b-89bd14c1918d",
+        "7c050fb2-2588-4366-b922-d64f8a3a8cee",
+        "7c050fb2-2588-4366-b922-d64f8a3a8cee",
+        "7c050fb2-2588-4366-b922-d64f8a3a8cee",
+        "7c050fb2-2588-4366-b922-d64f8a3a8cee",
+        "fe2640ce-ea0e-4510-a437-c9e9c7761b00",
+        "2ac18b9b-e90b-4b5e-b52a-9b98c2e138ef"
+      ]
     }
   ],
   "config": {

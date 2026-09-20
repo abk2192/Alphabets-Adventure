@@ -47,7 +47,10 @@
     </div>
     <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end;">
         <button id="backHomeBtn" class="button button-secondary" style="display: none;" title="Back to Home">
-            <span class="material-icons" style="vertical-align: middle;">home</span> Home
+            <span class="material-icons" style="vertical-align: middle;">home</span>
+        </button>
+        <button id="muteBtn" class="button button-secondary" title="Toggle Sound" style="display: none;">
+            <span class="material-icons" style="vertical-align: middle;">volume_up</span>
         </button>
         <button id="kidModeButton" class="button button-success" title="Full Screen" style="display: none;">
             <span class="material-icons" style="vertical-align: middle;">fullscreen</span>
@@ -85,6 +88,20 @@
     <!-- =============================================
          GAME VIEW
     ============================================== -->
+
+    <!-- =============================================
+         STORY SELECTION VIEW
+    ============================================== -->
+    <section id="storySelectionView" class="view">
+        <div class="settings-card">
+            <div class="settings-header">
+                <h1 class="settings-title">
+                    <span class="material-icons" style="vertical-align: middle;">auto_stories</span> Choose a Story
+                </h1>
+            </div>
+            <div id="storySelectionGrid" class="category-list" style="margin-top: 20px;"></div>
+        </div>
+    </section>
 
     <section id="gameView" class="view">
 
@@ -135,8 +152,8 @@
                         and app settings.
                     </div>
                 </div>
-                <button id="backToGameButton" class="button button-primary" title="Back to Home">
-                    <span class="material-icons" style="vertical-align: middle;">home</span> Back to Home
+                <button id="forceUpdateButton" class="button button-secondary" style="margin-left: 10px;">
+                    <span class="material-icons" style="vertical-align: middle;">system_update_alt</span> Force Update App
                 </button>
 
 
@@ -474,12 +491,8 @@
 
 
                 <button id="saveConfigButton" class="button button-primary">
-
                     <span class="material-icons" style="vertical-align: middle;">save</span> Save Configuration
-
                 </button>
-
-
             </div>
 
 
@@ -624,7 +637,7 @@
         <div class="modal-header" style="margin-bottom: 10px;">
             <h2 id="storyPlayerTitle" class="modal-title">Story Mode</h2>
             <div style="display: flex; gap: 10px;">
-                <button id="storyFullscreenBtn" class="button button-secondary" title="Fullscreen"><span class="material-icons" style="vertical-align: middle;">fullscreen</span></button>
+
                 <button id="closeStoryPlayer" class="button button-secondary" title="Close"><span class="material-icons" style="vertical-align: middle;">close</span></button>
             </div>
         </div>
@@ -738,6 +751,17 @@
                 <span class="material-icons" style="vertical-align: middle;">close</span> Close Preview
             </button>
         </div>
+    </div>
+</div>
+
+<div id="deltaModal" class="modal-overlay">
+    <div class="modal">
+        <div class="modal-header">
+            <h2 class="modal-title">New Words Added!</h2>
+            <button id="closeDeltaModal" class="button button-secondary" title="Close"><span class="material-icons" style="vertical-align: middle;">close</span></button>
+        </div>
+        <p>The following new words were added from the latest update:</p>
+        <ul id="deltaWordsList" style="max-height: 50vh; overflow-y: auto; text-align: left; font-size: 1.2rem;"></ul>
     </div>
 </div>
 

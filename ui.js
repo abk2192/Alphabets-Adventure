@@ -1,4 +1,4 @@
-/* ========================================================= DOM REFERENCES ========================================================= */ const gameView = document.getElementById("gameView"); const settingsView = document.getElementById("settingsView"); const settingsButton = document.getElementById("settingsButton"); const backToGameButton = document.getElementById("backToGameButton"); const wordContainer = document.getElementById("wordContainer"); const imageArea = document.getElementById("imageArea"); const categoryControls = document.getElementById("categoryControls"); const currentLetterBadge = document.getElementById("currentLetterBadge"); const wordTableBody = document.getElementById("wordTableBody"); const wordSearch = document.getElementById("wordSearch"); const addWordButton = document.getElementById("addWordButton"); const wordModal = document.getElementById("wordModal"); const wordModalTitle = document.getElementById("wordModalTitle"); const closeWordModal = document.getElementById("closeWordModal"); const cancelWordButton = document.getElementById("cancelWordButton"); const wordForm = document.getElementById("wordForm"); const editingWordId = document.getElementById("editingWordId"); const wordLetter = document.getElementById("wordLetter"); const wordName = document.getElementById("wordName"); const wordCategory = document.getElementById("wordCategory"); const wordImageUrl = document.getElementById("wordImageUrl"); const wordFallback = document.getElementById("wordFallback"); const categoryList = document.getElementById("categoryList"); const newCategoryInput = document.getElementById("newCategoryInput"); const addCategoryButton = document.getElementById("addCategoryButton"); const toast = document.getElementById("toast"); /* ========================================================= PERSISTENCE ========================================================= */  function saveState() { window.appDB.saveFullState(appState); } /* ========================================================= TOAST ========================================================= */ let toastTimer = null; function showToast(message) { toast.textContent = message; toast.classList.add( "show" ); clearTimeout( toastTimer ); toastTimer = setTimeout( () => { toast.classList.remove( "show" ); }, 2500 ); } /* ========================================================= CONFIGURATION ========================================================= */ function applyConfiguration() { document.title = appState.config.title; const logoText = document.querySelector( ".logo span:last-child" );
+/* ========================================================= DOM REFERENCES ========================================================= */ const gameView = document.getElementById("gameView"); const settingsView = document.getElementById("settingsView"); const settingsButton = document.getElementById("settingsButton"); const wordContainer = document.getElementById("wordContainer"); const imageArea = document.getElementById("imageArea"); const categoryControls = document.getElementById("categoryControls"); const currentLetterBadge = document.getElementById("currentLetterBadge"); const wordTableBody = document.getElementById("wordTableBody"); const wordSearch = document.getElementById("wordSearch"); const addWordButton = document.getElementById("addWordButton"); const wordModal = document.getElementById("wordModal"); const wordModalTitle = document.getElementById("wordModalTitle"); const closeWordModal = document.getElementById("closeWordModal"); const cancelWordButton = document.getElementById("cancelWordButton"); const wordForm = document.getElementById("wordForm"); const editingWordId = document.getElementById("editingWordId"); const wordLetter = document.getElementById("wordLetter"); const wordName = document.getElementById("wordName"); const wordCategory = document.getElementById("wordCategory"); const wordImageUrl = document.getElementById("wordImageUrl"); const wordFallback = document.getElementById("wordFallback"); const categoryList = document.getElementById("categoryList"); const newCategoryInput = document.getElementById("newCategoryInput"); const addCategoryButton = document.getElementById("addCategoryButton"); const toast = document.getElementById("toast"); /* ========================================================= PERSISTENCE ========================================================= */  function saveState() { window.appDB.saveFullState(appState); } /* ========================================================= TOAST ========================================================= */ let toastTimer = null; function showToast(message) { toast.textContent = message; toast.classList.add( "show" ); clearTimeout( toastTimer ); toastTimer = setTimeout( () => { toast.classList.remove( "show" ); }, 2500 ); } /* ========================================================= CONFIGURATION ========================================================= */ function applyConfiguration() { document.title = appState.config.title; const logoText = document.querySelector( ".logo span:last-child" );
     if (logoText) logoText.textContent = appState.config.title; document.getElementById( "instruction" ).childNodes[0].textContent = appState.config.instruction + " "; document.documentElement.style.setProperty( "--primary", appState.config.primary ); document.documentElement.style.setProperty( "--secondary", appState.config.secondary ); } /* ========================================================= FIND WORD ========================================================= */ function getWordForLetter( letter, category ) {
     let options = appState.words.filter( item => 
         item.letter === letter && 
@@ -139,38 +139,72 @@ var gameMode = 'single';
 
 
 const homeView = document.getElementById("homeView");
+const storySelectionView = document.getElementById("storySelectionView");
 
 function showHomeView() {
     gameView.classList.remove("active");
     settingsView.classList.remove("active");
-    if (document.getElementById("storyBuilderView")) document.getElementById("storyBuilderView").classList.remove("active");
+    storySelectionView.classList.remove("active");
     homeView.classList.add("active");
     document.getElementById("backHomeBtn").style.display = "none";
     document.getElementById("kidModeButton").style.display = "none";
+    document.getElementById("muteBtn").style.display = "none";
 }
 
 function showGameView(mode) { 
     if (mode) gameMode = mode;
     homeView.classList.remove("active");
     settingsView.classList.remove("active");
+    storySelectionView.classList.remove("active");
     gameView.classList.add("active"); 
     document.getElementById("backHomeBtn").style.display = "inline-flex";
     document.getElementById("kidModeButton").style.display = "inline-flex";
+    document.getElementById("muteBtn").style.display = "inline-flex";
+    updateMuteButtonIcon();
     playLetter(currentLetter);
 }
 
 function showSettingsView() { 
     homeView.classList.remove("active");
     gameView.classList.remove("active"); 
+    storySelectionView.classList.remove("active");
     settingsView.classList.add("active"); 
     document.getElementById("backHomeBtn").style.display = "inline-flex";
     document.getElementById("kidModeButton").style.display = "none";
+    document.getElementById("muteBtn").style.display = "none";
     renderAllSettings(); 
 } 
 
+function showStorySelectionView() {
+    homeView.classList.remove("active");
+    gameView.classList.remove("active");
+    settingsView.classList.remove("active");
+    storySelectionView.classList.add("active");
+    document.getElementById("backHomeBtn").style.display = "inline-flex";
+    document.getElementById("kidModeButton").style.display = "none";
+    document.getElementById("muteBtn").style.display = "none";
+    renderStorySelectionGrid();
+}
+
+function renderStorySelectionGrid() {
+    const grid = document.getElementById("storySelectionGrid");
+    grid.innerHTML = "";
+    appState.stories.forEach(story => {
+        const card = document.createElement("div");
+        card.className = "category-card";
+        card.style.cursor = "pointer";
+        card.style.textAlign = "center";
+        card.innerHTML = `<h3>${story.title}</h3><p style="margin: 0; color: var(--muted);">${story.wordIds.length} words</p>`;
+        card.addEventListener("click", () => {
+            playStory(story.id);
+        });
+        grid.appendChild(card);
+    });
+}
+
 /* ========================================================= SETTINGS EVENTS ========================================================= */ 
 if (document.getElementById("settingsButton")) document.getElementById("settingsButton").addEventListener("click", showSettingsView); 
-document.getElementById("backToGameButton").addEventListener("click", showHomeView); 
+
 document.getElementById("backHomeBtn").addEventListener("click", showHomeView);
 
 document.getElementById("homeLetterFunBtn").addEventListener("click", () => showGameView('single'));
@@ -182,7 +216,7 @@ document.getElementById("homeStoryModeBtn").addEventListener("click", () => {
         document.querySelector('[data-tab="stories"]').click();
         return;
     }
-    playStory(appState.stories[0].id);
+    showStorySelectionView();
 });
 document.getElementById("homeSettingsBtn").addEventListener("click", showSettingsView); 
 /* ========================================================= SETTINGS TABS ========================================================= */ 
@@ -518,11 +552,7 @@ window.deleteStory = function(id) {
    STORY PLAYER, DRAGGABLE CANVAS, PAN/ZOOM & DOCKING
 ========================================================= */
 
-document.getElementById("storyFullscreenBtn").addEventListener("click", (e) => {
-    const modal = document.getElementById("storyPlayerModal").querySelector(".modal");
-    modal.classList.toggle("modal-fullscreen");
-    e.target.innerHTML = modal.classList.contains("modal-fullscreen") ? "<span class=\"material-icons\">fullscreen_exit</span>" : "<span class=\"material-icons\">fullscreen</span>";
-});
+
 
 
 
@@ -585,6 +615,7 @@ window.playStory = function(id) {
     canvasInner.appendChild(selBox);
     
     document.getElementById("storyPlayerModal").classList.add("active");
+    document.getElementById("storyPlayerModal").querySelector(".modal").classList.add("modal-fullscreen");
     updateStoryPlayerUI();
 };
 
@@ -1460,7 +1491,9 @@ window.copyUrl = function(id) {
     appState.config.lockDelay = Number( document.getElementById( "configLockDelay" ).value ) || 500;
     appState.config.keyboardListener = document.getElementById( "configKeyboardListener" ).checked;
     appState.config.maxAudioDuration = Number( document.getElementById( "configMaxAudioDuration" ).value ) || 3;
-    saveState(); applyConfiguration(); showToast( "Configuration saved!" ); } ); 
+    saveState(); applyConfiguration(); 
+    if (typeof updateMuteButtonIcon === 'function') updateMuteButtonIcon();
+    showToast( "Configuration saved!" ); } );
 
 document.getElementById("btnReplaceAllAudio").addEventListener("click", () => {
     let replacedCount = 0;
@@ -1683,5 +1716,102 @@ document.getElementById("instruction").addEventListener("click", (e) => {
         if (typeof playLetter === "function") {
             playLetter(currentLetter);
         }
+    }
+});
+
+/* =========================================================
+   FORCE UPDATE
+========================================================= */
+document.getElementById("forceUpdateButton").addEventListener("click", async () => {
+    showToast("Checking for updates...");
+    try {
+        let baseUrl = window.location.href;
+        if (baseUrl.endsWith('.html')) baseUrl = baseUrl.substring(0, baseUrl.lastIndexOf('/') + 1);
+        else if (!baseUrl.endsWith('/')) baseUrl += '/';
+        const jsonUrl = new URL('alphabet-adventure-backup4.json', baseUrl).href + '?t=' + new Date().getTime();
+        
+        const response = await fetch(jsonUrl);
+        if (response.ok) {
+            const data = await response.json();
+            const newWords = [];
+            for (let word of data.words) {
+                if (!appState.words.find(w => w.id === word.id)) {
+                    newWords.push(word);
+                    appState.words.push(word);
+                }
+            }
+            if (newWords.length > 0) {
+                await window.appDB.saveFullState(appState);
+                localStorage.setItem("updateDeltaWords", JSON.stringify(newWords));
+            }
+        }
+        
+        if ('serviceWorker' in navigator) {
+            const registrations = await navigator.serviceWorker.getRegistrations();
+            for (let registration of registrations) {
+                await registration.unregister();
+            }
+        }
+        
+        window.location.reload(true);
+    } catch (e) {
+        console.error("Force update failed", e);
+        showToast("Update failed or you are offline.");
+    }
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    const deltaStr = localStorage.getItem("updateDeltaWords");
+    if (deltaStr) {
+        try {
+            const newWords = JSON.parse(deltaStr);
+            if (newWords && newWords.length > 0) {
+                const list = document.getElementById("deltaWordsList");
+                list.innerHTML = "";
+                newWords.forEach(w => {
+                    const li = document.createElement("li");
+                    li.textContent = `${w.letter.toUpperCase()} - ${w.word}`;
+                    li.style.marginBottom = "5px";
+                    list.appendChild(li);
+                });
+                document.getElementById("deltaModal").classList.add("active");
+            }
+        } catch (e) {}
+        localStorage.removeItem("updateDeltaWords");
+    }
+});
+
+document.getElementById("closeDeltaModal").addEventListener("click", () => {
+    document.getElementById("deltaModal").classList.remove("active");
+});
+
+/* =========================================================
+   MUTE BUTTON
+========================================================= */
+function updateMuteButtonIcon() {
+    const btn = document.getElementById("muteBtn");
+    if (appState.config.soundEnabled) {
+        btn.innerHTML = '<span class="material-icons" style="vertical-align: middle;">volume_up</span>';
+    } else {
+        btn.innerHTML = '<span class="material-icons" style="vertical-align: middle;">volume_off</span>';
+    }
+}
+
+document.getElementById("muteBtn").addEventListener("click", () => {
+    appState.config.soundEnabled = !appState.config.soundEnabled;
+    updateMuteButtonIcon();
+    saveState();
+    
+    // Also update the checkbox in Settings to keep it in sync
+    const settingsCheckbox = document.getElementById("configSound");
+    if (settingsCheckbox) {
+        settingsCheckbox.checked = appState.config.soundEnabled;
+    }
+
+    if (appState.config.soundEnabled) {
+        showToast("Sound Unmuted");
+        if (typeof playLetter === "function") playLetter(currentLetter);
+    } else {
+        showToast("Sound Muted");
     }
 });

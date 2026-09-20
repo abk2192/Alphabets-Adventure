@@ -36,6 +36,8 @@ function stopCurrentAudio() {
 }
 
 async function playSound(data) {
+    if (!appState.config.soundEnabled) return;
+
     if (appState.config.customAudioEnabled === false || !data) {
         playSyntheticSound();
         return;
@@ -109,7 +111,14 @@ function playSyntheticSound() {
 var keyboardLocked = false; 
 function handleKeyPress(key, fromVirtual = false) {
     if (keyboardLocked) return; 
-    keyboardLocked = true; 
+    
+    // Only process key presses if the game view is active
+    const gameViewEl = document.getElementById('gameView');
+    if (gameViewEl && !gameViewEl.classList.contains('active')) {
+        return;
+    }
+
+    keyboardLocked = true;
     
     const lockTime = appState.config.lockDelay !== undefined ? appState.config.lockDelay : 500;
     
