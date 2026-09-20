@@ -46,24 +46,40 @@
         <span>Alphabet Adventure</span>
     </div>
     <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: flex-end;">
-        <button id="storyModeBtn" class="button button-secondary" title="Story Mode">
-            <span class="material-icons" style="vertical-align: middle;">auto_stories</span> Story Mode
+        <button id="backHomeBtn" class="button button-secondary" style="display: none;" title="Back to Home">
+            <span class="material-icons" style="vertical-align: middle;">home</span> Home
         </button>
-        <button id="modeToggleButton" class="button button-secondary" title="Toggle Mode">
-            <span class="material-icons" style="vertical-align: middle;">shuffle</span>
-        </button>
-        <button id="kidModeButton" class="button button-success" title="Full Screen">
+        <button id="kidModeButton" class="button button-success" title="Full Screen" style="display: none;">
             <span class="material-icons" style="vertical-align: middle;">fullscreen</span>
-        </button>
-        <button id="settingsButton" class="button button-secondary" style="display: none;" title="Settings">
-            <span class="material-icons" style="vertical-align: middle;">settings</span>
         </button>
     </div>
 </header>
 
-
-
 <main class="main-container">
+
+    <!-- =============================================
+         HOME VIEW
+    ============================================== -->
+    <section id="homeView" class="view active">
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; gap: 20px;">
+            <button id="homeLetterFunBtn" class="button button-primary" style="font-size: 2rem; padding: 20px 40px; border-radius: 30px; width: 80%; max-width: 400px; box-shadow: 0 10px 20px rgba(108,99,255,0.3);">
+                <span class="material-icons" style="font-size: 2.5rem; vertical-align: middle; margin-right: 15px;">abc</span> Letter Fun
+            </button>
+            <button id="homeWordsFunBtn" class="button button-success" style="font-size: 2rem; padding: 20px 40px; border-radius: 30px; width: 80%; max-width: 400px; box-shadow: 0 10px 20px rgba(78,205,196,0.3);">
+                <span class="material-icons" style="font-size: 2.5rem; vertical-align: middle; margin-right: 15px;">grid_view</span> Words Fun
+            </button>
+            <button id="homeStoryModeBtn" class="button button-secondary" style="font-size: 2rem; padding: 20px 40px; border-radius: 30px; width: 80%; max-width: 400px; box-shadow: 0 10px 20px rgba(255,126,179,0.3);">
+                <span class="material-icons" style="font-size: 2.5rem; vertical-align: middle; margin-right: 15px;">auto_stories</span> Story Mode
+            </button>
+            <button id="homeSettingsBtn" class="button" style="background: #a0aec0; color: white; font-size: 2rem; padding: 20px 40px; border-radius: 30px; width: 80%; max-width: 400px; box-shadow: 0 10px 20px rgba(160,174,192,0.3);">
+                <span class="material-icons" style="font-size: 2.5rem; vertical-align: middle; margin-right: 15px;">settings</span> Settings
+            </button>
+        </div>
+    </section>
+
+
+
+
 
 
     <!-- =============================================
@@ -105,40 +121,22 @@
          SETTINGS VIEW
     ============================================== -->
 
-    <section id="settingsView" class="view active">
-
-
+    <section id="settingsView" class="view">
         <div class="settings-card">
-
-
             <div class="settings-header">
-
-
                 <div>
-
                     <h1 class="settings-title">
-
                         <span class="material-icons" style="vertical-align: middle;">settings</span> Settings
-
                     </h1>
-
                     <div>
-
                         Manage words,
                         images,
                         categories
                         and app settings.
-
                     </div>
-
                 </div>
-
-
-
-                <button id="backToGameButton" class="button button-primary" title="Back to Game">
-
-                    <span class="material-icons" style="vertical-align: middle;">sports_esports</span> Back to Game
-
+                <button id="backToGameButton" class="button button-primary" title="Back to Home">
+                    <span class="material-icons" style="vertical-align: middle;">home</span> Back to Home
                 </button>
 
 

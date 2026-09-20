@@ -136,27 +136,55 @@ function showSingleImageFromMulti(data) {
 
 /* ========================================================= VIEW MANAGEMENT ========================================================= */ 
 var gameMode = 'single';
-document.getElementById('modeToggleButton').addEventListener('click', (e) => {
-    const btn = e.currentTarget;
-    if (gameMode === 'single') {
-        gameMode = 'multi';
-        btn.innerHTML = '<span class="material-icons" style="vertical-align: middle;">grid_view</span>';
-    } else {
-        gameMode = 'single';
-        btn.innerHTML = '<span class="material-icons" style="vertical-align: middle;">shuffle</span>';
-    }
-});
 
-function showGameView() { 
-    settingsView.classList.remove( "active" ); 
-    gameView.classList.add( "active" ); 
-    settingsButton.style.display = "inline-block"; 
+
+const homeView = document.getElementById("homeView");
+
+function showHomeView() {
+    gameView.classList.remove("active");
+    settingsView.classList.remove("active");
+    if (document.getElementById("storyBuilderView")) document.getElementById("storyBuilderView").classList.remove("active");
+    homeView.classList.add("active");
+    document.getElementById("backHomeBtn").style.display = "none";
+    document.getElementById("kidModeButton").style.display = "none";
+}
+
+function showGameView(mode) { 
+    if (mode) gameMode = mode;
+    homeView.classList.remove("active");
+    settingsView.classList.remove("active");
+    gameView.classList.add("active"); 
+    document.getElementById("backHomeBtn").style.display = "inline-flex";
+    document.getElementById("kidModeButton").style.display = "inline-flex";
     playLetter(currentLetter);
+}
+
+function showSettingsView() { 
+    homeView.classList.remove("active");
+    gameView.classList.remove("active"); 
+    settingsView.classList.add("active"); 
+    document.getElementById("backHomeBtn").style.display = "inline-flex";
+    document.getElementById("kidModeButton").style.display = "none";
+    renderAllSettings(); 
 } 
-function showSettingsView() { gameView.classList.remove( "active" ); settingsView.classList.add( "active" ); settingsButton.style.display = "none"; renderAllSettings(); } 
 
 /* ========================================================= SETTINGS EVENTS ========================================================= */ 
-settingsButton.addEventListener( "click", showSettingsView ); backToGameButton.addEventListener( "click", showGameView ); 
+if (document.getElementById("settingsButton")) document.getElementById("settingsButton").addEventListener("click", showSettingsView); 
+document.getElementById("backToGameButton").addEventListener("click", showHomeView); 
+document.getElementById("backHomeBtn").addEventListener("click", showHomeView);
+
+document.getElementById("homeLetterFunBtn").addEventListener("click", () => showGameView('single'));
+document.getElementById("homeWordsFunBtn").addEventListener("click", () => showGameView('multi'));
+document.getElementById("homeStoryModeBtn").addEventListener("click", () => {
+    if (!appState.stories || appState.stories.length === 0) {
+        showToast("Please create a story in Settings first!");
+        showSettingsView();
+        document.querySelector('[data-tab="stories"]').click();
+        return;
+    }
+    playStory(appState.stories[0].id);
+});
+document.getElementById("homeSettingsBtn").addEventListener("click", showSettingsView); 
 /* ========================================================= SETTINGS TABS ========================================================= */ 
 document.querySelectorAll( ".settings-tab" ) .forEach( tab => { tab.addEventListener( "click", () => { const tabName = tab.dataset.tab; document.querySelectorAll( ".settings-tab" ) .forEach( item => item.classList.remove( "active" ) ); tab.classList.add( "active" ); document.querySelectorAll( ".settings-panel" ) .forEach( panel => panel.classList.remove( "active" ) ); document.getElementById( tabName + "Panel" ) .classList.add( "active" ); } ); } ); 
 /* ========================================================= SETTINGS RENDER ========================================================= */ 
@@ -987,16 +1015,6 @@ canvasEl.addEventListener('touchmove', e => {
     }
 }, {passive: false});
 
-document.getElementById("storyModeBtn").addEventListener("click", () => {
-    if (!appState.stories || appState.stories.length === 0) {
-        showToast("Please create a story in Settings first!");
-        showSettingsView();
-        document.querySelector('[data-tab="stories"]').click();
-        return;
-    }
-    playStory(appState.stories[0].id);
-});
- 
 /* =========================================================
    RECOVERED FUNCTIONS
 ========================================================= */

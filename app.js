@@ -13,7 +13,7 @@ async function initialize() {
         window.keyboardLocked = false;
         
         // Initial setup from logic.js
-        if (typeof showGameView === 'function') showGameView();
+        if (typeof showHomeView === 'function') showHomeView();
         if (typeof applyConfiguration === 'function') applyConfiguration();
         if (typeof renderCategoryButtons === 'function') renderCategoryButtons();
         if (typeof renderVirtualKeyboard === 'function') renderVirtualKeyboard();
