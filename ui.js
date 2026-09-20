@@ -860,8 +860,8 @@ function spawnDraggableCard(wordObj, spawnX, spawnY) {
         
         if (isDragging) {
             movingCards.forEach(m => {
-                m.el.style.left = Math.max(0, m.startLeft + dx) + "px";
-                m.el.style.top = Math.max(0, m.startTop + dy) + "px";
+                m.el.style.left = (m.startLeft + dx) + "px";
+                m.el.style.top = (m.startTop + dy) + "px";
             });
 
             // Edge glow docking check disabled for now
