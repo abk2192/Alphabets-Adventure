@@ -1304,7 +1304,16 @@ document.getElementById("googleImagesBtn").addEventListener("click", () => {
         showToast("Please enter a word first!");
         return;
     }
-    window.open(`https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query + ' transparent background')}`, "_blank");
+    
+    // Google prevents framing, so we use Bing Image Search which allows it
+    const searchUrl = `https://www.bing.com/images/search?q=${encodeURIComponent(query + ' transparent background')}`;
+    document.getElementById("webSearchIframe").src = searchUrl;
+    document.getElementById("webSearchModal").classList.add("active");
+});
+
+document.getElementById("closeWebSearchModal").addEventListener("click", () => {
+    document.getElementById("webSearchModal").classList.remove("active");
+    document.getElementById("webSearchIframe").src = "";
 });
 
 /* ========================================================= SAVE WORD ========================================================= */ wordForm.addEventListener( "submit", event => { event.preventDefault(); const letter = wordLetter.value .trim() .toLowerCase(); if ( !/^[a-z]$/.test( letter ) ) { showToast( "Please enter one letter from A to Z." ); return; } const newData = { letter: letter, word: wordName.value .trim() .toUpperCase(), categories: Array.from(wordCategory.querySelectorAll('input[type="checkbox"]:checked')).map(chk => chk.value), imageUrl: wordImageUrl.value .trim(), audioUrl: document.getElementById("wordAudioUrl").value.trim(), fallback: wordFallback.value .trim() || "❓" }; const existingId = editingWordId.value; if ( existingId ) { const index = appState.words.findIndex( item => item.id === existingId ); if ( index !== -1 ) { appState.words[index] = { id: existingId, ...newData }; } } else { appState.words.push({ id: crypto.randomUUID(), ...newData }); }    try { saveState(); renderWordTable(); renderCategoryButtons(); } catch(e) { console.error(e); } finally { if(typeof renderStoryBuilderWordPickers === 'function') renderStoryBuilderWordPickers(); closeModal(); showToast("Word saved!"); } } ); /* =========================================================
