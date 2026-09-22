@@ -837,21 +837,6 @@
 
 
 <script src="db.js?v=6"></script>
-<script src="components.js?v=6"></script>
-<script src="game.js?v=6"></script>
-<script src="ui.js?v=6"></script>
-<script src="app.js?v=6"></script>
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js').then(registration => {
-        console.log('ServiceWorker registration successful with scope: ', registration.scope);
-      }, err => {
-        console.log('ServiceWorker registration failed: ', err);
-      });
-    });
-  }
-</script>
 <!-- ===================================================== STORY ARRANGE MODAL ===================================================== -->
 <div id="storyArrangeModal" class="modal-overlay" style="z-index: 1000; background: #f4f6fb;">
     <div class="modal modal-fullscreen" style="display: flex; flex-direction: column;">
@@ -869,7 +854,7 @@
     <div class="modal modal-fullscreen" style="padding: 0; display: flex; flex-direction: column;">
         <div class="modal-header" style="padding: 10px 15px; border-bottom: 1px solid var(--border);">
             <h3 style="font-size: 1.2rem;">Web Image Search</h3>
-            <button class="icon-button" id="closeWebSearchModal"><span class="material-icons">close</span></button>
+            <button class="icon-button" id="closeWebSearchModal" style="background: none; border: none; font-size: 2rem; cursor: pointer; color: var(--text); padding: 0;"><span class="material-icons">close</span></button>
         </div>
         <div class="modal-body" style="flex: 1; padding: 0; overflow: hidden; display: flex; flex-direction: column;">
             <div style="padding: 10px; background: #fff8e1; border-bottom: 1px solid #ffe082; font-size: 0.9rem; color: #8d6e63; text-align: center;">
@@ -879,4 +864,19 @@
         </div>
     </div>
 </div>
+<script src="components.js?v=6"></script>
+<script src="game.js?v=6"></script>
+<script src="ui.js?v=6"></script>
+<script src="app.js?v=6"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').then(registration => {
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);
+      }, err => {
+        console.log('ServiceWorker registration failed: ', err);
+      });
+    });
+  }
+</script>
 </body></html>
