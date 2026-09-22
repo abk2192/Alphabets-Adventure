@@ -114,7 +114,7 @@ document.addEventListener('click', function(e) {
                 if (window.bubbleGameLetterPractice) {
                     const bubbleLetter = bubble.dataset.letter;
                     if (bubbleLetter === window.bubbleGameTargetLetter) {
-                        const matchingWords = appState.words.filter(w => w.letter === window.bubbleGameTargetLetter);
+                        const matchingWords = appState.words.filter(w => w.letter.toUpperCase() === window.bubbleGameTargetLetter);
                         if (matchingWords.length > 0) {
                             showImageWord = matchingWords[Math.floor(Math.random() * matchingWords.length)];
                         }
@@ -140,10 +140,10 @@ document.addEventListener('click', function(e) {
                     img.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect width='100' height='100' fill='%23e0e0e0'/%3E%3Ctext x='50' y='50' font-family='sans-serif' font-size='40' text-anchor='middle' alignment-baseline='middle' fill='%23666'%3E%3F%3C/text%3E%3C/svg%3E";
                 }
                 
-                img.style.left = `${e.clientX}px`;
-                img.style.top = `${e.clientY}px`;
-                img.style.width = `${Math.max(150, rect.width * 1.5)}px`;
-                img.style.height = `${Math.max(150, rect.width * 1.5)}px`;
+                img.style.left = `${rect.left + rect.width / 2}px`;
+                img.style.top = `${rect.top + rect.height / 2}px`;
+                img.style.width = `${rect.width}px`;
+                img.style.height = `${rect.height}px`;
                 
                 const duration = appState.config.imagePopDuration !== undefined ? appState.config.imagePopDuration : 1.0;
                 img.style.animationDuration = `${duration}s`;
@@ -302,6 +302,7 @@ const homeView = document.getElementById("homeView");
 const storySelectionView = document.getElementById("storySelectionView");
 
 function showHomeView() {
+    const pBtn = document.getElementById("bubbleLetterPracticeBtn"); if(pBtn) pBtn.style.display = "none";
     window.isBubbleGameActive = false;
     applyConfiguration(); // reset bubbles without letters
     document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
@@ -313,6 +314,7 @@ function showHomeView() {
 }
 
 function showGameView(mode) { 
+    const pBtn = document.getElementById("bubbleLetterPracticeBtn"); if(pBtn) pBtn.style.display = "none";
     window.isBubbleGameActive = false;
     applyConfiguration();
     if (mode) gameMode = mode;
@@ -327,6 +329,7 @@ function showGameView(mode) {
 }
 
 function showSettingsView() { 
+    const pBtn = document.getElementById("bubbleLetterPracticeBtn"); if(pBtn) pBtn.style.display = "none";
     window.isBubbleGameActive = false;
     applyConfiguration();
     document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
@@ -334,10 +337,12 @@ function showSettingsView() {
     document.getElementById("backHomeBtn").style.display = "inline-flex";
     document.getElementById("kidModeButton").style.display = "none";
     document.getElementById("muteBtn").style.display = "none";
+    if(typeof startKeyboardListener === 'function') stopKeyboardListener();
     renderAllSettings(); 
 } 
 
 function showStorySelectionView() {
+    const pBtn = document.getElementById("bubbleLetterPracticeBtn"); if(pBtn) pBtn.style.display = "none";
     window.isBubbleGameActive = false;
     applyConfiguration();
     document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
@@ -1565,15 +1570,11 @@ if (practiceBtn) {
         if (window.bubbleGameLetterPractice) {
             practiceBtn.style.background = 'var(--primary)';
             practiceBtn.style.color = 'white';
-            practiceBtn.style.borderColor = 'var(--secondary)';
-            practiceBtn.style.transform = 'scale(1.1)';
             display.style.display = 'flex';
             pickNewBubbleGameLetter();
         } else {
-            practiceBtn.style.background = 'white';
-            practiceBtn.style.color = '#aaa';
-            practiceBtn.style.borderColor = '#ddd';
-            practiceBtn.style.transform = 'scale(1)';
+            practiceBtn.style.background = '';
+            practiceBtn.style.color = '';
             display.style.display = 'none';
             applyConfiguration();
         }
@@ -1585,27 +1586,23 @@ function showBubbleGameView() {
     const view = document.getElementById("bubbleGameView");
     if (view) view.classList.add("active");
     document.getElementById("backHomeBtn").style.display = "inline-flex";
+    if (practiceBtn) practiceBtn.style.display = "inline-flex";
     
     window.isBubbleGameActive = true;
     
     // Sync UI with state
-    const practiceBtn = document.getElementById('bubbleLetterPracticeBtn');
     const display = document.getElementById('bubbleTargetLetterDisplay');
     if (window.bubbleGameLetterPractice) {
         if (practiceBtn) {
             practiceBtn.style.background = 'var(--primary)';
             practiceBtn.style.color = 'white';
-            practiceBtn.style.borderColor = 'var(--secondary)';
-            practiceBtn.style.transform = 'scale(1.1)';
         }
         if (display) display.style.display = 'flex';
         pickNewBubbleGameLetter();
     } else {
         if (practiceBtn) {
-            practiceBtn.style.background = 'white';
-            practiceBtn.style.color = '#aaa';
-            practiceBtn.style.borderColor = '#ddd';
-            practiceBtn.style.transform = 'scale(1)';
+            practiceBtn.style.background = '';
+            practiceBtn.style.color = '';
         }
         if (display) display.style.display = 'none';
         applyConfiguration(); // Refresh bubbles

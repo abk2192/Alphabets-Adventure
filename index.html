@@ -46,6 +46,9 @@
         <span>Alphabet Adventure</span>
     </div>
     <div style="display: flex; gap: 10px; flex-wrap: nowrap; justify-content: flex-end;">
+        <button id="bubbleLetterPracticeBtn" class="button button-secondary" style="display: none;" title="Letter Practice Mode">
+            <span style="font-family: 'Fredoka', sans-serif; font-weight: bold; font-size: 1.5rem; line-height: 1;">A</span>
+        </button>
         <button id="backHomeBtn" class="button button-secondary" style="display: none;" title="Back to Home" onclick="showHomeView()">
             <span class="material-icons" style="vertical-align: middle;">home</span>
         </button>
@@ -147,9 +150,6 @@
     ================================================= -->
     <section id="bubbleGameView" class="view">
         <div style="padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 15px;">
-            <button id="bubbleLetterPracticeBtn" style="width: 70px; height: 70px; border-radius: 50%; font-size: 2.5rem; font-family: 'Fredoka', sans-serif; font-weight: bold; background: white; color: #aaa; border: 4px solid #ddd; cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 10px rgba(0,0,0,0.1);" title="Letter Practice Mode">
-                A
-            </button>
             <div id="bubbleTargetLetterDisplay" style="display: none; width: 80px; height: 80px; background: white; border-radius: 50%; box-shadow: 0 10px 20px rgba(0,0,0,0.15); align-items: center; justify-content: center; font-size: 3.5rem; font-family: Fredoka\, sans-serif; font-weight: bold; color: var(--primary);">
                 A
             </div>
