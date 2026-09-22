@@ -27,10 +27,10 @@ window.bubbleGameTargetLetter = null;
 
 function getBubbleDuration() {
     const speed = appState.config.bubbleSpeed || 'normal';
-    if (speed === 'slow') return 12 + Math.random() * 8; // 12-20s
-    if (speed === 'fast') return 4 + Math.random() * 4; // 4-8s
-    if (speed === 'very-fast') return 2 + Math.random() * 3; // 2-5s
-    return 8 + Math.random() * 6; // normal 8-14s
+    if (speed === 'slow') return 18 + Math.random() * 8; // 18-26s
+    if (speed === 'fast') return 8 + Math.random() * 4; // 8-12s
+    if (speed === 'very-fast') return 4 + Math.random() * 3; // 4-7s
+    return 12 + Math.random() * 6; // normal 12-18s
 }
 
 window.spawnBubble = function(isRespawn = false) {
@@ -75,7 +75,13 @@ window.spawnBubble = function(isRespawn = false) {
         bubble.classList.add('has-letter');
         bubble.style.fontSize = `${size * 0.5}px`;
         
-        if (Math.random() < 0.33 && window.bubbleGameTargetLetter) {
+        let forceTarget = false;
+        if (window.bubbleGameTargetLetter) {
+            const existing = Array.from(bgContainer.querySelectorAll('.bubble:not(.popped)')).some(b => b.dataset.letter === window.bubbleGameTargetLetter);
+            if (!existing) forceTarget = true;
+        }
+        
+        if ((forceTarget || Math.random() < 0.3) && window.bubbleGameTargetLetter) {
             bubble.textContent = window.bubbleGameTargetLetter;
             bubble.dataset.letter = window.bubbleGameTargetLetter;
         } else {
@@ -128,21 +134,25 @@ document.addEventListener('click', function(e) {
                 img.className = 'bubble-image-popup';
                 const cacheUrl = localStorage.getItem(`img_${showImageWord.id}`);
                 img.src = cacheUrl || showImageWord.imageUrl || showImageWord.url;
+                
+                // Fallback for word.url structure differences or missing images
+                if (!img.src || img.src === 'undefined' || window.location.href === img.src || img.src.endsWith('/')) {
+                    img.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect width='100' height='100' fill='%23e0e0e0'/%3E%3Ctext x='50' y='50' font-family='sans-serif' font-size='40' text-anchor='middle' alignment-baseline='middle' fill='%23666'%3E%3F%3C/text%3E%3C/svg%3E";
+                }
+                
                 img.style.left = `${e.clientX}px`;
                 img.style.top = `${e.clientY}px`;
                 img.style.width = `${Math.max(150, rect.width * 1.5)}px`;
                 img.style.height = `${Math.max(150, rect.width * 1.5)}px`;
                 
-                // Fallback for word.url structure differences
-                if (!img.src || img.src === 'undefined') {
-                    // some objects might just have .url or .imageUrl, try both or fallback
-                }
+                const duration = appState.config.imagePopDuration !== undefined ? appState.config.imagePopDuration : 1.0;
+                img.style.animationDuration = `${duration}s`;
                 
                 document.body.appendChild(img);
                 
                 setTimeout(() => {
                     img.remove();
-                }, 1000);
+                }, duration * 1000);
             }
             
             if (appState.config.soundEnabled) {
@@ -1522,6 +1532,7 @@ window.copyUrl = function(id) {
     document.getElementById( "configBingSearch" ).checked = appState.config.bingSearchEnabled === true;
     document.getElementById( "configBubbleCount" ).value = appState.config.bubbleCount !== undefined ? appState.config.bubbleCount : 5;
     document.getElementById( "configBubbleSpeed" ).value = appState.config.bubbleSpeed || 'normal';
+    document.getElementById( "configImagePopDuration" ).value = appState.config.imagePopDuration !== undefined ? appState.config.imagePopDuration : 1.0;
 } document.getElementById( "saveConfigButton" ) .addEventListener( "click", () => { appState.config.title = document.getElementById( "configTitle" ) .value .trim() || "Alphabets Adventure"; appState.config.instruction = document.getElementById( "configInstruction" ) .value .trim() || "Tap on a letter to hear its sound and discover a word!"; appState.config.letterDelay = Number( document.getElementById( "configLetterDelay" ) .value ) || 600; appState.config.imageDelay = Number( document.getElementById( "configImageDelay" ) .value ) || 800; appState.config.soundEnabled = document.getElementById( "configSound" ) .checked;
     appState.config.customAudioEnabled = document.getElementById( "configCustomAudio" ).checked;
     appState.config.kidPin = document.getElementById( "configKidPin" ).value.trim() || "1234";
@@ -1532,6 +1543,7 @@ window.copyUrl = function(id) {
     appState.config.bingSearchEnabled = document.getElementById( "configBingSearch" ).checked;
     appState.config.bubbleCount = Number( document.getElementById( "configBubbleCount" ).value );
     appState.config.bubbleSpeed = document.getElementById( "configBubbleSpeed" ).value;
+    appState.config.imagePopDuration = Number( document.getElementById( "configImagePopDuration" ).value ) || 1.0;
     saveState(); applyConfiguration(); 
     if (typeof updateMuteButtonIcon === 'function') updateMuteButtonIcon();
     showToast( "Configuration saved!" ); } );
@@ -1545,17 +1557,25 @@ function pickNewBubbleGameLetter() {
     applyConfiguration();
 }
 
-const practiceToggle = document.getElementById('bubbleLetterPracticeToggle');
-if (practiceToggle) {
-    practiceToggle.addEventListener('change', function(e) {
-        window.bubbleGameLetterPractice = e.target.checked;
+const practiceBtn = document.getElementById('bubbleLetterPracticeBtn');
+if (practiceBtn) {
+    practiceBtn.addEventListener('click', function(e) {
+        window.bubbleGameLetterPractice = !window.bubbleGameLetterPractice;
         const display = document.getElementById('bubbleTargetLetterDisplay');
         if (window.bubbleGameLetterPractice) {
+            practiceBtn.style.background = 'var(--primary)';
+            practiceBtn.style.color = 'white';
+            practiceBtn.style.borderColor = 'var(--secondary)';
+            practiceBtn.style.transform = 'scale(1.1)';
             display.style.display = 'flex';
             pickNewBubbleGameLetter();
         } else {
+            practiceBtn.style.background = 'white';
+            practiceBtn.style.color = '#aaa';
+            practiceBtn.style.borderColor = '#ddd';
+            practiceBtn.style.transform = 'scale(1)';
             display.style.display = 'none';
-            applyConfiguration(); // remove letters from bubbles
+            applyConfiguration();
         }
     });
 }
@@ -1569,13 +1589,24 @@ function showBubbleGameView() {
     window.isBubbleGameActive = true;
     
     // Sync UI with state
-    const toggle = document.getElementById('bubbleLetterPracticeToggle');
-    if (toggle) toggle.checked = window.bubbleGameLetterPractice;
+    const practiceBtn = document.getElementById('bubbleLetterPracticeBtn');
     const display = document.getElementById('bubbleTargetLetterDisplay');
     if (window.bubbleGameLetterPractice) {
+        if (practiceBtn) {
+            practiceBtn.style.background = 'var(--primary)';
+            practiceBtn.style.color = 'white';
+            practiceBtn.style.borderColor = 'var(--secondary)';
+            practiceBtn.style.transform = 'scale(1.1)';
+        }
         if (display) display.style.display = 'flex';
         pickNewBubbleGameLetter();
     } else {
+        if (practiceBtn) {
+            practiceBtn.style.background = 'white';
+            practiceBtn.style.color = '#aaa';
+            practiceBtn.style.borderColor = '#ddd';
+            practiceBtn.style.transform = 'scale(1)';
+        }
         if (display) display.style.display = 'none';
         applyConfiguration(); // Refresh bubbles
     }
