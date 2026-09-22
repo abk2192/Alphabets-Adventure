@@ -44,9 +44,56 @@ window.spawnBubble = function(isRespawn = false, forceTargetOverride = false) {
     
     const bubble = document.createElement('div');
     bubble.className = 'bubble';
-    const size = Math.floor(Math.random() * 200) + 60;
+    let preloadedWord = null;
+    let isTarget = false;
+    let randomLetter = null;
+    
+    if (window.isBubbleGameActive) {
+        if (window.bubbleGameLetterPractice) {
+            bubble.classList.add('has-letter');
+            
+            let forceTarget = forceTargetOverride;
+            let targetCount = 0;
+            if (window.bubbleGameTargetLetter) {
+                targetCount = Array.from(bgContainer.querySelectorAll('.bubble:not(.popped)')).filter(b => b.dataset.letter === window.bubbleGameTargetLetter).length;
+                if (targetCount === 0) forceTarget = true;
+            }
+            
+            if (window.bubbleGameTargetLetter && (forceTarget || (Math.random() < 0.3 && targetCount < 2))) {
+                isTarget = true;
+                bubble.textContent = window.bubbleGameTargetLetter;
+                bubble.dataset.letter = window.bubbleGameTargetLetter;
+                const matching = appState.words.filter(w => w.letter.toUpperCase() === window.bubbleGameTargetLetter);
+                if (matching.length > 0) preloadedWord = matching[Math.floor(Math.random() * matching.length)];
+            } else {
+                const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                randomLetter = window.bubbleGameTargetLetter;
+                while (randomLetter === window.bubbleGameTargetLetter) {
+                    randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
+                }
+                bubble.textContent = randomLetter;
+                bubble.dataset.letter = randomLetter;
+            }
+        } else {
+            if (appState.words.length > 0) {
+                preloadedWord = appState.words[Math.floor(Math.random() * appState.words.length)];
+            }
+        }
+    }
+    
+    // Determine size: Target letters are always the biggest (180px - 260px)
+    // Non-target letters are smaller (60px - 140px)
+    let size;
+    if (isTarget) {
+        size = Math.floor(Math.random() * 80) + 180;
+    } else {
+        size = Math.floor(Math.random() * 80) + 60;
+    }
     bubble.style.width = `${size}px`;
     bubble.style.height = `${size}px`;
+    if (window.isBubbleGameActive && window.bubbleGameLetterPractice) {
+        bubble.style.fontSize = `${size * 0.5}px`;
+    }
     
     if (Math.random() < 0.7) {
         bubble.style.left = `${10 + Math.random() * 75}%`;
@@ -68,42 +115,27 @@ window.spawnBubble = function(isRespawn = false, forceTargetOverride = false) {
         }
     }
     
-    bubble.style.animationDelay = `-${Math.random() * 12}s`;
+    // Since animation is now forwards, we shouldn't use negative delay for respawns 
+    // unless it's initial load to desync them. 
+    if (!isRespawn) {
+        bubble.style.animationDelay = `-${Math.random() * 12}s`;
+    } else {
+        bubble.style.animationDelay = `0s`;
+    }
     bubble.style.animationDuration = `${getBubbleDuration()}s`;
     
-    let preloadedWord = null;
-    
-    if (window.isBubbleGameActive) {
-        if (window.bubbleGameLetterPractice) {
-            bubble.classList.add('has-letter');
-            bubble.style.fontSize = `${size * 0.5}px`;
-            
-            let forceTarget = forceTargetOverride;
-            let targetCount = 0;
-            if (window.bubbleGameTargetLetter) {
-                targetCount = Array.from(bgContainer.querySelectorAll('.bubble:not(.popped)')).filter(b => b.dataset.letter === window.bubbleGameTargetLetter).length;
-                if (targetCount === 0) forceTarget = true;
-            }
-            
-            if (window.bubbleGameTargetLetter && (forceTarget || (Math.random() < 0.3 && targetCount < 2))) {
-                bubble.textContent = window.bubbleGameTargetLetter;
-                bubble.dataset.letter = window.bubbleGameTargetLetter;
-                const matching = appState.words.filter(w => w.letter.toUpperCase() === window.bubbleGameTargetLetter);
-                if (matching.length > 0) preloadedWord = matching[Math.floor(Math.random() * matching.length)];
+    // When animation ends, bubble has fully faded out. Remove and spawn a new one!
+    bubble.addEventListener('animationend', (e) => {
+        if (e.animationName === 'floatBubble') {
+            if (bubble.parentNode) bubble.remove();
+            if (window.isBubbleGameActive) {
+                // If it was the target letter that just naturally left, force spawn a replacement!
+                window.spawnBubble(true, isTarget); 
             } else {
-                const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                let randomLetter = window.bubbleGameTargetLetter;
-                while (randomLetter === window.bubbleGameTargetLetter) {
-                    randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
-                }
-                bubble.textContent = randomLetter;
-                bubble.dataset.letter = randomLetter;
-            }
-        } else {
-            if (appState.words.length > 0) {
-                preloadedWord = appState.words[Math.floor(Math.random() * appState.words.length)];
+                window.spawnBubble(true);
             }
         }
+    });
         
         if (preloadedWord) {
             bubble.dataset.wordId = preloadedWord.id;
@@ -114,7 +146,6 @@ window.spawnBubble = function(isRespawn = false, forceTargetOverride = false) {
                 img.src = urlToLoad;
             }
         }
-    }
     
     bgContainer.appendChild(bubble);
 };
