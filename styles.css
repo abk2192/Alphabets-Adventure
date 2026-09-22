@@ -22,7 +22,7 @@
     font-size: clamp( 2.2rem, 7vw, 5rem ); 
     font-weight: 700; 
     color: var(--primary); 
-    box-shadow: 0 6px 0 #d8d4ff, 0 10px 20px rgba(0,0,0,0.08); 
+    box-shadow: 0 6px 0 var(--secondary), 0 10px 20px rgba(0,0,0,0.08); 
     opacity: 0; 
     animation: letterAppear 0.5s cubic-bezier( 0.2, 1.4, 0.5, 1 ) forwards; 
 } .animated-letter.first-letter {
