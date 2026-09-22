@@ -16,9 +16,21 @@ function playLetter(letter) {
             showMissingLetter( letter ); 
             return; 
         } 
-        showSingleImageFromMulti(data);
     }
-} /* ========================================================= SHOW MISSING LETTER ========================================================= */ function showMissingLetter(letter) { wordContainer.innerHTML = ""; imageArea.innerHTML = ""; const message = document.createElement( "div" ); message.className = "fallback"; message.innerHTML = ` <div class="fallback-icon"> ❓ </div> <div class="fallback-text"> No word for ${letter.toUpperCase()} in this category yet. </div> `; imageArea.appendChild( message ); } /* ========================================================= IMAGE DISPLAY ========================================================= */ function showWordImage(data) { imageArea.innerHTML = ""; const wrapper = document.createElement( "div" ); wrapper.className = "image-wrapper"; /* * No image URL means * immediate fallback. */ if ( !data.imageUrl ) { showFallback( wrapper, data ); imageArea.appendChild( wrapper ); playSound(data); return; } const image = document.createElement( "img" ); image.className = "word-image"; image.src = data.imageUrl; image.alt = data.word; image.addEventListener( "error", () => { showFallback( wrapper, data ); }, { once: true } ); wrapper.appendChild( image ); imageArea.appendChild( wrapper ); playSound(data); } /* ========================================================= FALLBACK ========================================================= */ function showFallback( wrapper, data ) { wrapper.innerHTML = ""; const fallback = document.createElement( "div" ); fallback.className = "fallback"; const icon = document.createElement( "div" ); icon.className = "fallback-icon"; icon.textContent = data.fallback || "❓"; const text = document.createElement( "div" ); text.className = "fallback-text"; text.textContent = data.word; fallback.appendChild( icon ); fallback.appendChild( text ); wrapper.appendChild( fallback ); } /* ========================================================= SOUND ========================================================= */ 
+} 
+
+/* ========================================================= SHOW MISSING LETTER ========================================================= */ 
+function showMissingLetter(letter) { 
+    wordContainer.innerHTML = ""; 
+    imageArea.innerHTML = ""; 
+    const message = document.createElement("div"); 
+    message.className = "fallback"; 
+    message.innerHTML = ` <div class="fallback-icon"> ❓ </div> <div class="fallback-text"> No word for ${letter.toUpperCase()} in this category yet. </div> `; 
+    imageArea.appendChild(message); 
+} 
+
+/* ========================================================= SOUND ========================================================= */
+
 var audioCache = {};
 var currentlyPlayingAudio = null;
 var currentAudioTimeout = null;

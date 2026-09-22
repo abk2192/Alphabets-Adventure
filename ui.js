@@ -92,45 +92,22 @@ function showMultiModeGrid(allData, letter) {
 }
 
 function showSingleImageFromMulti(data) {
-    wordContainer.innerHTML = "";
-    imageArea.innerHTML = "";
     clearTimeout(animationTimer);
     
-    const words = data.word.split(" ");
-    let globalLetterIndex = 0;
-    
-    words.forEach((wordStr) => {
-        const wordGroup = document.createElement("div");
-        wordGroup.style.display = "flex";
-        wordGroup.style.gap = "6px";
-        wordGroup.style.flexWrap = "wrap";
-        wordGroup.style.justifyContent = "center";
-        
-        const characters = wordStr.split("");
-        characters.forEach((character) => {
-            const element = document.createElement( "span" );
-            element.className = "animated-letter";
-            if (globalLetterIndex === 0) {
-                element.classList.add("first-letter");
-            }
-            element.textContent = character;
-            element.style.animationDelay = ( globalLetterIndex * appState.config.letterDelay ) + "ms";
-            if (/^[a-zA-Z]$/.test(character)) {
-                element.style.cursor = "pointer";
-                element.addEventListener("pointerdown", (e) => {
-                    e.preventDefault();
-                    handleKeyPress(character.toLowerCase(), true);
-                });
-            }
-            wordGroup.appendChild( element );
-            globalLetterIndex++;
-        });
-        
-        wordContainer.appendChild(wordGroup);
-    });
-    
-    const totalDelay = globalLetterIndex * appState.config.letterDelay + appState.config.imageDelay;
-    animationTimer = setTimeout(() => { showWordImage(data); }, totalDelay);
+    animationTimer = WordCardComponent.render(
+        wordContainer,
+        imageArea,
+        data,
+        {
+            letterDelay: appState.config.letterDelay !== undefined ? appState.config.letterDelay : 180,
+            imageDelay: appState.config.imageDelay !== undefined ? appState.config.imageDelay : 0,
+            onLetterClick: (character) => {
+                handleKeyPress(character, true);
+            },
+            onImageLoaded: () => playSound(data),
+            onImageError: () => playSound(data)
+        }
+    );
 }
 
 
@@ -1366,37 +1343,13 @@ document.getElementById("previewWordBtn").addEventListener("click", () => {
     const wordContainer = document.getElementById("previewWordContainer");
     const imageArea = document.getElementById("previewImageArea");
     
-    wordContainer.innerHTML = "";
-    for (let i = 0; i < word.length; i++) {
-        const span = document.createElement("span");
-        span.className = "animated-letter";
-        span.style.animationDelay = (i * 180) + "ms";
-        span.textContent = word[i];
-        wordContainer.appendChild(span);
-    }
-    
-    imageArea.innerHTML = "";
-    const wrapper = document.createElement("div");
-    wrapper.className = "image-wrapper";
-    
     const tempWordData = { word, imageUrl, fallback, audioUrl };
-    
-    if (!imageUrl) {
-        showFallback(wrapper, tempWordData);
-        imageArea.appendChild(wrapper);
-    } else {
-        const image = document.createElement("img");
-        image.className = "word-image";
-        image.src = imageUrl;
-        image.alt = word;
-        image.addEventListener("error", () => {
-            showFallback(wrapper, tempWordData);
-        }, { once: true });
-        wrapper.appendChild(image);
-        imageArea.appendChild(wrapper);
-    }
-    
-    playSound(tempWordData);
+    WordCardComponent.render(wordContainer, imageArea, tempWordData, {
+        letterDelay: 180,
+        imageDelay: 0,
+        onImageLoaded: () => playSound(tempWordData),
+        onImageError: () => playSound(tempWordData)
+    });
 });
 
 window.previewWordFromList = function(id) {
@@ -1409,35 +1362,12 @@ window.previewWordFromList = function(id) {
     
     modal.classList.add("active");
     
-    wordContainer.innerHTML = "";
-    for (let i = 0; i < word.word.length; i++) {
-        const span = document.createElement("span");
-        span.className = "animated-letter";
-        span.style.animationDelay = (i * 180) + "ms";
-        span.textContent = word.word[i];
-        wordContainer.appendChild(span);
-    }
-    
-    imageArea.innerHTML = "";
-    const wrapper = document.createElement("div");
-    wrapper.className = "image-wrapper";
-    
-    if (!word.imageUrl) {
-        showFallback(wrapper, word);
-        imageArea.appendChild(wrapper);
-    } else {
-        const image = document.createElement("img");
-        image.className = "word-image";
-        image.src = word.imageUrl;
-        image.alt = word.word;
-        image.addEventListener("error", () => {
-            showFallback(wrapper, word);
-        }, { once: true });
-        wrapper.appendChild(image);
-        imageArea.appendChild(wrapper);
-    }
-    
-    playSound(word);
+    WordCardComponent.render(wordContainer, imageArea, word, {
+        letterDelay: 180,
+        imageDelay: 0,
+        onImageLoaded: () => playSound(word),
+        onImageError: () => playSound(word)
+    });
 };
 
 document.getElementById("closeStandalonePreviewBtn").addEventListener("click", () => {

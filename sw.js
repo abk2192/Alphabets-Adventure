@@ -1,4 +1,4 @@
-const CACHE_NAME = 'alphabet-adventure-cache-v5';
+const CACHE_NAME = 'alphabet-adventure-v6';
 const urlsToCache = [
   './',
   './index.html',
@@ -7,6 +7,7 @@ const urlsToCache = [
   './app.js',
   './ui.js',
   './game.js',
+  './components.js',
   './db.js',
   './styles.css'
 ];
