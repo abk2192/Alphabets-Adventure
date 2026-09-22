@@ -21,6 +21,18 @@ function applyConfiguration() {
     }
 } 
 
+window.isBubbleGameActive = false;
+window.bubbleGameLetterPractice = false;
+window.bubbleGameTargetLetter = null;
+
+function getBubbleDuration() {
+    const speed = appState.config.bubbleSpeed || 'normal';
+    if (speed === 'slow') return 12 + Math.random() * 8; // 12-20s
+    if (speed === 'fast') return 4 + Math.random() * 4; // 4-8s
+    if (speed === 'very-fast') return 2 + Math.random() * 3; // 2-5s
+    return 8 + Math.random() * 6; // normal 8-14s
+}
+
 window.spawnBubble = function(isRespawn = false) {
     const bgContainer = document.querySelector('.background-decoration');
     if (!bgContainer) return;
@@ -57,7 +69,23 @@ window.spawnBubble = function(isRespawn = false) {
     }
     
     bubble.style.animationDelay = `-${Math.random() * 12}s`;
-    bubble.style.animationDuration = `${8 + Math.random() * 8}s`;
+    bubble.style.animationDuration = `${getBubbleDuration()}s`;
+    
+    if (window.isBubbleGameActive && window.bubbleGameLetterPractice) {
+        bubble.classList.add('has-letter');
+        bubble.style.fontSize = `${size * 0.5}px`;
+        
+        if (Math.random() < 0.33 && window.bubbleGameTargetLetter) {
+            bubble.textContent = window.bubbleGameTargetLetter;
+            bubble.dataset.letter = window.bubbleGameTargetLetter;
+        } else {
+            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
+            bubble.textContent = randomLetter;
+            bubble.dataset.letter = randomLetter;
+        }
+    }
+    
     bgContainer.appendChild(bubble);
 };
 
@@ -73,7 +101,49 @@ document.addEventListener('click', function(e) {
         const distance = Math.sqrt(dx * dx + dy * dy);
         
         if (distance <= rect.width / 2) {
+            
+            let showImageWord = null;
+            
+            if (window.isBubbleGameActive) {
+                if (window.bubbleGameLetterPractice) {
+                    const bubbleLetter = bubble.dataset.letter;
+                    if (bubbleLetter === window.bubbleGameTargetLetter) {
+                        const matchingWords = appState.words.filter(w => w.letter === window.bubbleGameTargetLetter);
+                        if (matchingWords.length > 0) {
+                            showImageWord = matchingWords[Math.floor(Math.random() * matchingWords.length)];
+                        }
+                        setTimeout(() => { pickNewBubbleGameLetter(); }, 1000);
+                    }
+                } else {
+                    if (appState.words.length > 0) {
+                        showImageWord = appState.words[Math.floor(Math.random() * appState.words.length)];
+                    }
+                }
+            }
+            
             bubble.classList.add('popped');
+            
+            if (showImageWord) {
+                const img = document.createElement('img');
+                img.className = 'bubble-image-popup';
+                const cacheUrl = localStorage.getItem(`img_${showImageWord.id}`);
+                img.src = cacheUrl || showImageWord.imageUrl || showImageWord.url;
+                img.style.left = `${e.clientX}px`;
+                img.style.top = `${e.clientY}px`;
+                img.style.width = `${Math.max(150, rect.width * 1.5)}px`;
+                img.style.height = `${Math.max(150, rect.width * 1.5)}px`;
+                
+                // Fallback for word.url structure differences
+                if (!img.src || img.src === 'undefined') {
+                    // some objects might just have .url or .imageUrl, try both or fallback
+                }
+                
+                document.body.appendChild(img);
+                
+                setTimeout(() => {
+                    img.remove();
+                }, 1000);
+            }
             
             if (appState.config.soundEnabled) {
                 try {
@@ -94,7 +164,6 @@ document.addEventListener('click', function(e) {
             
             setTimeout(() => { 
                 bubble.remove(); 
-                // Respawn a new bubble to replace it!
                 setTimeout(() => window.spawnBubble(true), 100);
             }, 200);
             
@@ -223,9 +292,9 @@ const homeView = document.getElementById("homeView");
 const storySelectionView = document.getElementById("storySelectionView");
 
 function showHomeView() {
-    gameView.classList.remove("active");
-    settingsView.classList.remove("active");
-    storySelectionView.classList.remove("active");
+    window.isBubbleGameActive = false;
+    applyConfiguration(); // reset bubbles without letters
+    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
     homeView.classList.add("active");
     document.getElementById("backHomeBtn").style.display = "none";
     document.getElementById("kidModeButton").style.display = "none";
@@ -234,10 +303,10 @@ function showHomeView() {
 }
 
 function showGameView(mode) { 
+    window.isBubbleGameActive = false;
+    applyConfiguration();
     if (mode) gameMode = mode;
-    homeView.classList.remove("active");
-    settingsView.classList.remove("active");
-    storySelectionView.classList.remove("active");
+    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
     gameView.classList.add("active"); 
     document.getElementById("backHomeBtn").style.display = "inline-flex";
     document.getElementById("kidModeButton").style.display = "inline-flex";
@@ -248,9 +317,9 @@ function showGameView(mode) {
 }
 
 function showSettingsView() { 
-    homeView.classList.remove("active");
-    gameView.classList.remove("active"); 
-    storySelectionView.classList.remove("active");
+    window.isBubbleGameActive = false;
+    applyConfiguration();
+    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
     settingsView.classList.add("active"); 
     document.getElementById("backHomeBtn").style.display = "inline-flex";
     document.getElementById("kidModeButton").style.display = "none";
@@ -259,9 +328,9 @@ function showSettingsView() {
 } 
 
 function showStorySelectionView() {
-    homeView.classList.remove("active");
-    gameView.classList.remove("active");
-    settingsView.classList.remove("active");
+    window.isBubbleGameActive = false;
+    applyConfiguration();
+    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
     storySelectionView.classList.add("active");
     document.getElementById("backHomeBtn").style.display = "inline-flex";
     document.getElementById("kidModeButton").style.display = "none";
@@ -1452,6 +1521,7 @@ window.copyUrl = function(id) {
     document.getElementById( "configMaxAudioDuration" ).value = appState.config.maxAudioDuration !== undefined ? appState.config.maxAudioDuration : 3;
     document.getElementById( "configBingSearch" ).checked = appState.config.bingSearchEnabled === true;
     document.getElementById( "configBubbleCount" ).value = appState.config.bubbleCount !== undefined ? appState.config.bubbleCount : 5;
+    document.getElementById( "configBubbleSpeed" ).value = appState.config.bubbleSpeed || 'normal';
 } document.getElementById( "saveConfigButton" ) .addEventListener( "click", () => { appState.config.title = document.getElementById( "configTitle" ) .value .trim() || "Alphabets Adventure"; appState.config.instruction = document.getElementById( "configInstruction" ) .value .trim() || "Tap on a letter to hear its sound and discover a word!"; appState.config.letterDelay = Number( document.getElementById( "configLetterDelay" ) .value ) || 600; appState.config.imageDelay = Number( document.getElementById( "configImageDelay" ) .value ) || 800; appState.config.soundEnabled = document.getElementById( "configSound" ) .checked;
     appState.config.customAudioEnabled = document.getElementById( "configCustomAudio" ).checked;
     appState.config.kidPin = document.getElementById( "configKidPin" ).value.trim() || "1234";
@@ -1461,9 +1531,55 @@ window.copyUrl = function(id) {
     appState.config.maxAudioDuration = Number( document.getElementById( "configMaxAudioDuration" ).value ) || 3;
     appState.config.bingSearchEnabled = document.getElementById( "configBingSearch" ).checked;
     appState.config.bubbleCount = Number( document.getElementById( "configBubbleCount" ).value );
+    appState.config.bubbleSpeed = document.getElementById( "configBubbleSpeed" ).value;
     saveState(); applyConfiguration(); 
     if (typeof updateMuteButtonIcon === 'function') updateMuteButtonIcon();
     showToast( "Configuration saved!" ); } );
+
+function pickNewBubbleGameLetter() {
+    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    window.bubbleGameTargetLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
+    const display = document.getElementById('bubbleTargetLetterDisplay');
+    if (display) display.textContent = window.bubbleGameTargetLetter;
+    // Respawn all bubbles so they get the new target letter occasionally
+    applyConfiguration();
+}
+
+const practiceToggle = document.getElementById('bubbleLetterPracticeToggle');
+if (practiceToggle) {
+    practiceToggle.addEventListener('change', function(e) {
+        window.bubbleGameLetterPractice = e.target.checked;
+        const display = document.getElementById('bubbleTargetLetterDisplay');
+        if (window.bubbleGameLetterPractice) {
+            display.style.display = 'flex';
+            pickNewBubbleGameLetter();
+        } else {
+            display.style.display = 'none';
+            applyConfiguration(); // remove letters from bubbles
+        }
+    });
+}
+
+function showBubbleGameView() {
+    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+    const view = document.getElementById("bubbleGameView");
+    if (view) view.classList.add("active");
+    document.getElementById("backHomeBtn").style.display = "inline-flex";
+    
+    window.isBubbleGameActive = true;
+    
+    // Sync UI with state
+    const toggle = document.getElementById('bubbleLetterPracticeToggle');
+    if (toggle) toggle.checked = window.bubbleGameLetterPractice;
+    const display = document.getElementById('bubbleTargetLetterDisplay');
+    if (window.bubbleGameLetterPractice) {
+        if (display) display.style.display = 'flex';
+        pickNewBubbleGameLetter();
+    } else {
+        if (display) display.style.display = 'none';
+        applyConfiguration(); // Refresh bubbles
+    }
+}
 
 document.getElementById("btnReplaceAllAudio").addEventListener("click", () => {
     let replacedCount = 0;

@@ -71,6 +71,9 @@
             <button id="homeWordsFunBtn" class="button button-primary" style="filter: hue-rotate(75deg); font-size: clamp(1.2rem, 6vw, 2rem); padding: 15px 20px; border-radius: 30px; width: 85%; max-width: 400px; white-space: nowrap; box-shadow: 0 10px 20px color-mix(in srgb, var(--primary) 40%, transparent);">
                 <span class="material-icons" style="font-size: clamp(1.5rem, 7vw, 2.5rem); vertical-align: middle; margin-right: 10px;">grid_view</span> Words Fun
             </button>
+            <button id="homeBubbleGameBtn" class="button button-primary" style="filter: hue-rotate(300deg); font-size: clamp(1.2rem, 6vw, 2rem); padding: 15px 20px; border-radius: 30px; width: 85%; max-width: 400px; white-space: nowrap; box-shadow: 0 10px 20px color-mix(in srgb, var(--primary) 40%, transparent);" onclick="showBubbleGameView()">
+                <span class="material-icons" style="font-size: clamp(1.5rem, 7vw, 2.5rem); vertical-align: middle; margin-right: 10px;">bubble_chart</span> Bubble Game
+            </button>
             <button id="homeStoryModeBtn" class="button button-primary" style="filter: hue-rotate(150deg); font-size: clamp(1.2rem, 6vw, 2rem); padding: 15px 20px; border-radius: 30px; width: 85%; max-width: 400px; white-space: nowrap; box-shadow: 0 10px 20px color-mix(in srgb, var(--primary) 40%, transparent);">
                 <span class="material-icons" style="font-size: clamp(1.5rem, 7vw, 2.5rem); vertical-align: middle; margin-right: 10px;">auto_stories</span> Story Mode
             </button>
@@ -138,6 +141,21 @@
     <!-- =============================================
          SETTINGS VIEW
     ============================================== -->
+
+    <!-- =================================================
+         BUBBLE GAME VIEW
+    ================================================= -->
+    <section id="bubbleGameView" class="view">
+        <div style="padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 15px;">
+            <div style="background: rgba(255,255,255,0.8); padding: 10px 20px; border-radius: 999px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 10px; font-weight: bold;">
+                <label for="bubbleLetterPracticeToggle" style="margin: 0; cursor: pointer;">Letter Practice Mode</label>
+                <input type="checkbox" id="bubbleLetterPracticeToggle" style="transform: scale(1.2); cursor: pointer;">
+            </div>
+            <div id="bubbleTargetLetterDisplay" style="display: none; width: 80px; height: 80px; background: white; border-radius: 50%; box-shadow: 0 10px 20px rgba(0,0,0,0.15); align-items: center; justify-content: center; font-size: 3.5rem; font-family: Fredoka\, sans-serif; font-weight: bold; color: var(--primary);">
+                A
+            </div>
+        </div>
+    </section>
 
     <section id="settingsView" class="view">
         <div class="settings-card">
@@ -428,6 +446,17 @@
                             Background Bubbles Count
                         </label>
                         <input id="configBubbleCount" type="number" min="0" max="20" step="1">
+                    </div>
+                    <div class="form-group">
+                        <label>
+                            Background Bubbles Speed
+                        </label>
+                        <select id="configBubbleSpeed">
+                            <option value="slow">Slow</option>
+                            <option value="normal">Normal</option>
+                            <option value="fast">Fast</option>
+                            <option value="very-fast">Very Fast</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label>
