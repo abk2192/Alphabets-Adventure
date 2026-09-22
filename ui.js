@@ -9,7 +9,7 @@ function applyConfiguration() {
     document.documentElement.style.setProperty( "--secondary", appState.config.secondary ); 
     document.documentElement.style.setProperty( "--primary-dark", `color-mix(in srgb, ${appState.config.primary} 80%, black)` );
     document.documentElement.style.setProperty( "--success", `color-mix(in srgb, ${appState.config.primary} 70%, white)` );
-    document.documentElement.style.setProperty( "--background", `linear-gradient(135deg, ${appState.config.secondary}, #ffffff)` );
+    document.documentElement.style.setProperty( "--background", `linear-gradient(135deg, color-mix(in srgb, ${appState.config.primary} 40%, white), color-mix(in srgb, ${appState.config.primary} 15%, white))` );
 } /* ========================================================= FIND WORD ========================================================= */ function getWordForLetter( letter, category ) {
     let options = appState.words.filter( item => 
         item.letter === letter && 
