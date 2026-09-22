@@ -16,6 +16,7 @@ function playLetter(letter) {
             showMissingLetter( letter ); 
             return; 
         } 
+        showSingleImageFromMulti(data);
     }
 } 
 
