@@ -33,14 +33,14 @@ function getBubbleDuration() {
     return 12 + Math.random() * 6; // normal 12-18s
 }
 
-window.spawnBubble = function(isRespawn = false) {
+window.spawnBubble = function(isRespawn = false, forceTargetOverride = false) {
     const bgContainer = document.querySelector('.background-decoration');
     if (!bgContainer) return;
     
     // Safety check so we don't spawn infinitely if not needed
-    const currentBubbles = bgContainer.querySelectorAll('.bubble').length;
+    const currentBubbles = bgContainer.querySelectorAll('.bubble:not(.popped)').length;
     const maxBubbles = appState.config.bubbleCount !== undefined ? appState.config.bubbleCount : 5;
-    if (isRespawn && currentBubbles >= maxBubbles) return;
+    if (isRespawn && !forceTargetOverride && currentBubbles >= maxBubbles) return;
     
     const bubble = document.createElement('div');
     bubble.className = 'bubble';
@@ -48,7 +48,7 @@ window.spawnBubble = function(isRespawn = false) {
     bubble.style.width = `${size}px`;
     bubble.style.height = `${size}px`;
     
-    if (isRespawn) {
+    if (isRespawn && !forceTargetOverride) {
         const edge = Math.floor(Math.random() * 4);
         if (edge === 0) { // top
             bubble.style.left = `${Math.random() * 100}%`;
@@ -78,20 +78,24 @@ window.spawnBubble = function(isRespawn = false) {
             bubble.classList.add('has-letter');
             bubble.style.fontSize = `${size * 0.5}px`;
             
-            let forceTarget = false;
+            let forceTarget = forceTargetOverride;
+            let targetCount = 0;
             if (window.bubbleGameTargetLetter) {
-                const existing = Array.from(bgContainer.querySelectorAll('.bubble:not(.popped)')).some(b => b.dataset.letter === window.bubbleGameTargetLetter);
-                if (!existing) forceTarget = true;
+                targetCount = Array.from(bgContainer.querySelectorAll('.bubble:not(.popped)')).filter(b => b.dataset.letter === window.bubbleGameTargetLetter).length;
+                if (targetCount === 0) forceTarget = true;
             }
             
-            if ((forceTarget || Math.random() < 0.3) && window.bubbleGameTargetLetter) {
+            if (window.bubbleGameTargetLetter && (forceTarget || (Math.random() < 0.3 && targetCount < 2))) {
                 bubble.textContent = window.bubbleGameTargetLetter;
                 bubble.dataset.letter = window.bubbleGameTargetLetter;
                 const matching = appState.words.filter(w => w.letter.toUpperCase() === window.bubbleGameTargetLetter);
                 if (matching.length > 0) preloadedWord = matching[Math.floor(Math.random() * matching.length)];
             } else {
                 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                const randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
+                let randomLetter = window.bubbleGameTargetLetter;
+                while (randomLetter === window.bubbleGameTargetLetter) {
+                    randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
+                }
                 bubble.textContent = randomLetter;
                 bubble.dataset.letter = randomLetter;
             }
@@ -1568,8 +1572,16 @@ function pickNewBubbleGameLetter() {
     window.bubbleGameTargetLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
     const display = document.getElementById('bubbleTargetLetterDisplay');
     if (display) display.textContent = window.bubbleGameTargetLetter;
-    // Respawn all bubbles so they get the new target letter occasionally
-    applyConfiguration();
+    
+    // Do NOT reset screen! Just ensure it's spawned if not present.
+    setTimeout(() => {
+        const bgContainer = document.querySelector('.background-decoration');
+        if (!bgContainer) return;
+        const targetCount = Array.from(bgContainer.querySelectorAll('.bubble:not(.popped)')).filter(b => b.dataset.letter === window.bubbleGameTargetLetter).length;
+        if (targetCount === 0) {
+            window.spawnBubble(true, true); // force spawn
+        }
+    }, 200);
 }
 
 const practiceBtn = document.getElementById('bubbleLetterPracticeBtn');
@@ -1581,12 +1593,31 @@ if (practiceBtn) {
             practiceBtn.style.background = 'var(--primary)';
             practiceBtn.style.color = 'white';
             display.style.display = 'flex';
+            
+            // Inject letters into existing bubbles smoothly
+            document.querySelectorAll('.bubble:not(.popped)').forEach(bubble => {
+                if (!bubble.dataset.letter) {
+                    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                    const randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
+                    bubble.textContent = randomLetter;
+                    bubble.dataset.letter = randomLetter;
+                    bubble.classList.add('has-letter');
+                    const size = parseInt(bubble.style.width);
+                    bubble.style.fontSize = `${size * 0.5}px`;
+                }
+            });
             pickNewBubbleGameLetter();
         } else {
             practiceBtn.style.background = '';
             practiceBtn.style.color = '';
             display.style.display = 'none';
-            applyConfiguration();
+            // Remove letters smoothly without resetting
+            document.querySelectorAll('.bubble:not(.popped)').forEach(bubble => {
+                 bubble.textContent = '';
+                 delete bubble.dataset.letter;
+                 delete bubble.dataset.wordId;
+                 bubble.classList.remove('has-letter');
+            });
         }
     });
 }
@@ -1608,14 +1639,23 @@ function showBubbleGameView() {
             practiceBtn.style.color = 'white';
         }
         if (display) display.style.display = 'flex';
-        pickNewBubbleGameLetter();
+        if (!window.bubbleGameTargetLetter) {
+            pickNewBubbleGameLetter();
+        }
     } else {
         if (practiceBtn) {
             practiceBtn.style.background = '';
             practiceBtn.style.color = '';
         }
         if (display) display.style.display = 'none';
-        applyConfiguration(); // Refresh bubbles
+        // Wait, bubbles without letters will just naturally be generated when next ones spawn.
+        // Or we can manually remove them without resetting.
+        document.querySelectorAll('.bubble:not(.popped)').forEach(bubble => {
+             bubble.textContent = '';
+             delete bubble.dataset.letter;
+             delete bubble.dataset.wordId;
+             bubble.classList.remove('has-letter');
+        });
     }
 }
 
