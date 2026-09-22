@@ -139,37 +139,55 @@ class ImageSearchComponent {
     }
 
     async fetchImages(query, offset, append = false) {
+        let imgs = [];
+        
         try {
-            const response = await fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&generator=search&gsrsearch=${encodeURIComponent(query)}&gsrlimit=24&gsroffset=${offset}&prop=pageimages&piprop=thumbnail&pithumbsize=400&origin=*`);
+            // 1. Try Google Images via Proxy
+            const gUrl = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query + ' transparent background')}&gbv=1&start=${offset}`;
+            const pUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(gUrl)}`;
+            const res = await fetch(pUrl);
+            const data = await res.json();
+            if (data && data.contents) {
+                const html = data.contents;
+                const imgRegex = /<img[^>]+src="([^">]+)"/g;
+                let match;
+                while ((match = imgRegex.exec(html)) !== null) {
+                    if (match[1].startsWith("http") && !match[1].includes("text") && !match[1].includes("tracking")) {
+                        imgs.push(match[1]);
+                    }
+                }
+            }
+        } catch(e) {
+            console.warn("Google Image Proxy failed:", e);
+        }
+
+        try {
+            // 2. Fetch Wikipedia as fallback/addition
+            const response = await fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&generator=search&gsrsearch=${encodeURIComponent(query)}&gsrlimit=12&gsroffset=${offset}&prop=pageimages&piprop=thumbnail&pithumbsize=400&origin=*`);
             const data = await response.json();
             
-            let imgs = [];
             if (data.query && data.query.pages) {
                 const pages = Object.values(data.query.pages);
-                imgs = pages.filter(p => p.thumbnail && p.thumbnail.source).map(p => p.thumbnail.source);
+                const wikiImgs = pages.filter(p => p.thumbnail && p.thumbnail.source).map(p => p.thumbnail.source);
+                imgs = [...imgs, ...wikiImgs];
             }
-            
-            if (imgs.length === 0 && !append) {
-                this.container.innerHTML = "<div style='grid-column: 1/-1; text-align:center; padding: 20px; color: var(--muted);'>No images found. Please paste a URL manually.</div>";
-            } else if (imgs.length === 0 && append) {
-                const existingLoadMore = this.container.querySelector(".load-more-images-btn");
-                if (existingLoadMore) {
-                    existingLoadMore.textContent = "No more images";
-                    existingLoadMore.disabled = true;
-                }
-            } else {
-                this.renderImageResults(imgs, append);
+        } catch(e) {
+            console.warn("Wikipedia Image search failed:", e);
+        }
+        
+        // Remove duplicates
+        imgs = [...new Set(imgs)];
+        
+        if (imgs.length === 0 && !append) {
+            this.container.innerHTML = "<div style='grid-column: 1/-1; text-align:center; padding: 20px; color: var(--muted);'>No images found. Please paste a URL manually.</div>";
+        } else if (imgs.length === 0 && append) {
+            const existingLoadMore = this.container.querySelector(".load-more-images-btn");
+            if (existingLoadMore) {
+                existingLoadMore.textContent = "No more images";
+                existingLoadMore.disabled = true;
             }
-        } catch (err) {
-            if (!append) {
-                this.container.innerHTML = "<div style='grid-column: 1/-1; text-align:center; padding: 20px; color: var(--muted);'>Search failed. Please paste a URL manually.</div>";
-            } else {
-                const existingLoadMore = this.container.querySelector(".load-more-images-btn");
-                if (existingLoadMore) {
-                    existingLoadMore.textContent = "Load failed. Try again.";
-                    existingLoadMore.disabled = false;
-                }
-            }
+        } else {
+            this.renderImageResults(imgs, append);
         }
     }
 
