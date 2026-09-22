@@ -16,19 +16,50 @@ function applyConfiguration() {
         bgContainer.innerHTML = '';
         const bubbleCount = appState.config.bubbleCount !== undefined ? appState.config.bubbleCount : 5;
         for (let i = 0; i < bubbleCount; i++) {
-            const bubble = document.createElement('div');
-            bubble.className = 'bubble';
-            const size = Math.floor(Math.random() * 200) + 60;
-            bubble.style.width = `${size}px`;
-            bubble.style.height = `${size}px`;
-            bubble.style.left = `${Math.random() * 90}%`;
-            bubble.style.top = `${Math.random() * 90}%`;
-            bubble.style.animationDelay = `-${Math.random() * 12}s`;
-            bubble.style.animationDuration = `${8 + Math.random() * 8}s`;
-            bgContainer.appendChild(bubble);
+            window.spawnBubble(false);
         }
     }
 } 
+
+window.spawnBubble = function(isRespawn = false) {
+    const bgContainer = document.querySelector('.background-decoration');
+    if (!bgContainer) return;
+    
+    // Safety check so we don't spawn infinitely if not needed
+    const currentBubbles = bgContainer.querySelectorAll('.bubble').length;
+    const maxBubbles = appState.config.bubbleCount !== undefined ? appState.config.bubbleCount : 5;
+    if (isRespawn && currentBubbles >= maxBubbles) return;
+    
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    const size = Math.floor(Math.random() * 200) + 60;
+    bubble.style.width = `${size}px`;
+    bubble.style.height = `${size}px`;
+    
+    if (isRespawn) {
+        const edge = Math.floor(Math.random() * 4);
+        if (edge === 0) { // top
+            bubble.style.left = `${Math.random() * 100}%`;
+            bubble.style.top = `-20%`;
+        } else if (edge === 1) { // right
+            bubble.style.left = `120%`;
+            bubble.style.top = `${Math.random() * 100}%`;
+        } else if (edge === 2) { // bottom
+            bubble.style.left = `${Math.random() * 100}%`;
+            bubble.style.top = `120%`;
+        } else { // left
+            bubble.style.left = `-20%`;
+            bubble.style.top = `${Math.random() * 100}%`;
+        }
+    } else {
+        bubble.style.left = `${Math.random() * 90}%`;
+        bubble.style.top = `${Math.random() * 90}%`;
+    }
+    
+    bubble.style.animationDelay = `-${Math.random() * 12}s`;
+    bubble.style.animationDuration = `${8 + Math.random() * 8}s`;
+    bgContainer.appendChild(bubble);
+};
 
 // Global listener to pop background bubbles even if they are behind other elements
 document.addEventListener('click', function(e) {
@@ -61,7 +92,12 @@ document.addEventListener('click', function(e) {
                 } catch(err) {}
             }
             
-            setTimeout(() => { bubble.remove(); }, 200);
+            setTimeout(() => { 
+                bubble.remove(); 
+                // Respawn a new bubble to replace it!
+                setTimeout(() => window.spawnBubble(true), 100);
+            }, 200);
+            
             break; // pop only one
         }
     }
