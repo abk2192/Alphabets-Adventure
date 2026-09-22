@@ -1153,115 +1153,25 @@ function populateCategorySelect() {
 ========================================================= */
 var searchImagesBtn = document.getElementById("searchImagesBtn");
 var imageSearchResults = document.getElementById("imageSearchResults");
-var currentSearchQuery = "";
-var currentSearchOffset = 0;
+const imageSearchComponent = new ImageSearchComponent(imageSearchResults, (finalUrl) => {
+    document.getElementById("wordImageUrl").value = finalUrl;
+    imageSearchResults.style.display = "none";
+    showToast("High-res image selected!");
+});
 
-function renderImageResults(imgs, append = false) {
-    if (!append) {
-        imageSearchResults.innerHTML = "";
-    }
-    
-    const existingLoadMore = document.getElementById("loadMoreImagesBtn");
-    if (existingLoadMore) existingLoadMore.remove();
-
-    imgs.forEach(imgUrl => {
-        const img = document.createElement("img");
-        img.src = imgUrl;
-        img.style.width = "100%";
-        img.style.height = "80px";
-        img.style.objectFit = "cover";
-        img.style.borderRadius = "8px";
-        img.style.cursor = "pointer";
-        img.style.border = "2px solid transparent";
-        
-        img.onerror = () => { img.style.display = 'none'; };
-        
-        img.addEventListener("mouseover", () => img.style.border = "2px solid var(--primary)");
-        img.addEventListener("mouseout", () => img.style.border = "2px solid transparent");
-        
-        img.addEventListener("pointerdown", () => {
-            let finalUrl = imgUrl;
-            if (finalUrl.includes('/thumb/')) {
-                let parts = finalUrl.split('/');
-                parts.pop();
-                finalUrl = parts.join('/').replace('/thumb/', '/');
-            }
-            document.getElementById("wordImageUrl").value = finalUrl;
-            imageSearchResults.style.display = "none";
-            showToast("High-res image selected!");
-        });
-        
-        imageSearchResults.appendChild(img);
-    });
-    
-    if (imgs.length > 0) {
-        const loadMore = document.createElement("button");
-        loadMore.id = "loadMoreImagesBtn";
-        loadMore.type = "button";
-        loadMore.className = "button button-secondary";
-        loadMore.style.gridColumn = "1 / -1";
-        loadMore.style.marginTop = "10px";
-        loadMore.textContent = "Load More Images...";
-        loadMore.addEventListener("pointerdown", async () => {
-            currentSearchOffset += 24;
-            loadMore.textContent = "Loading...";
-            loadMore.disabled = true;
-            await fetchImages(currentSearchQuery, currentSearchOffset, true);
-        });
-        imageSearchResults.appendChild(loadMore);
-    }
-}
-
-async function fetchImages(query, offset, append = false) {
-    try {
-        const response = await fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&generator=search&gsrsearch=${encodeURIComponent(query)}&gsrlimit=24&gsroffset=${offset}&prop=pageimages&piprop=thumbnail&pithumbsize=400&origin=*`);
-        const data = await response.json();
-        
-        let imgs = [];
-        if (data.query && data.query.pages) {
-            const pages = Object.values(data.query.pages);
-            imgs = pages.filter(p => p.thumbnail && p.thumbnail.source).map(p => p.thumbnail.source);
-        }
-        
-        if (imgs.length === 0 && !append) {
-            imageSearchResults.innerHTML = "<div style='grid-column: 1/-1; text-align:center; padding: 20px; color: var(--muted);'>No images found. Please paste a URL manually.</div>";
-        } else if (imgs.length === 0 && append) {
-            const existingLoadMore = document.getElementById("loadMoreImagesBtn");
-            if (existingLoadMore) {
-                existingLoadMore.textContent = "No more images";
-                existingLoadMore.disabled = true;
-            }
-        } else {
-            renderImageResults(imgs, append);
-        }
-    } catch (err) {
-        if (!append) {
-            imageSearchResults.innerHTML = "<div style='grid-column: 1/-1; text-align:center; padding: 20px; color: var(--muted);'>Search failed. Please paste a URL manually.</div>";
-        } else {
-            const existingLoadMore = document.getElementById("loadMoreImagesBtn");
-            if (existingLoadMore) existingLoadMore.textContent = "Search failed.";
-        }
-    }
-}
-
-searchImagesBtn.addEventListener("pointerdown", async () => {
+searchImagesBtn.addEventListener("click", async () => {
     const query = document.getElementById("wordName").value.trim();
     if (!query) {
         showToast("Please enter a word first!");
         return;
     }
     
-    currentSearchQuery = query;
-    currentSearchOffset = 0;
-    
     searchImagesBtn.textContent = "⏳...";
     searchImagesBtn.disabled = true;
-    imageSearchResults.style.display = "grid";
-    imageSearchResults.innerHTML = "<div style='grid-column: 1/-1; text-align:center; padding: 20px; color: var(--muted);'>Searching free images...</div>";
     
-    await fetchImages(currentSearchQuery, currentSearchOffset, false);
+    await imageSearchComponent.search(query);
     
-searchImagesBtn.textContent = "🔍 Search";
+    searchImagesBtn.textContent = "🔍 Search";
     searchImagesBtn.disabled = false;
 });
 

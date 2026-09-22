@@ -116,3 +116,116 @@ class WordCardComponent {
         wrapper.appendChild(fallback);
     }
 }
+
+class ImageSearchComponent {
+    /**
+     * Initializes the Image Search panel.
+     * @param {HTMLElement} containerElement - The DOM element to render the grid into.
+     * @param {Function} onImageSelected - Callback (highResUrl) => void
+     */
+    constructor(containerElement, onImageSelected) {
+        this.container = containerElement;
+        this.onImageSelected = onImageSelected;
+        this.currentQuery = "";
+        this.currentOffset = 0;
+    }
+
+    async search(query) {
+        this.currentQuery = query;
+        this.currentOffset = 0;
+        this.container.style.display = "grid";
+        this.container.innerHTML = "<div style='grid-column: 1/-1; text-align:center; padding: 20px; color: var(--muted);'>Searching free images...</div>";
+        await this.fetchImages(this.currentQuery, this.currentOffset, false);
+    }
+
+    async fetchImages(query, offset, append = false) {
+        try {
+            const response = await fetch(`https://en.wikipedia.org/w/api.php?action=query&format=json&generator=search&gsrsearch=${encodeURIComponent(query)}&gsrlimit=24&gsroffset=${offset}&prop=pageimages&piprop=thumbnail&pithumbsize=400&origin=*`);
+            const data = await response.json();
+            
+            let imgs = [];
+            if (data.query && data.query.pages) {
+                const pages = Object.values(data.query.pages);
+                imgs = pages.filter(p => p.thumbnail && p.thumbnail.source).map(p => p.thumbnail.source);
+            }
+            
+            if (imgs.length === 0 && !append) {
+                this.container.innerHTML = "<div style='grid-column: 1/-1; text-align:center; padding: 20px; color: var(--muted);'>No images found. Please paste a URL manually.</div>";
+            } else if (imgs.length === 0 && append) {
+                const existingLoadMore = this.container.querySelector(".load-more-images-btn");
+                if (existingLoadMore) {
+                    existingLoadMore.textContent = "No more images";
+                    existingLoadMore.disabled = true;
+                }
+            } else {
+                this.renderImageResults(imgs, append);
+            }
+        } catch (err) {
+            if (!append) {
+                this.container.innerHTML = "<div style='grid-column: 1/-1; text-align:center; padding: 20px; color: var(--muted);'>Search failed. Please paste a URL manually.</div>";
+            } else {
+                const existingLoadMore = this.container.querySelector(".load-more-images-btn");
+                if (existingLoadMore) {
+                    existingLoadMore.textContent = "Load failed. Try again.";
+                    existingLoadMore.disabled = false;
+                }
+            }
+        }
+    }
+
+    renderImageResults(imgs, append = false) {
+        if (!append) {
+            this.container.innerHTML = "";
+        }
+        
+        const existingLoadMore = this.container.querySelector(".load-more-images-btn");
+        if (existingLoadMore) existingLoadMore.remove();
+
+        imgs.forEach(imgUrl => {
+            const img = document.createElement("img");
+            img.src = imgUrl;
+            img.style.width = "100%";
+            img.style.height = "80px";
+            img.style.objectFit = "cover";
+            img.style.borderRadius = "8px";
+            img.style.cursor = "pointer";
+            img.style.border = "2px solid transparent";
+            
+            img.onerror = () => { img.style.display = 'none'; };
+            
+            img.addEventListener("mouseover", () => img.style.border = "2px solid var(--primary)");
+            img.addEventListener("mouseout", () => img.style.border = "2px solid transparent");
+            
+            // USE CLICK INSTEAD OF POINTERDOWN TO AVOID SCROLL CONFLICTS
+            img.addEventListener("click", () => {
+                let finalUrl = imgUrl;
+                if (finalUrl.includes('/thumb/')) {
+                    let parts = finalUrl.split('/');
+                    parts.pop();
+                    finalUrl = parts.join('/').replace('/thumb/', '/');
+                }
+                this.onImageSelected(finalUrl);
+            });
+            
+            this.container.appendChild(img);
+        });
+        
+        if (imgs.length > 0) {
+            const loadMore = document.createElement("button");
+            loadMore.type = "button";
+            loadMore.className = "button button-secondary load-more-images-btn";
+            loadMore.style.gridColumn = "1 / -1";
+            loadMore.style.marginTop = "10px";
+            loadMore.textContent = "Load More Images...";
+            
+            loadMore.addEventListener("click", () => {
+                loadMore.textContent = "Loading...";
+                loadMore.disabled = true;
+                this.currentOffset += 24;
+                this.fetchImages(this.currentQuery, this.currentOffset, true);
+            });
+            
+            this.container.appendChild(loadMore);
+        }
+    }
+}
