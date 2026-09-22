@@ -71,24 +71,44 @@ window.spawnBubble = function(isRespawn = false) {
     bubble.style.animationDelay = `-${Math.random() * 12}s`;
     bubble.style.animationDuration = `${getBubbleDuration()}s`;
     
-    if (window.isBubbleGameActive && window.bubbleGameLetterPractice) {
-        bubble.classList.add('has-letter');
-        bubble.style.fontSize = `${size * 0.5}px`;
-        
-        let forceTarget = false;
-        if (window.bubbleGameTargetLetter) {
-            const existing = Array.from(bgContainer.querySelectorAll('.bubble:not(.popped)')).some(b => b.dataset.letter === window.bubbleGameTargetLetter);
-            if (!existing) forceTarget = true;
+    let preloadedWord = null;
+    
+    if (window.isBubbleGameActive) {
+        if (window.bubbleGameLetterPractice) {
+            bubble.classList.add('has-letter');
+            bubble.style.fontSize = `${size * 0.5}px`;
+            
+            let forceTarget = false;
+            if (window.bubbleGameTargetLetter) {
+                const existing = Array.from(bgContainer.querySelectorAll('.bubble:not(.popped)')).some(b => b.dataset.letter === window.bubbleGameTargetLetter);
+                if (!existing) forceTarget = true;
+            }
+            
+            if ((forceTarget || Math.random() < 0.3) && window.bubbleGameTargetLetter) {
+                bubble.textContent = window.bubbleGameTargetLetter;
+                bubble.dataset.letter = window.bubbleGameTargetLetter;
+                const matching = appState.words.filter(w => w.letter.toUpperCase() === window.bubbleGameTargetLetter);
+                if (matching.length > 0) preloadedWord = matching[Math.floor(Math.random() * matching.length)];
+            } else {
+                const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                const randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
+                bubble.textContent = randomLetter;
+                bubble.dataset.letter = randomLetter;
+            }
+        } else {
+            if (appState.words.length > 0) {
+                preloadedWord = appState.words[Math.floor(Math.random() * appState.words.length)];
+            }
         }
         
-        if ((forceTarget || Math.random() < 0.3) && window.bubbleGameTargetLetter) {
-            bubble.textContent = window.bubbleGameTargetLetter;
-            bubble.dataset.letter = window.bubbleGameTargetLetter;
-        } else {
-            const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            const randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
-            bubble.textContent = randomLetter;
-            bubble.dataset.letter = randomLetter;
+        if (preloadedWord) {
+            bubble.dataset.wordId = preloadedWord.id;
+            const cacheUrl = localStorage.getItem(`img_${preloadedWord.id}`);
+            const urlToLoad = cacheUrl || preloadedWord.imageUrl || preloadedWord.url;
+            if (urlToLoad && urlToLoad !== 'undefined' && urlToLoad !== window.location.href && !urlToLoad.endsWith('/')) {
+                const img = new Image();
+                img.src = urlToLoad;
+            }
         }
     }
     
@@ -110,20 +130,10 @@ document.addEventListener('click', function(e) {
             
             let showImageWord = null;
             
-            if (window.isBubbleGameActive) {
+            if (window.isBubbleGameActive && bubble.dataset.wordId) {
+                showImageWord = appState.words.find(w => w.id === bubble.dataset.wordId);
                 if (window.bubbleGameLetterPractice) {
-                    const bubbleLetter = bubble.dataset.letter;
-                    if (bubbleLetter === window.bubbleGameTargetLetter) {
-                        const matchingWords = appState.words.filter(w => w.letter.toUpperCase() === window.bubbleGameTargetLetter);
-                        if (matchingWords.length > 0) {
-                            showImageWord = matchingWords[Math.floor(Math.random() * matchingWords.length)];
-                        }
-                        setTimeout(() => { pickNewBubbleGameLetter(); }, 1000);
-                    }
-                } else {
-                    if (appState.words.length > 0) {
-                        showImageWord = appState.words[Math.floor(Math.random() * appState.words.length)];
-                    }
+                    setTimeout(() => { pickNewBubbleGameLetter(); }, 1000);
                 }
             }
             
@@ -150,9 +160,9 @@ document.addEventListener('click', function(e) {
                 
                 document.body.appendChild(img);
                 
-                setTimeout(() => {
+                img.addEventListener('animationend', () => {
                     img.remove();
-                }, duration * 1000);
+                });
             }
             
             if (appState.config.soundEnabled) {
