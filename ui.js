@@ -1166,8 +1166,18 @@ searchImagesBtn.addEventListener("click", async () => {
         return;
     }
     
+    if (appState.config.bingSearchEnabled) {
+        const searchUrl = `https://www.bing.com/images/search?q=${encodeURIComponent(query)}`;
+        document.getElementById("webSearchIframe").src = searchUrl;
+        document.getElementById("webSearchModal").classList.add("active");
+        imageSearchResults.style.display = "none";
+        return;
+    }
+    
     searchImagesBtn.textContent = "⏳...";
     searchImagesBtn.disabled = true;
+    imageSearchResults.style.display = "grid";
+    imageSearchResults.innerHTML = "<div style='grid-column: 1/-1; text-align:center; padding: 20px; color: var(--muted);'>Searching free images...</div>";
     
     await imageSearchComponent.search(query);
     
@@ -1305,10 +1315,7 @@ document.getElementById("googleImagesBtn").addEventListener("click", () => {
         return;
     }
     
-    // Google prevents framing, so we use Bing Image Search which allows it
-    const searchUrl = `https://www.bing.com/images/search?q=${encodeURIComponent(query + ' transparent background')}`;
-    document.getElementById("webSearchIframe").src = searchUrl;
-    document.getElementById("webSearchModal").classList.add("active");
+    window.open(`https://www.google.com/search?tbm=isch&q=${encodeURIComponent(query)}`, "_blank");
 });
 
 document.getElementById("closeWebSearchModal").addEventListener("click", () => {
@@ -1339,6 +1346,7 @@ window.copyUrl = function(id) {
     document.getElementById( "configLockDelay" ).value = appState.config.lockDelay !== undefined ? appState.config.lockDelay : 500;
     document.getElementById( "configKeyboardListener" ).checked = appState.config.keyboardListener !== false;
     document.getElementById( "configMaxAudioDuration" ).value = appState.config.maxAudioDuration !== undefined ? appState.config.maxAudioDuration : 3;
+    document.getElementById( "configBingSearch" ).checked = appState.config.bingSearchEnabled === true;
 } document.getElementById( "saveConfigButton" ) .addEventListener( "click", () => { appState.config.title = document.getElementById( "configTitle" ) .value .trim() || "Alphabets Adventure"; appState.config.instruction = document.getElementById( "configInstruction" ) .value .trim() || "Tap on a letter to hear its sound and discover a word!"; appState.config.letterDelay = Number( document.getElementById( "configLetterDelay" ) .value ) || 600; appState.config.imageDelay = Number( document.getElementById( "configImageDelay" ) .value ) || 800; appState.config.soundEnabled = document.getElementById( "configSound" ) .checked;
     appState.config.customAudioEnabled = document.getElementById( "configCustomAudio" ).checked;
     appState.config.kidPin = document.getElementById( "configKidPin" ).value.trim() || "1234";
@@ -1346,6 +1354,7 @@ window.copyUrl = function(id) {
     appState.config.lockDelay = Number( document.getElementById( "configLockDelay" ).value ) || 500;
     appState.config.keyboardListener = document.getElementById( "configKeyboardListener" ).checked;
     appState.config.maxAudioDuration = Number( document.getElementById( "configMaxAudioDuration" ).value ) || 3;
+    appState.config.bingSearchEnabled = document.getElementById( "configBingSearch" ).checked;
     saveState(); applyConfiguration(); 
     if (typeof updateMuteButtonIcon === 'function') updateMuteButtonIcon();
     showToast( "Configuration saved!" ); } );
