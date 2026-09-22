@@ -25,34 +25,49 @@ function applyConfiguration() {
             bubble.style.top = `${Math.random() * 90}%`;
             bubble.style.animationDelay = `-${Math.random() * 12}s`;
             bubble.style.animationDuration = `${8 + Math.random() * 8}s`;
-            
-            bubble.addEventListener('click', function() {
-                if (this.classList.contains('popped')) return;
-                this.classList.add('popped');
-                
-                if (appState.config.soundEnabled) {
-                    try {
-                        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-                        const osc = ctx.createOscillator();
-                        const gain = ctx.createGain();
-                        osc.connect(gain);
-                        gain.connect(ctx.destination);
-                        osc.type = 'sine';
-                        osc.frequency.setValueAtTime(400 + Math.random()*200, ctx.currentTime);
-                        osc.frequency.exponentialRampToValueAtTime(800 + Math.random()*200, ctx.currentTime + 0.1);
-                        gain.gain.setValueAtTime(0.3, ctx.currentTime);
-                        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-                        osc.start();
-                        osc.stop(ctx.currentTime + 0.1);
-                    } catch(e) {}
-                }
-                
-                setTimeout(() => { this.remove(); }, 200);
-            });
             bgContainer.appendChild(bubble);
         }
     }
-} /* ========================================================= FIND WORD ========================================================= */ function getWordForLetter( letter, category ) {
+} 
+
+// Global listener to pop background bubbles even if they are behind other elements
+document.addEventListener('click', function(e) {
+    const bubbles = document.querySelectorAll('.bubble:not(.popped)');
+    for (let bubble of bubbles) {
+        const rect = bubble.getBoundingClientRect();
+        if (rect.width === 0) continue;
+        
+        const dx = e.clientX - (rect.left + rect.width / 2);
+        const dy = e.clientY - (rect.top + rect.height / 2);
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        if (distance <= rect.width / 2) {
+            bubble.classList.add('popped');
+            
+            if (appState.config.soundEnabled) {
+                try {
+                    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(400 + Math.random()*200, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(800 + Math.random()*200, ctx.currentTime + 0.1);
+                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.1);
+                } catch(err) {}
+            }
+            
+            setTimeout(() => { bubble.remove(); }, 200);
+            break; // pop only one
+        }
+    }
+});
+
+/* ========================================================= FIND WORD ========================================================= */ function getWordForLetter( letter, category ) {
     let options = appState.words.filter( item => 
         item.letter === letter && 
         (category === "all" || (item.categories || []).includes(category))
