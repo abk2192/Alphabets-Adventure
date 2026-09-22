@@ -10,6 +10,48 @@ function applyConfiguration() {
     document.documentElement.style.setProperty( "--primary-dark", `color-mix(in srgb, ${appState.config.primary} 80%, black)` );
     document.documentElement.style.setProperty( "--success", `color-mix(in srgb, ${appState.config.primary} 70%, white)` );
     document.documentElement.style.setProperty( "--background", `radial-gradient(circle at center, color-mix(in srgb, ${appState.config.primary} 25%, white) 0%, color-mix(in srgb, ${appState.config.primary} 55%, white) 100%)` );
+
+    const bgContainer = document.querySelector('.background-decoration');
+    if (bgContainer) {
+        bgContainer.innerHTML = '';
+        const bubbleCount = appState.config.bubbleCount !== undefined ? appState.config.bubbleCount : 5;
+        for (let i = 0; i < bubbleCount; i++) {
+            const bubble = document.createElement('div');
+            bubble.className = 'bubble';
+            const size = Math.floor(Math.random() * 200) + 60;
+            bubble.style.width = `${size}px`;
+            bubble.style.height = `${size}px`;
+            bubble.style.left = `${Math.random() * 90}%`;
+            bubble.style.top = `${Math.random() * 90}%`;
+            bubble.style.animationDelay = `-${Math.random() * 12}s`;
+            bubble.style.animationDuration = `${8 + Math.random() * 8}s`;
+            
+            bubble.addEventListener('click', function() {
+                if (this.classList.contains('popped')) return;
+                this.classList.add('popped');
+                
+                if (appState.config.soundEnabled) {
+                    try {
+                        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(400 + Math.random()*200, ctx.currentTime);
+                        osc.frequency.exponentialRampToValueAtTime(800 + Math.random()*200, ctx.currentTime + 0.1);
+                        gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
+                        osc.start();
+                        osc.stop(ctx.currentTime + 0.1);
+                    } catch(e) {}
+                }
+                
+                setTimeout(() => { this.remove(); }, 200);
+            });
+            bgContainer.appendChild(bubble);
+        }
+    }
 } /* ========================================================= FIND WORD ========================================================= */ function getWordForLetter( letter, category ) {
     let options = appState.words.filter( item => 
         item.letter === letter && 
@@ -1358,6 +1400,7 @@ window.copyUrl = function(id) {
     document.getElementById( "configKeyboardListener" ).checked = appState.config.keyboardListener !== false;
     document.getElementById( "configMaxAudioDuration" ).value = appState.config.maxAudioDuration !== undefined ? appState.config.maxAudioDuration : 3;
     document.getElementById( "configBingSearch" ).checked = appState.config.bingSearchEnabled === true;
+    document.getElementById( "configBubbleCount" ).value = appState.config.bubbleCount !== undefined ? appState.config.bubbleCount : 5;
 } document.getElementById( "saveConfigButton" ) .addEventListener( "click", () => { appState.config.title = document.getElementById( "configTitle" ) .value .trim() || "Alphabets Adventure"; appState.config.instruction = document.getElementById( "configInstruction" ) .value .trim() || "Tap on a letter to hear its sound and discover a word!"; appState.config.letterDelay = Number( document.getElementById( "configLetterDelay" ) .value ) || 600; appState.config.imageDelay = Number( document.getElementById( "configImageDelay" ) .value ) || 800; appState.config.soundEnabled = document.getElementById( "configSound" ) .checked;
     appState.config.customAudioEnabled = document.getElementById( "configCustomAudio" ).checked;
     appState.config.kidPin = document.getElementById( "configKidPin" ).value.trim() || "1234";
@@ -1366,6 +1409,7 @@ window.copyUrl = function(id) {
     appState.config.keyboardListener = document.getElementById( "configKeyboardListener" ).checked;
     appState.config.maxAudioDuration = Number( document.getElementById( "configMaxAudioDuration" ).value ) || 3;
     appState.config.bingSearchEnabled = document.getElementById( "configBingSearch" ).checked;
+    appState.config.bubbleCount = Number( document.getElementById( "configBubbleCount" ).value );
     saveState(); applyConfiguration(); 
     if (typeof updateMuteButtonIcon === 'function') updateMuteButtonIcon();
     showToast( "Configuration saved!" ); } );
