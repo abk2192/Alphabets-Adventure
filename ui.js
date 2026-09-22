@@ -48,24 +48,24 @@ window.spawnBubble = function(isRespawn = false, forceTargetOverride = false) {
     bubble.style.width = `${size}px`;
     bubble.style.height = `${size}px`;
     
-    if (isRespawn && !forceTargetOverride) {
+    if (Math.random() < 0.7) {
+        bubble.style.left = `${10 + Math.random() * 75}%`;
+        bubble.style.top = `${10 + Math.random() * 75}%`;
+    } else {
         const edge = Math.floor(Math.random() * 4);
         if (edge === 0) { // top
             bubble.style.left = `${Math.random() * 100}%`;
-            bubble.style.top = `-20%`;
+            bubble.style.top = `-10%`;
         } else if (edge === 1) { // right
-            bubble.style.left = `120%`;
+            bubble.style.left = `100%`;
             bubble.style.top = `${Math.random() * 100}%`;
         } else if (edge === 2) { // bottom
             bubble.style.left = `${Math.random() * 100}%`;
-            bubble.style.top = `120%`;
+            bubble.style.top = `100%`;
         } else { // left
-            bubble.style.left = `-20%`;
+            bubble.style.left = `-10%`;
             bubble.style.top = `${Math.random() * 100}%`;
         }
-    } else {
-        bubble.style.left = `${Math.random() * 90}%`;
-        bubble.style.top = `${Math.random() * 90}%`;
     }
     
     bubble.style.animationDelay = `-${Math.random() * 12}s`;
