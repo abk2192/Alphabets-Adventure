@@ -59,21 +59,28 @@ window.spawnBubble = function(isRespawn = false, forceTargetOverride = false) {
                 if (targetCount === 0) forceTarget = true;
             }
             
-            if (window.bubbleGameTargetLetter && (forceTarget || (Math.random() < 0.3 && targetCount < 2))) {
+            let assignedLetter = '';
+            
+            // Limit targetCount to < 1 so there's never more than 1 target unless forced.
+            if (window.bubbleGameTargetLetter && (forceTarget || (Math.random() < 0.3 && targetCount < 1))) {
                 isTarget = true;
-                bubble.textContent = window.bubbleGameTargetLetter;
-                bubble.dataset.letter = window.bubbleGameTargetLetter;
-                const matching = appState.words.filter(w => w.letter.toUpperCase() === window.bubbleGameTargetLetter);
-                if (matching.length > 0) preloadedWord = matching[Math.floor(Math.random() * matching.length)];
+                assignedLetter = window.bubbleGameTargetLetter;
             } else {
                 const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                randomLetter = window.bubbleGameTargetLetter;
-                while (randomLetter === window.bubbleGameTargetLetter) {
+                randomLetter = window.bubbleGameTargetLetter || '';
+                while (randomLetter === (window.bubbleGameTargetLetter || '')) {
                     randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
                 }
-                bubble.textContent = randomLetter;
-                bubble.dataset.letter = randomLetter;
+                assignedLetter = randomLetter;
             }
+            
+            bubble.textContent = assignedLetter;
+            bubble.dataset.letter = assignedLetter;
+            
+            // ALWAYS assign a preloaded word for ANY letter (if available) so popping it later works!
+            const matching = appState.words.filter(w => w.letter.toUpperCase() === assignedLetter.toUpperCase());
+            if (matching.length > 0) preloadedWord = matching[Math.floor(Math.random() * matching.length)];
+            
         } else {
             if (appState.words.length > 0) {
                 preloadedWord = appState.words[Math.floor(Math.random() * appState.words.length)];
@@ -1619,8 +1626,11 @@ window.copyUrl = function(id) {
     showToast( "Configuration saved!" ); } );
 
 function pickNewBubbleGameLetter() {
-    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    window.bubbleGameTargetLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
+    if (!window.bubbleGameLetterQueue || window.bubbleGameLetterQueue.length === 0) {
+        window.bubbleGameLetterQueue = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').sort(() => Math.random() - 0.5);
+    }
+    window.bubbleGameTargetLetter = window.bubbleGameLetterQueue.pop();
+    
     const display = document.getElementById('bubbleTargetLetterDisplay');
     if (display) display.textContent = window.bubbleGameTargetLetter;
     
@@ -1629,7 +1639,7 @@ function pickNewBubbleGameLetter() {
         const bgContainer = document.querySelector('.background-decoration');
         if (!bgContainer) return;
         const targetCount = Array.from(bgContainer.querySelectorAll('.bubble:not(.popped)')).filter(b => b.dataset.letter === window.bubbleGameTargetLetter).length;
-        if (targetCount === 0) {
+        if (targetCount < 1) {
             window.spawnBubble(true, true); // force spawn
         }
     }, 200);
