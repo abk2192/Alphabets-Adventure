@@ -165,10 +165,21 @@ document.addEventListener('click', function(e) {
             
             let showImageWord = null;
             
-            if (window.isBubbleGameActive && bubble.dataset.wordId) {
-                showImageWord = appState.words.find(w => w.id === bubble.dataset.wordId);
+            if (window.isBubbleGameActive) {
                 if (window.bubbleGameLetterPractice) {
-                    setTimeout(() => { pickNewBubbleGameLetter(); }, 1000);
+                    if (bubble.dataset.letter === window.bubbleGameTargetLetter) {
+                        if (bubble.dataset.wordId) {
+                            showImageWord = appState.words.find(w => w.id === bubble.dataset.wordId);
+                        }
+                        if (!showImageWord) showImageWord = { id: 'fake', fallback: bubble.dataset.letter };
+                        setTimeout(() => { pickNewBubbleGameLetter(); }, 1000);
+                    }
+                } else {
+                    if (bubble.dataset.wordId) {
+                        showImageWord = appState.words.find(w => w.id === bubble.dataset.wordId);
+                    }
+                    // In normal mode, only show if we had a word or words exist
+                    if (!showImageWord && appState.words.length > 0) showImageWord = { id: 'fake', fallback: '?' };
                 }
             }
             
@@ -177,12 +188,21 @@ document.addEventListener('click', function(e) {
             if (showImageWord) {
                 const img = document.createElement('img');
                 img.className = 'bubble-image-popup';
-                const cacheUrl = localStorage.getItem(`img_${showImageWord.id}`);
-                img.src = cacheUrl || showImageWord.imageUrl || showImageWord.url;
                 
-                // Fallback for word.url structure differences or missing images
-                if (!img.src || img.src === 'undefined' || window.location.href === img.src || img.src.endsWith('/')) {
-                    img.src = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Crect width='100' height='100' fill='%23e0e0e0'/%3E%3Ctext x='50' y='50' font-family='sans-serif' font-size='40' text-anchor='middle' alignment-baseline='middle' fill='%23666'%3E%3F%3C/text%3E%3C/svg%3E";
+                let urlToUse = '';
+                if (showImageWord.id !== 'fake') {
+                    const cacheUrl = localStorage.getItem(`img_${showImageWord.id}`);
+                    urlToUse = cacheUrl || showImageWord.imageUrl || showImageWord.url || '';
+                }
+                
+                const fallbackRaw = (showImageWord.fallback || showImageWord.word || '?').charAt(0).toUpperCase();
+                const svgFallback = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23f0f0f0'/%3E%3Ctext x='50' y='55' font-family='sans-serif' font-size='50' font-weight='bold' text-anchor='middle' alignment-baseline='middle' fill='%23aaa'%3E${encodeURIComponent(fallbackRaw)}%3C/text%3E%3C/svg%3E`;
+                
+                if (!urlToUse || urlToUse === 'undefined' || urlToUse.endsWith('/')) {
+                    img.src = svgFallback;
+                } else {
+                    img.src = urlToUse;
+                    img.onerror = function() { this.src = svgFallback; };
                 }
                 
                 img.style.left = `${rect.left + rect.width / 2}px`;
