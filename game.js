@@ -155,10 +155,95 @@ document.addEventListener( "keydown", event => {
     if ( target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.tagName === "SELECT" ) { return; } 
     const key = event.key.toLowerCase(); 
     if ( /^[a-z]$/.test( key ) ) { 
-        event.preventDefault(); 
+        event.preventDefault();
+
+        // ── Letter Bubble Game keyboard handler ──────────────────────────
+        const bubbleViewEl = document.getElementById('bubbleGameView');
+        const inBubbleGame = bubbleViewEl && bubbleViewEl.classList.contains('active')
+                          && window.isBubbleGameActive && window.bubbleGameLetterPractice;
+        if (inBubbleGame) {
+            handleBubbleKeyPress(key.toUpperCase());
+            return;
+        }
+
         handleKeyPress( key ); 
     } 
-} ); 
+} );
+
+/**
+ * Handle a keyboard letter press while in letter-bubble game mode.
+ * Correct key  → find the target bubble and pop it programmatically.
+ * Wrong key    → play a soft "miss" beep and briefly shake the target display.
+ */
+function handleBubbleKeyPress(pressedLetter) {
+    const targetLetter = window.bubbleGameTargetLetter;
+    if (!targetLetter) return;
+
+    if (pressedLetter === targetLetter) {
+        // ── Correct! Find the target bubble and pop it ───────────────────
+        const bgContainer = document.querySelector('.background-decoration');
+        if (!bgContainer) return;
+
+        const targetBubble = Array.from(
+            bgContainer.querySelectorAll('.bubble:not(.popped)')
+        ).find(b => b.dataset.letter === targetLetter);
+
+        if (targetBubble) {
+            // Simulate the same pop logic used by the click handler:
+            // synthesise a click at the bubble's centre so the existing
+            // async pop handler runs exactly once with all its side-effects.
+            const rect = targetBubble.getBoundingClientRect();
+            const cx = rect.left + rect.width / 2;
+            const cy = rect.top + rect.height / 2;
+            // PointerEvent is more reliable than MouseEvent for the hit-test
+            targetBubble.dispatchEvent(new MouseEvent('click', {
+                bubbles: true, cancelable: true,
+                clientX: cx, clientY: cy
+            }));
+        } else {
+            // No target bubble visible yet — still advance to next letter
+            setTimeout(() => { if (typeof pickNewBubbleGameLetter === 'function') pickNewBubbleGameLetter(); }, 300);
+        }
+
+        // Flash the target-letter display green as feedback
+        const display = document.getElementById('bubbleTargetLetterDisplay');
+        if (display) {
+            const prevColor = display.style.color;
+            display.style.color = '#4ecdc4';
+            display.style.transform = 'scale(1.25)';
+            display.style.transition = 'transform 0.15s ease, color 0.15s ease';
+            setTimeout(() => {
+                display.style.color = prevColor;
+                display.style.transform = 'scale(1)';
+            }, 350);
+        }
+
+    } else {
+        // ── Wrong key — soft miss sound + shake ──────────────────────────
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain); gain.connect(ctx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(220, ctx.currentTime);
+            osc.frequency.exponentialRampToValueAtTime(150, ctx.currentTime + 0.12);
+            gain.gain.setValueAtTime(0.18, ctx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.18);
+            osc.start(ctx.currentTime);
+            osc.stop(ctx.currentTime + 0.2);
+        } catch(e) {}
+
+        // Briefly shake the target display to indicate wrong answer
+        const display = document.getElementById('bubbleTargetLetterDisplay');
+        if (display) {
+            display.style.animation = 'bubbleKeyMiss 0.35s ease';
+            display.addEventListener('animationend', () => {
+                display.style.animation = '';
+            }, { once: true });
+        }
+    }
+} 
 document.querySelectorAll(".key-button").forEach(btn => {
     btn.addEventListener("pointerdown", (e) => {
         e.preventDefault();

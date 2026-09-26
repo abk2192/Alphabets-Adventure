@@ -148,9 +148,20 @@
     <!-- =================================================
          BUBBLE GAME VIEW
     ================================================= -->
-    <section id="bubbleGameView" class="view">
+    <section id="bubbleGameView" class="view" style="position: relative;">
+        <!-- Floating letter-mode toggle — always accessible, even in fullscreen -->
+        <button id="bubbleGameLetterModeBtn"
+            title="Toggle Letter Mode"
+            style="display: none; position: fixed; bottom: 20px; right: 20px; z-index: 200;
+                   width: 56px; height: 56px; border-radius: 50%; border: none; cursor: pointer;
+                   background: rgba(255,255,255,0.92); box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+                   align-items: center; justify-content: center; font-size: 1.8rem;
+                   transition: background 0.2s, transform 0.1s;"
+            onclick="toggleBubbleLetterMode()">
+            🔤
+        </button>
         <div style="padding: 20px; display: flex; flex-direction: column; align-items: center; gap: 15px;">
-            <div id="bubbleTargetLetterDisplay" style="display: none; width: 80px; height: 80px; background: white; border-radius: 50%; box-shadow: 0 10px 20px rgba(0,0,0,0.15); align-items: center; justify-content: center; font-size: 3.5rem; font-family: Fredoka\, sans-serif; font-weight: bold; color: var(--primary);">
+            <div id="bubbleTargetLetterDisplay" style="display: none; width: 80px; height: 80px; background: white; border-radius: 50%; box-shadow: 0 10px 20px rgba(0,0,0,0.15); align-items: center; justify-content: center; font-size: 3.5rem; font-family: Fredoka, sans-serif; font-weight: bold; color: var(--primary);">
                 A
             </div>
         </div>
@@ -468,6 +479,39 @@
                             Image Pop Duration (seconds)
                         </label>
                         <input id="configImagePopDuration" type="number" min="0.5" max="5" step="0.5" value="1.0">
+                    </div>
+
+
+                    <div class="form-group full" style="grid-column: 1 / -1;">
+                        <label>Bubble Style</label>
+                        <div id="bubbleStylePicker" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 8px;">
+
+                            <div class="bubble-style-option selected" data-style="crystal" title="Classic translucent white — high visibility on any background">
+                                <div class="preview-bubble bubble-style-preview-crystal">⬤</div>
+                                Crystal White
+                            </div>
+
+                            <div class="bubble-style-option" data-style="theme" title="Subtle tint from the selected theme colour — blends with background">
+                                <div class="preview-bubble bubble-style-preview-theme">⬤</div>
+                                Theme Blend
+                            </div>
+
+                            <div class="bubble-style-option" data-style="frosted" title="Frosted glass — white with a strong blur halo and glassy border">
+                                <div class="preview-bubble bubble-style-preview-frosted">⬤</div>
+                                Frosted Glass
+                            </div>
+
+                            <div class="bubble-style-option" data-style="pastel" title="Soft warm pastels — independent of theme">
+                                <div class="preview-bubble bubble-style-preview-pastel">⬤</div>
+                                Pastel Pop
+                            </div>
+
+                            <div class="bubble-style-option" data-style="neon" title="Vivid theme glow — bold and eye-catching">
+                                <div class="preview-bubble bubble-style-preview-neon">⬤</div>
+                                Neon Glow
+                            </div>
+
+                        </div>
                     </div>
 
                     <div class="form-group full" style="grid-column: 1 / -1;">

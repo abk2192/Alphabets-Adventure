@@ -1,4 +1,10 @@
 /* ========================================================= DOM REFERENCES ========================================================= */ const gameView = document.getElementById("gameView"); const settingsView = document.getElementById("settingsView"); const settingsButton = document.getElementById("settingsButton"); const wordContainer = document.getElementById("wordContainer"); const imageArea = document.getElementById("imageArea"); const categoryControls = document.getElementById("categoryControls"); const currentLetterBadge = document.getElementById("currentLetterBadge"); const wordTableBody = document.getElementById("wordTableBody"); const wordSearch = document.getElementById("wordSearch"); const addWordButton = document.getElementById("addWordButton"); const wordModal = document.getElementById("wordModal"); const wordModalTitle = document.getElementById("wordModalTitle"); const closeWordModal = document.getElementById("closeWordModal"); const cancelWordButton = document.getElementById("cancelWordButton"); const wordForm = document.getElementById("wordForm"); const editingWordId = document.getElementById("editingWordId"); const wordLetter = document.getElementById("wordLetter"); const wordName = document.getElementById("wordName"); const wordCategory = document.getElementById("wordCategory"); const wordImageUrl = document.getElementById("wordImageUrl"); const wordFallback = document.getElementById("wordFallback"); const categoryList = document.getElementById("categoryList"); const newCategoryInput = document.getElementById("newCategoryInput"); const addCategoryButton = document.getElementById("addCategoryButton"); const toast = document.getElementById("toast"); /* ========================================================= PERSISTENCE ========================================================= */  function saveState() { window.appDB.saveFullState(appState); } /* ========================================================= TOAST ========================================================= */ let toastTimer = null; function showToast(message) { toast.textContent = message; toast.classList.add( "show" ); clearTimeout( toastTimer ); toastTimer = setTimeout( () => { toast.classList.remove( "show" ); }, 2500 ); } /* ========================================================= CONFIGURATION ========================================================= */ 
+
+// Apply the configured bubble visual style to the document
+function applyBubbleStyle() {
+    const style = (appState.config.bubbleStyle || 'crystal');
+    document.body.dataset.bubbleStyle = style;
+}
 function applyConfiguration() { 
     document.title = appState.config.title; 
     const logoText = document.querySelector( ".logo span:last-child" );
@@ -11,8 +17,15 @@ function applyConfiguration() {
     document.documentElement.style.setProperty( "--success", `color-mix(in srgb, ${appState.config.primary} 70%, white)` );
     document.documentElement.style.setProperty( "--background", `radial-gradient(circle at center, color-mix(in srgb, ${appState.config.primary} 25%, white) 0%, color-mix(in srgb, ${appState.config.primary} 55%, white) 100%)` );
 
+    applyBubbleStyle();
     const bgContainer = document.querySelector('.background-decoration');
     if (bgContainer) {
+        // Stop any running physics loop before clearing
+        if (typeof _physicsRafId !== 'undefined' && _physicsRafId) {
+            cancelAnimationFrame(_physicsRafId);
+            _physicsRafId = null;
+            _physicsLastTime = null;
+        }
         bgContainer.innerHTML = '';
         const bubbleCount = appState.config.bubbleCount !== undefined ? appState.config.bubbleCount : 5;
         for (let i = 0; i < bubbleCount; i++) {
@@ -67,10 +80,6 @@ function centeredRandom(min = 10, max = 90, pulls = 3) {
     return min + (sum / pulls) * (max - min);
 }
 
-// Counter used to give each bubble a unique CSS animation name
-let _bubbleAnimId = 0;
-
-
 // ── BUBBLE SPAWN CONSTANTS ────────────────────────────────────────────────
 const LETTER_PRACTICE_MIN_SIZE = 140; // px — large enough to see the image clearly
 
@@ -80,7 +89,7 @@ window.spawnBubble = function(isRespawn = false, forceTargetOverride = false) {
 
     const isLetterPractice = window.isBubbleGameActive && window.bubbleGameLetterPractice;
 
-    // ── Respect configured bubble count per mode ────────────────────────────
+    // ── Respect configured bubble count per mode ──────────────────────────
     const currentBubbles = bgContainer.querySelectorAll('.bubble:not(.popped)').length;
     const maxBubbles = isLetterPractice
         ? (appState.config.letterPracticeBubbleCount !== undefined ? appState.config.letterPracticeBubbleCount : 4)
@@ -92,16 +101,14 @@ window.spawnBubble = function(isRespawn = false, forceTargetOverride = false) {
     let preloadedWord = null;
     let isTarget = false;
 
-    // ── Word / letter assignment ────────────────────────────────────────────
+    // ── Word / letter assignment ──────────────────────────────────────────
     if (isLetterPractice) {
         bubble.classList.add('has-letter');
 
-        // In letter practice: decide target vs. distractor
         const existingTargetCount = Array.from(
             bgContainer.querySelectorAll('.bubble:not(.popped)')
         ).filter(b => b.dataset.letter === window.bubbleGameTargetLetter).length;
 
-        // Force target ONLY if explicitly overridden and none exists yet
         if (forceTargetOverride && existingTargetCount === 0) {
             isTarget = true;
         } else {
@@ -112,7 +119,6 @@ window.spawnBubble = function(isRespawn = false, forceTargetOverride = false) {
         if (isTarget) {
             assignedLetter = window.bubbleGameTargetLetter || 'A';
         } else {
-            // Pick a random letter that is NOT the target
             const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
             do {
                 assignedLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
@@ -123,7 +129,6 @@ window.spawnBubble = function(isRespawn = false, forceTargetOverride = false) {
         bubble.dataset.letter = assignedLetter;
         bubble.dataset.isTarget = isTarget ? '1' : '0';
 
-        // Always assign a word matching the assigned letter
         const matching = appState.words.filter(
             w => w.letter && w.letter.trim().toLowerCase() === assignedLetter.trim().toLowerCase()
         );
@@ -134,16 +139,14 @@ window.spawnBubble = function(isRespawn = false, forceTargetOverride = false) {
         }
 
     } else {
-        // Normal mode & background bubbles — assign a random word so every bubble has an image ready
         if (appState.words && appState.words.length > 0) {
             preloadedWord = appState.words[Math.floor(Math.random() * appState.words.length)];
         }
     }
 
-    // ── Size ────────────────────────────────────────────────────────────────
+    // ── Size ─────────────────────────────────────────────────────────────
     let size;
     if (isLetterPractice) {
-        // Both target and distractor are large enough to show an image
         size = Math.floor(Math.random() * 80) + LETTER_PRACTICE_MIN_SIZE;
     } else if (isTarget) {
         size = Math.floor(Math.random() * 80) + 180;
@@ -156,60 +159,58 @@ window.spawnBubble = function(isRespawn = false, forceTargetOverride = false) {
         bubble.style.fontSize = `${size * 0.48}px`;
     }
 
-    // ── Center-weighted positioning ─────────────────────────────────────────
-    const strongCenter = Math.random() < 0.5;
-    const pulls = strongCenter ? 4 : 2;
-    const leftPct = centeredRandom(5, 88, pulls);
-    const topPct  = centeredRandom(5, 85, pulls);
-    bubble.style.left = `${leftPct}%`;
-    bubble.style.top  = `${topPct}%`;
-
-    // ── Per-bubble unique float animation ───────────────────────────────────
-    const animId = `floatB${++_bubbleAnimId}`;
-    const dx1 = (Math.random() - 0.5) * 20;
-    const dy1 = (Math.random() - 0.5) * 20;
-    const dx2 = (Math.random() - 0.5) * 30;
-    const dy2 = (Math.random() - 0.5) * 30;
-    const dx3 = (Math.random() - 0.5) * 20;
-    const dy3 = (Math.random() - 0.5) * 20;
-    const styleEl = document.createElement('style');
-    styleEl.textContent = `
-      @keyframes ${animId} {
-        0%   { transform: translate(0,0) scale(0.5); opacity: 0; }
-        10%  { opacity: 1; transform: translate(${dx1}vw,${dy1}vh) scale(1); }
-        40%  { transform: translate(${dx2}vw,${dy2}vh) scale(1.05); }
-        70%  { transform: translate(${dx3}vw,${dy3}vh) scale(0.97); }
-        90%  { opacity: 1; transform: translate(${dx1 * 0.5}vw,${dy1 * 0.5}vh) scale(1); }
-        100% { transform: translate(0,0) scale(0.5); opacity: 0; }
-      }
-    `;
-    document.head.appendChild(styleEl);
-
-    const duration = getBubbleDuration();
-    const delay = isRespawn ? 0 : -(Math.random() * 12);
-    bubble.style.animation = `${animId} ${duration}s ease-in-out ${delay}s forwards`;
-
-    // When animation ends, remove + replace
-    bubble.addEventListener('animationend', (e) => {
-        if (e.animationName !== animId) return;
-        if (bubble.parentNode) bubble.remove();
-        styleEl.remove();
-
-        if (isLetterPractice) {
-            // Only force a replacement target if none exist on screen
-            const remaining = Array.from(
-                (document.querySelector('.background-decoration') || { querySelectorAll: () => [] })
-                    .querySelectorAll('.bubble:not(.popped)')
-            ).filter(b => b.dataset.letter === window.bubbleGameTargetLetter).length;
-            window.spawnBubble(true, remaining === 0);
-        } else if (window.isBubbleGameActive) {
-            window.spawnBubble(true, isTarget);
-        } else {
-            window.spawnBubble(true);
+    // ── Physics-based positioning — find a non-overlapping spot ───────────
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+    const r = size / 2;
+    let px, py;
+    const existingBubbles = Array.from(bgContainer.querySelectorAll('.bubble:not(.popped)'));
+    let placed = false;
+    for (let attempt = 0; attempt < 40; attempt++) {
+        px = r + Math.random() * (W - size);
+        py = r + Math.random() * (H - size);
+        let overlaps = false;
+        for (const eb of existingBubbles) {
+            const er = parseFloat(eb.style.width) / 2;
+            const ex = parseFloat(eb.dataset.physX !== undefined ? eb.dataset.physX : eb.style.left) + er;
+            const ey = parseFloat(eb.dataset.physY !== undefined ? eb.dataset.physY : eb.style.top) + er;
+            const dist = Math.sqrt((px - ex) ** 2 + (py - ey) ** 2);
+            if (dist < r + er + 4) { overlaps = true; break; }
         }
+        if (!overlaps) { placed = true; break; }
+    }
+    if (!placed) {
+        px = r + Math.random() * (W - size);
+        py = r + Math.random() * (H - size);
+    }
+
+    bubble.dataset.physX = String(px - r);
+    bubble.dataset.physY = String(py - r);
+    bubble.style.left = `${px - r}px`;
+    bubble.style.top  = `${py - r}px`;
+    bubble.style.position = 'absolute';
+    bubble.style.animation = 'none';
+
+    // Random velocity (px/s) scaled to speed setting
+    const speed = appState.config.bubbleSpeed || 'normal';
+    const baseSpeed = speed === 'slow' ? 35 : speed === 'fast' ? 90 : speed === 'very-fast' ? 140 : 60;
+    const angle = Math.random() * Math.PI * 2;
+    const spd = baseSpeed * (0.6 + Math.random() * 0.8);
+    bubble.dataset.physVx = String(Math.cos(angle) * spd);
+    bubble.dataset.physVy = String(Math.sin(angle) * spd);
+
+    // Fade-in entrance
+    bubble.style.opacity = '0';
+    bubble.style.transform = 'scale(0.5)';
+    bubble.style.transition = 'opacity 0.4s ease, transform 0.4s ease';
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+            bubble.style.opacity = '1';
+            bubble.style.transform = 'scale(1)';
+        });
     });
 
-    // ── Image pre-caching ───────────────────────────────────────────────────
+    // ── Image pre-caching ─────────────────────────────────────────────────
     if (preloadedWord) {
         bubble.dataset.wordId = preloadedWord.id;
         if (typeof window.getOrFetchWordImage === 'function') {
@@ -220,7 +221,91 @@ window.spawnBubble = function(isRespawn = false, forceTargetOverride = false) {
     }
 
     bgContainer.appendChild(bubble);
+    startBubblePhysicsLoop();
 };
+
+
+// ── PHYSICS LOOP ─────────────────────────────────────────────────────────
+let _physicsRafId = null;
+let _physicsLastTime = null;
+
+function startBubblePhysicsLoop() {
+    if (_physicsRafId) return; // already running
+    _physicsLastTime = performance.now();
+    _physicsRafId = requestAnimationFrame(_physicsTick);
+}
+
+function _physicsTick(now) {
+    const bgContainer = document.querySelector('.background-decoration');
+    if (!bgContainer) { _physicsRafId = null; return; }
+
+    const bubbles = Array.from(bgContainer.querySelectorAll('.bubble:not(.popped)'));
+    if (bubbles.length === 0) { _physicsRafId = null; _physicsLastTime = null; return; }
+
+    const dt = Math.min((now - (_physicsLastTime || now)) / 1000, 0.05);
+    _physicsLastTime = now;
+
+    const W = window.innerWidth;
+    const H = window.innerHeight;
+
+    const state = bubbles.map(b => {
+        const r = parseFloat(b.style.width) / 2;
+        let x = parseFloat(b.dataset.physX);
+        let y = parseFloat(b.dataset.physY);
+        if (isNaN(x)) x = parseFloat(b.style.left) || 0;
+        if (isNaN(y)) y = parseFloat(b.style.top) || 0;
+        return {
+            el: b, r,
+            x: x + r, y: y + r,
+            vx: parseFloat(b.dataset.physVx) || 0,
+            vy: parseFloat(b.dataset.physVy) || 0,
+        };
+    });
+
+    state.forEach(s => { s.x += s.vx * dt; s.y += s.vy * dt; });
+
+    // Wall bouncing
+    state.forEach(s => {
+        if (s.x - s.r < 0)  { s.x = s.r;      s.vx =  Math.abs(s.vx); }
+        if (s.x + s.r > W)  { s.x = W - s.r;  s.vx = -Math.abs(s.vx); }
+        if (s.y - s.r < 0)  { s.y = s.r;      s.vy =  Math.abs(s.vy); }
+        if (s.y + s.r > H)  { s.y = H - s.r;  s.vy = -Math.abs(s.vy); }
+    });
+
+    // Bubble-bubble elastic collisions
+    for (let i = 0; i < state.length; i++) {
+        for (let j = i + 1; j < state.length; j++) {
+            const a = state[i], b = state[j];
+            const dx = b.x - a.x;
+            const dy = b.y - a.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            const minDist = a.r + b.r;
+            if (dist < minDist && dist > 0.001) {
+                const overlap = (minDist - dist) / 2;
+                const nx = dx / dist;
+                const ny = dy / dist;
+                a.x -= nx * overlap; a.y -= ny * overlap;
+                b.x += nx * overlap; b.y += ny * overlap;
+                const dot = (a.vx - b.vx) * nx + (a.vy - b.vy) * ny;
+                if (dot > 0) {
+                    a.vx -= dot * nx; a.vy -= dot * ny;
+                    b.vx += dot * nx; b.vy += dot * ny;
+                }
+            }
+        }
+    }
+
+    state.forEach(s => {
+        s.el.dataset.physX = String(s.x - s.r);
+        s.el.dataset.physY = String(s.y - s.r);
+        s.el.dataset.physVx = String(s.vx);
+        s.el.dataset.physVy = String(s.vy);
+        s.el.style.left = `${s.x - s.r}px`;
+        s.el.style.top  = `${s.y - s.r}px`;
+    });
+
+    _physicsRafId = requestAnimationFrame(_physicsTick);
+}
 
 
 
@@ -402,10 +487,22 @@ document.addEventListener('click', async function(e) {
                 
                 const cx = rect.left + rect.width / 2;
                 const cy = rect.top + rect.height / 2;
+                // Mode max sizes
+                const isLP = window.isBubbleGameActive && window.bubbleGameLetterPractice;
+                const modeMax = isLP
+                    ? (LETTER_PRACTICE_MIN_SIZE + 80)   // letter-practice max: 220px
+                    : window.isBubbleGameActive
+                        ? 260                           // bubble-game max: 260px
+                        : 140;                          // home-screen max: 140px
+                // Small bubbles (<60% of mode max) grow by 30%; larger ones use the mode max
+                const bubbleSize = rect.width;
+                const maxPopSize = bubbleSize < modeMax * 0.6
+                    ? Math.round(bubbleSize * 1.3)
+                    : modeMax;
                 img.style.left = `${cx}px`;
                 img.style.top  = `${cy}px`;
-                img.style.width  = `${rect.width}px`;
-                img.style.height = `${rect.height}px`;
+                img.style.width  = `${maxPopSize}px`;
+                img.style.height = `${maxPopSize}px`;
                 
                 // Apply the configured pop animation
                 const animName = appState.config.popAnimation || 'popBounce';
@@ -437,10 +534,25 @@ document.addEventListener('click', async function(e) {
                 } catch(err) {}
             }
             
-            setTimeout(() => { 
-                bubble.remove(); 
-                setTimeout(() => window.spawnBubble(true), 100);
-            }, 200);
+            // Stop this bubble from being included in physics and remove it
+            bubble.style.transition = 'transform 0.2s ease-out, opacity 0.2s ease-out';
+            bubble.style.transform = 'scale(1.4)';
+            bubble.style.opacity = '0';
+            setTimeout(() => {
+                bubble.remove();
+                setTimeout(() => {
+                    const isLP = window.isBubbleGameActive && window.bubbleGameLetterPractice;
+                    if (isLP) {
+                        const remaining = Array.from(
+                            (document.querySelector('.background-decoration') || { querySelectorAll: () => [] })
+                                .querySelectorAll('.bubble:not(.popped)')
+                        ).filter(b => b.dataset.letter === window.bubbleGameTargetLetter).length;
+                        window.spawnBubble(true, remaining === 0);
+                    } else {
+                        window.spawnBubble(true);
+                    }
+                }, 80);
+            }, 220);
             
             break; // pop only one
         }
@@ -1861,6 +1973,12 @@ window.copyUrl = function(id) {
     document.getElementById( "configBubbleSpeed" ).value = appState.config.bubbleSpeed || 'normal';
     document.getElementById( "configImagePopDuration" ).value = appState.config.imagePopDuration !== undefined ? appState.config.imagePopDuration : 1.0;
 
+    // Bubble style picker
+    const bubbleStyle = appState.config.bubbleStyle || 'crystal';
+    document.querySelectorAll('.bubble-style-option').forEach(el => {
+        el.classList.toggle('selected', el.dataset.style === bubbleStyle);
+    });
+
     // Pop animation picker
     const popAnim = appState.config.popAnimation || 'popBounce';
     document.querySelectorAll('.pop-anim-option').forEach(el => {
@@ -1888,6 +2006,10 @@ window.copyUrl = function(id) {
     appState.config.bubbleSpeed = document.getElementById( "configBubbleSpeed" ).value;
     appState.config.imagePopDuration = Number( document.getElementById( "configImagePopDuration" ).value ) || 1.0;
 
+    // Save bubble style selection
+    const selStyle = document.querySelector('.bubble-style-option.selected');
+    appState.config.bubbleStyle = selStyle ? selStyle.dataset.style : 'crystal';
+
     // Save pop animation selection
     const selAnim = document.querySelector('.pop-anim-option.selected');
     appState.config.popAnimation = selAnim ? selAnim.dataset.anim : 'popBounce';
@@ -1899,6 +2021,16 @@ window.copyUrl = function(id) {
     saveState(); applyConfiguration(); 
     if (typeof updateMuteButtonIcon === 'function') updateMuteButtonIcon();
     showToast( "Configuration saved!" ); } );
+
+// Tile picker interaction — bubble style
+document.getElementById('bubbleStylePicker').addEventListener('click', (e) => {
+    const tile = e.target.closest('.bubble-style-option');
+    if (!tile) return;
+    document.querySelectorAll('.bubble-style-option').forEach(el => el.classList.remove('selected'));
+    tile.classList.add('selected');
+    // Live-preview: apply immediately
+    document.body.dataset.bubbleStyle = tile.dataset.style;
+});
 
 // Tile picker interaction — pop animation
 document.getElementById('popAnimPicker').addEventListener('click', (e) => {
@@ -1945,6 +2077,30 @@ if (precacheBtn) {
 
 
 
+// Shared toggle for letter practice mode — works from both header btn and floating in-game btn
+function toggleBubbleLetterMode() {
+    window.bubbleGameLetterPractice = !window.bubbleGameLetterPractice;
+    const display = document.getElementById('bubbleTargetLetterDisplay');
+    const practiceBtn = document.getElementById('bubbleLetterPracticeBtn');
+    const floatingBtn = document.getElementById('bubbleGameLetterModeBtn');
+    if (window.bubbleGameLetterPractice) {
+        if (practiceBtn) { practiceBtn.style.background = 'var(--primary)'; practiceBtn.style.color = 'white'; }
+        if (floatingBtn) { floatingBtn.style.background = 'var(--primary)'; floatingBtn.style.filter = 'none'; }
+        if (display) display.style.display = 'flex';
+        pickNewBubbleGameLetter();
+    } else {
+        if (practiceBtn) { practiceBtn.style.background = ''; practiceBtn.style.color = ''; }
+        if (floatingBtn) { floatingBtn.style.background = 'rgba(255,255,255,0.92)'; floatingBtn.style.filter = ''; }
+        if (display) display.style.display = 'none';
+        document.querySelectorAll('.bubble:not(.popped)').forEach(bubble => {
+            bubble.textContent = '';
+            delete bubble.dataset.letter;
+            delete bubble.dataset.wordId;
+            bubble.classList.remove('has-letter');
+        });
+    }
+}
+
 function pickNewBubbleGameLetter() {
     if (!window.bubbleGameLetterQueue || window.bubbleGameLetterQueue.length === 0) {
         window.bubbleGameLetterQueue = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').sort(() => Math.random() - 0.5);
@@ -1957,6 +2113,11 @@ function pickNewBubbleGameLetter() {
     // Clear ALL existing bubbles so the new set spawns cleanly with correct words/images
     const bgContainer = document.querySelector('.background-decoration');
     if (bgContainer) {
+        if (typeof _physicsRafId !== 'undefined' && _physicsRafId) {
+            cancelAnimationFrame(_physicsRafId);
+            _physicsRafId = null;
+            _physicsLastTime = null;
+        }
         bgContainer.querySelectorAll('.bubble').forEach(b => b.remove());
     }
 
@@ -1976,26 +2137,7 @@ function pickNewBubbleGameLetter() {
 const practiceBtn = document.getElementById('bubbleLetterPracticeBtn');
 if (practiceBtn) {
     practiceBtn.addEventListener('click', function(e) {
-        window.bubbleGameLetterPractice = !window.bubbleGameLetterPractice;
-        const display = document.getElementById('bubbleTargetLetterDisplay');
-        if (window.bubbleGameLetterPractice) {
-            practiceBtn.style.background = 'var(--primary)';
-            practiceBtn.style.color = 'white';
-            display.style.display = 'flex';
-            // pickNewBubbleGameLetter clears old bubbles and spawns a fresh target+distractor pair
-            pickNewBubbleGameLetter();
-        } else {
-            practiceBtn.style.background = '';
-            practiceBtn.style.color = '';
-            display.style.display = 'none';
-            // Remove letters smoothly without resetting
-            document.querySelectorAll('.bubble:not(.popped)').forEach(bubble => {
-                 bubble.textContent = '';
-                 delete bubble.dataset.letter;
-                 delete bubble.dataset.wordId;
-                 bubble.classList.remove('has-letter');
-            });
-        }
+        toggleBubbleLetterMode();
     });
 }
 
@@ -2004,9 +2146,12 @@ function showBubbleGameView() {
     const view = document.getElementById("bubbleGameView");
     if (view) view.classList.add("active");
     document.getElementById("backHomeBtn").style.display = "inline-flex";
-    document.getElementById("kidModeButton").style.display = "none";
+    document.getElementById("kidModeButton").style.display = "inline-flex"; // show fullscreen btn
     document.getElementById("muteBtn").style.display = "none";
     if (practiceBtn) practiceBtn.style.display = "inline-flex";
+    // Also show/hide floating in-game letter button (always visible in this view)
+    const floatingLetterBtn = document.getElementById("bubbleGameLetterModeBtn");
+    if (floatingLetterBtn) floatingLetterBtn.style.display = "none"; // hidden until fullscreen
     
     window.isBubbleGameActive = true;
     
@@ -2179,6 +2324,13 @@ function enterKidMode() {
     
     const kidMute = document.getElementById("kidModeMuteBtn");
     if (kidMute) kidMute.style.display = "block";
+
+    // In bubble game fullscreen, show the floating letter-mode toggle
+    const bubbleView = document.getElementById("bubbleGameView");
+    const bubbleFloatingLetterBtn = document.getElementById("bubbleGameLetterModeBtn");
+    if (bubbleView && bubbleView.classList.contains("active") && bubbleFloatingLetterBtn) {
+        bubbleFloatingLetterBtn.style.display = "flex";
+    }
     
     // Trap back button
     history.pushState({kidMode: true}, ""); 
@@ -2212,6 +2364,8 @@ function exitKidMode() {
     
     const kidMute = document.getElementById("kidModeMuteBtn");
     if (kidMute) kidMute.style.display = "none";
+    const bubbleFloatingLetterBtn2 = document.getElementById("bubbleGameLetterModeBtn");
+    if (bubbleFloatingLetterBtn2) bubbleFloatingLetterBtn2.style.display = "none";
     if (document.fullscreenElement || document.webkitFullscreenElement) {
         if (document.exitFullscreen) {
             document.exitFullscreen().catch(e => console.log(e));
