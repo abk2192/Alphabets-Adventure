@@ -1,0 +1,1272 @@
+{
+  "words": [
+    {
+      "id": "014fad5b-ace5-4c5c-8861-c804f21011fa",
+      "letter": "b",
+      "word": "BUSTER BUS",
+      "categories": [
+        "characters"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3l49ncgy_Dd9RNm58RGqiUvHxSldquvbKa4SGxzfvUQ&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=buster%20bus&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "01f95503-2ba0-4656-b5f5-a85840ec736c",
+      "letter": "d",
+      "word": "DOG",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWMKYq7ZwbLA7_4M3wuqGRFUjyUHlPFR__WtARVaeGvg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=dog&tl=en&client=tw-ob",
+      "fallback": "🐶"
+    },
+    {
+      "id": "04b638e5-a4c8-4505-9473-5e97f6269b16",
+      "letter": "s",
+      "word": "SLIDES",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR2fmNmBJwN5hzh0WMqJH7TRczG0Rv7c7DtcG0QfcM_Cg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=slides&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "06365669-743d-478c-96fd-b871366979f6",
+      "letter": "n",
+      "word": "NOTEBOOK",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/e/ea/Notebooks.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=notebook&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "072af49a-4133-48d6-8498-f34a5e2fb863",
+      "letter": "b",
+      "word": "BOX",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/6c/Kentucky_Balikbayan_Box_Container_Loading_and_Shipping_Site.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=box&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "0860a8a3-92e9-4822-86e3-7700b376ab55",
+      "letter": "c",
+      "word": "CLOUD",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/3c/GoldenMedows.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=cloud&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "08f5613c-577b-479e-a42e-f5d39f49015d",
+      "letter": "p",
+      "word": "PEARS",
+      "categories": [
+        "fruit"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRY_67CDXGTMxvfmLYczGNX70WCPqtSJybuUIqFMTY_pA&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=pears&tl=en&client=tw-ob",
+      "fallback": "🍐"
+    },
+    {
+      "id": "0d8bef90-cdef-43a7-ba6d-cf2b047f7338",
+      "letter": "c",
+      "word": "CHAIR",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/ce/Aeron_chair_Brooklyn_Museum.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=chair&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "10491482-9eb8-4b35-b9ab-8928a8c3465f",
+      "letter": "e",
+      "word": "ELEPHANT",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKiYlbMTOClMb0NPQVRSxkNdmWfKQJuDcfDUgDQ-ur4BNyRVk4wRd2Ph9DerOK_2AbmfDB9dUNdTD6JQzfzWaKNT7-3cm7lZ9hvhykTQ&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=elephant&tl=en&client=tw-ob",
+      "fallback": "🐘"
+    },
+    {
+      "id": "1494e245-31cb-4ca4-b056-4f0ef67d87cb",
+      "letter": "d",
+      "word": "DOCTOR",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT1ZxnHb__-b3tVE84FAkfHPJ8mvGACeg0aMSRT2UYgSA&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=doctor&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "14e7bd03-4d94-4aa9-8dd8-084f4eca32ee",
+      "letter": "o",
+      "word": "ORANGE",
+      "categories": [
+        "fruit"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTdDj097v1Ic1Mhf5ZtfV9NydXhsJyiXed1s1WoKVIlDg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=orange&tl=en&client=tw-ob",
+      "fallback": "🍊"
+    },
+    {
+      "id": "153d7d08-f16d-4c9e-a5b6-0b46a314190f",
+      "letter": "d",
+      "word": "DINO",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNq23w5CvpeCVFt2DlPpz__x9evu5XleslxCxq1VRMNg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=dyno&tl=en&client=tw-ob",
+      "fallback": "🦖"
+    },
+    {
+      "id": "195c022e-7f92-42b7-a66a-367d96fe024d",
+      "letter": "x",
+      "word": "XYLOPHONE",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ-kNm9EXNAHTxWXRvMueH0wESGh_ETye1c55a8fbF-OA&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=xylophone&tl=en&client=tw-ob",
+      "fallback": "🎼"
+    },
+    {
+      "id": "1a50c042-7d84-4abe-b0d4-1daaeafb48b8",
+      "letter": "c",
+      "word": "CAR",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/2/2c/1996_Porsche_911_993_GT2_-_Flickr_-_The_Car_Spy_%284%29.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=car&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "1bb0d332-dd7a-4001-b42f-f129452b2e4d",
+      "letter": "g",
+      "word": "GEORGE PIG",
+      "categories": [
+        "characters"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfoLZmoceJub7wiZVj02sKyySJRZrWqHIOAhUD6Qqj2Q&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=george%20pig&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "1dfec308-f587-4ac0-8b69-4b7de02c9d40",
+      "letter": "i",
+      "word": "IGUANA",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJq0egJv61tQXFVgYKr0yofIRQ5OQA8o45r0eJFS2aoA&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=iguana&tl=en&client=tw-ob",
+      "fallback": "🦎",
+      "categories": [
+        "animal"
+      ]
+    },
+    {
+      "id": "1f8e06d8-f7e6-4896-be13-4e3a28bd55b6",
+      "letter": "b",
+      "word": "BALL",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS4747f7GuqubpW46FSnQSaY-RdECYnRpYTR5p-380leA&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=ball&tl=en&client=tw-ob",
+      "fallback": "⚽",
+      "categories": []
+    },
+    {
+      "id": "202ac894-b591-4aa5-bbf1-5959dcf01610",
+      "letter": "v",
+      "word": "VIOLIN",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGjU9eV5S49fzD_U844F-yGuyUhBtibpHWCsHUJ4dxxg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=violin&tl=en&client=tw-ob",
+      "fallback": "🎻"
+    },
+    {
+      "id": "20307b24-2814-4017-916e-eb7551c002cb",
+      "letter": "c",
+      "word": "CANDLE",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/aa/LA2_Skultuna_kontorsljusstake.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=candle&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "2097caf6-fd57-4f8b-b083-79946397195f",
+      "letter": "a",
+      "word": "APPLE",
+      "categories": [
+        "fruit"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT9CQiQTwDM0icaz7ZLMEj5drPCU_Q3UnLSdaROGKjSVg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=apple&tl=en&client=tw-ob",
+      "fallback": "🍎"
+    },
+    {
+      "id": "225b54d8-26a6-4673-943a-bb57ea99ffeb",
+      "letter": "t",
+      "word": "TURTLE",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQm0GFPyC_EgTi4DOLAEu6q3RcezljvoW0GqQDS9MGLcQ&s",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=turtle&tl=en&client=tw-ob",
+      "fallback": "🐢"
+    },
+    {
+      "id": "227febcd-f1a0-4d58-bd65-1e8809d0acbf",
+      "letter": "z",
+      "word": "ZOO",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSTa3BJDXU3-ZDSZYdZJiNH3FQpcnuXgAfU3kpLLDpICQ&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=zoo&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "248f7df9-b8dd-4b27-8c78-b126dcf42a70",
+      "letter": "o",
+      "word": "OWL",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwrtm9swXhEXIG05dzXGil-ab0gJLi4Svi8ZDyJ5Nk9g&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=owl&tl=en&client=tw-ob",
+      "fallback": "🦉"
+    },
+    {
+      "id": "29fe69c6-2a2d-484b-b509-94cce1c798a4",
+      "letter": "b",
+      "word": "BANANA",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9b/Cavendish_Banana_DS.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=banana&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "2a66ea6f-f520-459d-921b-89bd14c1918d",
+      "letter": "d",
+      "word": "DUCK",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjFz5EzdL3TqBb1wUJfv8PTh0tPgoPTDue8Vhf1RSdbg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=duck&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "2ac18b9b-e90b-4b5e-b52a-9b98c2e138ef",
+      "letter": "b",
+      "word": "BRIDGE",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBU8Ug5cZe_sPXB_6lf0FU7lRrfUb0DuYUdqFBLZsT1w&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=bridge&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "2cf6a527-0c73-420a-a3f2-9bf8e0170904",
+      "letter": "c",
+      "word": "CONCRETE MIXER",
+      "categories": [
+        "vehicle"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeDbmOjyA7achUGal7UcKoxB_bpEhnke8fS3KsLC19XQ&s",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=concrete%20mixer&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "3068e01d-ea37-413c-8b9f-c546c4f829bb",
+      "letter": "b",
+      "word": "BLUEBERRY",
+      "categories": [
+        "fruit"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a9/Vaccinium_myrtilloides_berries.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=blueberry&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "35d0c75f-df1a-4cc9-8e56-7d900959c6e9",
+      "letter": "t",
+      "word": "TIGER",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRkgV_MQSLHm70sCf7p0bHA4XuqWuC_eWRg-Epmey_CiA&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=tiger&tl=en&client=tw-ob",
+      "fallback": "🐯"
+    },
+    {
+      "id": "3609b73e-37ce-472a-b100-235765c7b052",
+      "letter": "s",
+      "word": "SWINGS",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQC_DOftIJ7Rjs-gqzGm39X2nV_G-FVaw7aw4T1qqcuzw&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=swings&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "361e977b-15b3-4b13-88e7-4074983d55b5",
+      "letter": "j",
+      "word": "JUICE",
+      "categories": [
+        "food"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRDpz_npjLEcVuhBHWbsejkBREIUh8j7Ng8yIUTyXsy6w&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=juice&tl=en&client=tw-ob",
+      "fallback": "🧃"
+    },
+    {
+      "id": "3875b241-a27d-48e2-8965-3be8446666c1",
+      "letter": "w",
+      "word": "WATERMELON",
+      "categories": [
+        "fruit"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRWIezy-LqXvzVLLJgS6TivUQMtiEPRRxOvt8LlOMds2g&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=watermelon&tl=en&client=tw-ob",
+      "fallback": "🍉"
+    },
+    {
+      "id": "421d4bc2-df1b-4964-89d5-a2cbd64e621d",
+      "letter": "n",
+      "word": "NEST",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSGPWafXC7f8QoFzMvRBLxaQpIHU6CmugkcuEEE_S7z1Q&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=nest&tl=en&client=tw-ob",
+      "fallback": "🪹"
+    },
+    {
+      "id": "43b2a667-5b94-445b-9b15-2881eff826cb",
+      "letter": "w",
+      "word": "WHALE",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqIC2seQmdyCOD96O3VZ0bojNZPMBaRRZl5TqrgoJRZg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=whale&tl=en&client=tw-ob",
+      "fallback": "🐳"
+    },
+    {
+      "id": "46119abe-d649-4c76-b80d-71a0b8915f75",
+      "letter": "a",
+      "word": "APRON",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/ca/Preparing_the_Cake_%285285262061%29.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=apron&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "4bbf2ca2-c531-49ff-bdab-d1b6181b6ed0",
+      "letter": "f",
+      "word": "FISH",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqHStMH6A2CYnNaGF9t313zq12DR0li-nIs71790kfdg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=fish&tl=en&client=tw-ob",
+      "fallback": "🐟"
+    },
+    {
+      "id": "4c8ba96e-6492-45a5-8207-54e7667295ec",
+      "letter": "h",
+      "word": "HOSPITAL",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnEyfhmyVea5aO1o2poaELt9QLLdFCiikgutxuuar5aQ&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=hospital&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "4ce49561-93b6-4037-a371-bc14f3ef83fa",
+      "letter": "q",
+      "word": "QUEEN",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT_DsQ7rKcShUYtlrCJNNJf5q1tRFkAkZlTV3bcRRYbAA&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=queen&tl=en&client=tw-ob",
+      "fallback": "👑"
+    },
+    {
+      "id": "4e933491-0b3f-4902-92c5-c57d073276e4",
+      "letter": "s",
+      "word": "SNAKE",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-E9Hlr7uSAmxTAKoqs6QsnZzIpvgRdvfbnSe7iFLvxw&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=snake&tl=en&client=tw-ob",
+      "fallback": "🐍"
+    },
+    {
+      "id": "51223ca0-af88-4cb6-913c-5c884f7b3166",
+      "letter": "a",
+      "word": "ASTRONAUT",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/91/Bruce_McCandless_II_during_EVA_in_1984.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=astronaut&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "556d2a8e-29c5-40f8-8102-e56e4553610d",
+      "letter": "h",
+      "word": "HAT",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoqLrSv2tfs-J__-38wqxUmpqnzChJUOE2PmOodk5pLQ&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=hat&tl=en&client=tw-ob",
+      "fallback": "🎩",
+      "categories": []
+    },
+    {
+      "id": "58e88507-a3a2-45e5-9c88-3cfbaa20de77",
+      "letter": "n",
+      "word": "NARWHAL",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTHm_mOHrkwCvbhFB912xAJ6geKv112PtNRzEN4cVx3DQ&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=narwhal&tl=en&client=tw-ob",
+      "fallback": "🐋",
+      "categories": [
+        "animal"
+      ]
+    },
+    {
+      "id": "6203cc14-665c-405c-8997-6f4c78999fb7",
+      "letter": "m",
+      "word": "MANGO",
+      "categories": [
+        "fruit"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/74/Mangos_-_single_and_halved.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=mango&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "62afbe12-6b65-424c-8a1a-f5a81746b13f",
+      "letter": "p",
+      "word": "POLICE CAR",
+      "categories": [
+        "vehicle"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSbjTwXz8G8LFSd4-C8Rp-O15dMrI7dc7V0kTdC1toTyA&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=police%20car&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "65ce5d74-0df4-4858-ac94-17feef720d4f",
+      "letter": "e",
+      "word": "EXCAVATOR",
+      "categories": [
+        "vehicle"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2R0bpPwYMq4w5h2jmE7r0QjRRRKyXV9x79df2dj2fWg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=excavator&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "66f7a5da-ab6a-4317-b350-39644a433aa8",
+      "letter": "l",
+      "word": "LADY BUG",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/77/Coccinella-septempunctata-15-fws.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=lady%20bug&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "67701d13-a2f1-4954-9154-0d384a1dde4c",
+      "letter": "a",
+      "word": "ALLIGATOR",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-ntcOXIzWkWlNr1H6vIn1mt6fw8QvRkIUrLPqYapRfQ&s",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=alligator&tl=en&client=tw-ob",
+      "fallback": "🐊",
+      "categories": [
+        "animal"
+      ]
+    },
+    {
+      "id": "698553dc-5a22-481d-89fd-114d30a58ec9",
+      "letter": "u",
+      "word": "UMBRELLA",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSPGBI67vxtknCVyFSFVtYukuFQramLV4qOmdKUY11ctw&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=umbrella&tl=en&client=tw-ob",
+      "fallback": "☂️"
+    },
+    {
+      "id": "6c9deb3f-f069-44a5-99fc-e26872dab495",
+      "letter": "g",
+      "word": "GOAT",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAe1xRKSSjq12zRZH52pb103ab_svCmS6bTaPTJO8OgQ&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=goat&tl=en&client=tw-ob",
+      "fallback": "🐐"
+    },
+    {
+      "id": "6e6ed3a8-b31c-4c2c-adf5-92468243d426",
+      "letter": "b",
+      "word": "BUTTERFLY",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/73/Monarch_Butterfly_Danaus_plexippus_Male_2664px.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=butterfly&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "745c5b25-d55e-4347-8349-936360c602fd",
+      "letter": "r",
+      "word": "MS RACHEL",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXUNvAMnsF5oPJuy9ZyDMKX1Bc3r6Byrg8-MvEvg4EEQ&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=ms%20rachel&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "768d00ac-780a-4c42-bc56-339acaf1bec1",
+      "letter": "l",
+      "word": "LION",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRf5YynXdOqJ1V6OGuFQjWjEf1uGMwVVbxH5unTKClGDQ&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=lion&tl=en&client=tw-ob",
+      "fallback": "🦁"
+    },
+    {
+      "id": "7956a004-703a-4446-aa1c-542d959f6f20",
+      "letter": "i",
+      "word": "ICE CREAM",
+      "categories": [
+        "food"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfCBzkPnRWGieAGc9FhdQ3vrhJ9O8IlvUgnZT1pwW6vQ&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=ice%20cream&tl=en&client=tw-ob",
+      "fallback": "🍦"
+    },
+    {
+      "id": "79b6fac9-94c0-46a4-b1d8-cbde357e3c37",
+      "letter": "c",
+      "word": "CHICKEN",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/84/Male_and_female_chicken_sitting_together.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=chicken&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "7c050fb2-2588-4366-b922-d64f8a3a8cee",
+      "letter": "d",
+      "word": "DUCKLING",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZBzPDTYaEfUo6xbV0OjSY22_eK_aCfL939QYK-pUc_Q&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=duckling&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "7d53ee45-9fd0-42f0-b9a3-8f1a3758af4b",
+      "letter": "a",
+      "word": "AMBULANCE",
+      "categories": [
+        "vehicle"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/00/MTA_Union_Tpke_and_164_St_54.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=ambulance&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "7e321f8c-6dfc-4787-8071-ea8600da96ae",
+      "letter": "d",
+      "word": "DUMP TRUCK",
+      "categories": [
+        "vehicle"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2zwKPayaLtXtXztLhSiEMaFjiE6GrfJfuylX1WVUBXg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=dump%20truck&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "83c3f5b8-0ce4-4f2d-8815-0154fe536d9a",
+      "letter": "c",
+      "word": "CAKE",
+      "categories": [
+        "food"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/04/Pound_layer_cake.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=cake&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "85dc6812-46ea-4562-890b-a3230834dcbb",
+      "letter": "b",
+      "word": "BED",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIN2XjhPGUC-itu3fJ4gXmZMAjMlos7SK4nKbjHy26_Q&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=bed&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "86da4e8d-bac4-4c95-904a-bd9435386594",
+      "letter": "g",
+      "word": "GIRAFFE",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAENUbqb_2ewNl-H5leAMltqZlGee0aLAjwmJ5xKJ61g&s",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=giraffe&tl=en&client=tw-ob",
+      "fallback": "🦒"
+    },
+    {
+      "id": "8a14dd23-8db3-4fe9-bbed-e431b3ce1667",
+      "letter": "b",
+      "word": "BAT",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/6/67/047_Indian_flying_fox_in_Keoladeo_National_Park_Photo_by_Giles_Laurent.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=bat&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "8a1d55da-a2c2-422b-bf64-d9b71db865d1",
+      "letter": "r",
+      "word": "RABBIT",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSzPkc_Q-291gQhIHD7JVUH9j1bbulEKbQa2btDOzF7_Q&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=rabbit&tl=en&client=tw-ob",
+      "fallback": "🐰"
+    },
+    {
+      "id": "8ae18688-ba7a-468f-b1a6-3b7aaa29a5c5",
+      "letter": "k",
+      "word": "KITE",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTaFvpsxmCKP2zFOPS36yc0FQV9hzK08EZTbVaXMvfSqw&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=kite&tl=en&client=tw-ob",
+      "fallback": "🪁"
+    },
+    {
+      "id": "8e93646c-248d-4903-b5c4-e464979ecea3",
+      "letter": "b",
+      "word": "BAG",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/d/db/Pink_Birkin_bag.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=bag&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "92c44b30-646e-419b-8754-d6eede0d584c",
+      "letter": "c",
+      "word": "COOKIE",
+      "categories": [
+        "food"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1b/Oreo-Two-Cookies.png",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=cookie&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "939f08ec-1d64-459f-8e06-f06bc83fc25d",
+      "letter": "a",
+      "word": "AVOCADO",
+      "categories": [
+        "fruit"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/c9/Avocado_Hass_-_single_and_halved.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=avocado&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "98276a0d-b6ee-4b19-94e2-499a2956af26",
+      "letter": "y",
+      "word": "YAK",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS8RODtLrxOu22cp6SbZ_VjfGHRVa-glk5HpQEm1iGVIQ&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=yak&tl=en&client=tw-ob",
+      "fallback": "🐂",
+      "categories": [
+        "animal"
+      ]
+    },
+    {
+      "id": "9992a431-9e71-4fb7-9fc8-2d4768c1bc97",
+      "letter": "z",
+      "word": "ZEBRA",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSH7LJUkaIT1KwD4GD_-aLpDO2aX7gHkDlC6OY6Omr_Ig&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=zebra&tl=en&client=tw-ob",
+      "fallback": "🦓"
+    },
+    {
+      "id": "9c542c42-e302-42b2-a77f-d084e4f806aa",
+      "letter": "d",
+      "word": "DADDY PIG",
+      "categories": [
+        "characters"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9o8QqgdfUK9Y4zQo1bdL_LDVV4Hl6Wx37nuUiwFPYEQ&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=daddy%20pig&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "9c5f2718-0978-4670-9cf0-9c9a61c4bef0",
+      "letter": "c",
+      "word": "CANDY",
+      "categories": [
+        "food"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/10/Candy_in_Damascus.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=candy&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "a01086f4-610f-4fef-ad05-c52f2565b62b",
+      "letter": "y",
+      "word": "YO-YO",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR9tRV2uHm2PlkVM7LLxuoJHtvkjOUwV94MfjMQMqZyWg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=yo-yo&tl=en&client=tw-ob",
+      "fallback": "🪀"
+    },
+    {
+      "id": "a19ed349-781f-481a-add5-78017afc1815",
+      "letter": "s",
+      "word": "SUN",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUl-UiuStKaLhxHqBEFGrg_VQGe3_XWR6uG85qd6q34Q&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=sun&tl=en&client=tw-ob",
+      "fallback": "☀️"
+    },
+    {
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "letter": "a",
+      "word": "ARROW",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIABVXpbsdI9xjjbPVJ0fZo1UzjQaPgVoH4IYn_QV-8A&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=arrow&tl=en&client=tw-ob",
+      "fallback": "➡️"
+    },
+    {
+      "id": "a3b4c5d6-e7f8-9012-mnop-345678901234",
+      "letter": "r",
+      "word": "RAINBOW",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzM3w6gQQ0GDyMdFyjJFbzAErsKkuBmkO7qjzw87mkqA&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=rainbow&tl=en&client=tw-ob",
+      "fallback": "🌈"
+    },
+    {
+      "id": "a7b8c9d0-e1f2-3456-ghij-789012345678",
+      "letter": "j",
+      "word": "JELLYFISH",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f9/Aurelia_aurita_%28Cnidaria%29_Luc_Viatour.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=jellyfish&tl=en&client=tw-ob",
+      "fallback": "🐙"
+    },
+    {
+      "id": "af48fa0a-732d-4590-b0a6-336386c9e5af",
+      "letter": "p",
+      "word": "PENGUIN",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRGOeuK3u0vl4_XwVeTmxpGHRDlWX2nH3uZN_6EBCDoVw&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=penguin&tl=en&client=tw-ob",
+      "fallback": "🐧",
+      "categories": [
+        "animal"
+      ]
+    },
+    {
+      "id": "b07d1cdf-f5a9-4b68-af77-19afffd70ece",
+      "letter": "h",
+      "word": "HORSE",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRAtiaOuaFGUPWwx4wA_xvxzA0-ZmzEmReE9oXdkJD10keS0ItoSp_Jocd_pYGmMOoYXmrvgZtfPenmLiPU-8hkkAFCXIFWQDQuhGNsw52DjQ&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=horse&tl=en&client=tw-ob",
+      "fallback": "🐴"
+    },
+    {
+      "id": "b0e54c81-0d7d-41fd-b3f2-718aca6ec372",
+      "letter": "a",
+      "word": "ANT",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/c/cb/Paraponera_clavata.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=ant&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "b2c3d4e5-f6a7-8901-bcde-f23456789012",
+      "letter": "d",
+      "word": "DOLL",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrV2Vvuo1MurEQSO_2y2IutPjpHldZVxoDWNKQRNtLVw&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=doll&tl=en&client=tw-ob",
+      "fallback": "🎎"
+    },
+    {
+      "id": "b4c5d6e7-f8a9-0123-nopq-456789012345",
+      "letter": "s",
+      "word": "STAR",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRW3dEBNoRJXD8L_kAEGumdnlZtR3YnzIF_NM421a6EQg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=star&tl=en&client=tw-ob",
+      "fallback": "⭐"
+    },
+    {
+      "id": "b5e293a0-e598-47bd-9b28-1491ca3f5de9",
+      "letter": "f",
+      "word": "FIRE TRUCK",
+      "categories": [
+        "vehicle"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBEdlb2CnrgvJLBoVpmN3SeSxUyeMzuGEzRspLaekkeg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=fire%20truck&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "b7040d7f-8298-48cd-8596-2f4f555f88fb",
+      "letter": "g",
+      "word": "GUITAR",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRHMhxu018LzUXg-2SFw8E3xjZRcliIrtrS6ORjl2fKEA&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=guitar&tl=en&client=tw-ob",
+      "fallback": "🎸"
+    },
+    {
+      "id": "b8aa9ad4-f123-40bb-a41f-62c071fc72ca",
+      "letter": "c",
+      "word": "CAP",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/70/Casquette_marine.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=cap&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "b8c9d0e1-f2a3-4567-hijk-890123456789",
+      "letter": "k",
+      "word": "KOALA",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF59k1rFZPEIL8AmhQqoR6CD8tGQh3Z4Xyr9AjVRHVqg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=koala&tl=en&client=tw-ob",
+      "fallback": "🐨"
+    },
+    {
+      "id": "ba029821-ae30-49de-8e36-13828bdb7b56",
+      "letter": "t",
+      "word": "TAYO",
+      "categories": [
+        "characters"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsgeFg7NiP3OKGGuAl0_UqE6UIJX6-JPtv56mSFayUdg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=taayo&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "ba9530f4-3759-4345-9376-601539dcf841",
+      "letter": "p",
+      "word": "PEPPA PIG",
+      "categories": [
+        "characters"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuNOf0a0vl34YO5JjVPjQZIHFQbiG0l-7gUEdi7RLr5A&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=peppa%20pig&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "bac4e167-4d7a-4a10-94fa-0b70ac4f1d03",
+      "letter": "c",
+      "word": "CLOCK",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8b/2010-07-20_Black_windup_alarm_clock_face.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=clock&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "c1bd8193-17bf-46f5-8bdd-4f5d8088bee9",
+      "letter": "p",
+      "word": "PIG",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT8AttK-mTWvZ6-FYeVxyBl2uLA9emwIyuG0YCrH_Uy7Q&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=pig&tl=en&client=tw-ob",
+      "fallback": "🐷"
+    },
+    {
+      "id": "c33c551a-670c-437b-8185-4b7f1d4b57d4",
+      "letter": "k",
+      "word": "KANGAROO",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTywE0Ww3bVL5FyUKj029-3YtzsdHZ2oRVdjKPodRlSWg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=kangaroo&tl=en&client=tw-ob",
+      "fallback": "🦘",
+      "categories": [
+        "animal"
+      ]
+    },
+    {
+      "id": "c3d4e5f6-a7b8-9012-cdef-345678901234",
+      "letter": "e",
+      "word": "EEL",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQFQqgtJg5zr4liEZXKCr1pvyupEbKjDNR-vfN5SXy1A&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=eel&tl=en&client=tw-ob",
+      "fallback": "🐍"
+    },
+    {
+      "id": "c5d6e7f8-a9b0-1234-opqr-567890123456",
+      "letter": "u",
+      "word": "UNICORN",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQf5CLC0g-jbfAOrnTOAJ8UmFnZdcr1a3dH9HkRpJgm4A&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=unicorn&tl=en&client=tw-ob",
+      "fallback": "🦄"
+    },
+    {
+      "id": "c9d0e1f2-a3b4-5678-ijkl-901234567890",
+      "letter": "m",
+      "word": "MOON",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoK-sKQUQqG0R2CSx8rkrrBOp7w_OwRF5PHzlbP4Z9fw&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=moon&tl=en&client=tw-ob",
+      "fallback": "🌙"
+    },
+    {
+      "id": "cb4f6e0c-5e38-487e-accc-84830bd39513",
+      "letter": "j",
+      "word": "JAGUAR",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRxs9W0eiklSewL3Xo30Zq2THYG_4neUjQ8OyZeAwkuWQ&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=jaguar&tl=en&client=tw-ob",
+      "fallback": "🐆",
+      "categories": [
+        "animal"
+      ]
+    },
+    {
+      "id": "d07c5874-d7b4-4212-a3e5-e235ebf646be",
+      "letter": "p",
+      "word": "PEN",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/1/1c/Surface_Pen.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=pen&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "d0e1f2a3-b4c5-6789-jklm-012345678901",
+      "letter": "n",
+      "word": "NURSE",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2WWPGnUMisJeCNb6T1ymnO59BFWdOqYPdhLwb4GEpyw&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=nurse&tl=en&client=tw-ob",
+      "fallback": "👩‍⚕️"
+    },
+    {
+      "id": "d1046120-adfc-4a73-a7c6-b8950c79680a",
+      "letter": "b",
+      "word": "BEAR",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQGeJr7vbL8Nqzu0e_wcqXpYpUBzPbmOh4wanPbnj-eA&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=bear&tl=en&client=tw-ob",
+      "fallback": "🐻"
+    },
+    {
+      "id": "d4e5f6a7-b8c9-0123-defg-456789012345",
+      "letter": "e",
+      "word": "EGG",
+      "categories": [
+        "food"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRm0yGavJdXwPB6pkpOJRumyQkIODPP8Rjq8SrmES8zXA&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=egg&tl=en&client=tw-ob",
+      "fallback": "🥚"
+    },
+    {
+      "id": "d68d6f09-71ea-467b-ba20-fd35f2a3190e",
+      "letter": "c",
+      "word": "CAT",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Cat_November_2010-1a.jpg/960px-Cat_November_2010-1a.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=cat&tl=en&client=tw-ob",
+      "fallback": "🐱"
+    },
+    {
+      "id": "d6e7f8a9-b0c1-2345-pqrs-678901234567",
+      "letter": "v",
+      "word": "VAN",
+      "categories": [
+        "vehicle"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgEiLiMlvY_1kGajeMktynODkjo8gPl0XSksXgxSLJEg&s=10_silver.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=van&tl=en&client=tw-ob",
+      "fallback": "🚐"
+    },
+    {
+      "id": "d7bd7ec8-265a-465c-96ec-8120ac5511c4",
+      "letter": "c",
+      "word": "COW",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/8c/Cow_%28Fleckvieh_breed%29_Oeschinensee_Slaunger_2009-07-07.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=cow&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "d92cba94-9a8b-40c0-87d0-bbc68e22b184",
+      "letter": "f",
+      "word": "FROG",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSIWI8HWva1RNSKdWSkyqaKytfqf0wcln2LKAnJl0SH0Q&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=frog&tl=en&client=tw-ob",
+      "fallback": "🐸"
+    },
+    {
+      "id": "e1f2a3b4-c5d6-7890-klmn-123456789012",
+      "letter": "o",
+      "word": "OCTOPUS",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA7dL_UBl0B2y7Rz1YEsCbgi983lOqbF-uPy8kLkczyg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=octopus&tl=en&client=tw-ob",
+      "fallback": "🐙"
+    },
+    {
+      "id": "e5f6a7b8-c9d0-1234-efgh-567890123456",
+      "letter": "f",
+      "word": "FLOWER",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0FU1ZzWzPn1r_scZiamlD84YBMbQaaYTb_vN4PuACMA&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=flower&tl=en&client=tw-ob",
+      "fallback": "🌸"
+    },
+    {
+      "id": "e65c4bab-eb02-49eb-ad4b-7df7e4f398dd",
+      "letter": "b",
+      "word": "BELL",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/3/37/Liberty_Bell_2017a.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=bell&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "e72b7e1f-1189-41c4-9353-f38a00b5dbf1",
+      "letter": "l",
+      "word": "LAPTOP",
+      "categories": [],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9e/MacBook_Neo_Indigo_Touch_ID.png",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=laptop&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "e7f8a9b0-c1d2-3456-qrst-789012345678",
+      "letter": "x",
+      "word": "X-RAY",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8r18-Kxbv3ZBwfr7gL6jxlaCiJPjmGZgjpQDfvBe3mA&s",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=x-ray&tl=en&client=tw-ob",
+      "fallback": "🩻"
+    },
+    {
+      "id": "ee8beef9-438e-4494-9545-06ec5a4adaca",
+      "letter": "c",
+      "word": "CARROT",
+      "categories": [
+        "food"
+      ],
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/a/a2/Vegetable-Carrot-Bundle-wStalks.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=carrot&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "f2a3b4c5-d6e7-8901-lmno-234567890123",
+      "letter": "q",
+      "word": "QUAIL",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm3GTIpz-Ohwq3OlLPPIrrZQCd5rKhE3y21kHxJKufjA&s=10rnix%29.jpg",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=quail&tl=en&client=tw-ob",
+      "fallback": "🐦"
+    },
+    {
+      "id": "f3b13d01-11f1-4391-b042-82cf905aae42",
+      "letter": "m",
+      "word": "MUMMY PIG",
+      "categories": [
+        "characters"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJFBDbgXTciJrfZcpohfKPTARpHfZBXD7QldIVlis8lw&s=10",
+      "fallback": "❓",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=mummy%20pig&tl=en&client=tw-ob"
+    },
+    {
+      "id": "f6a7b8c9-d0e1-2345-fghi-678901234567",
+      "letter": "h",
+      "word": "HONEY",
+      "categories": [
+        "food"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkkwYTZycHBsC8x4oCpOgg-w0fvqgpvTZL3WxT1ngSCg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=honey&tl=en&client=tw-ob",
+      "fallback": "🍯"
+    },
+    {
+      "id": "f88395b3-fa7d-415f-b95b-ca9136806702",
+      "letter": "m",
+      "word": "MONKEY",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZETIBHztISgGwDgXiLhAnwOOOu49U52aPQgUg3LBRtg&s",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=monkey&tl=en&client=tw-ob",
+      "fallback": "🐒"
+    },
+    {
+      "id": "fa9adafe-100d-4cbb-a70f-1a6a67e5c709",
+      "letter": "p",
+      "word": "PLANE",
+      "categories": [
+        "vehicle"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJHx2iBQYrVsluxUQXztAG2-MblOjPNIQhtpV2pl4c5g&s",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=plane&tl=en&client=tw-ob",
+      "fallback": "✈️"
+    },
+    {
+      "id": "fe2640ce-ea0e-4510-a437-c9e9c7761b00",
+      "letter": "r",
+      "word": "RIVER",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYNkr5orGhtBjvWpHaE4TYXzo-NDhBQb6M5S-imQIr1w&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=river&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "b9a6164a-f023-4ba9-ac9f-833f0c416624",
+      "letter": "f",
+      "word": "FIRE ALARM",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBBm1SOUoXgLVyrWuEhJnm0lA22kPONfdkm43qlT5HbQ&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=fire%20alarm&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "fa96f789-e517-46ff-9d8e-a4313f63e9cd",
+      "letter": "s",
+      "word": "SMOKE",
+      "categories": [],
+      "imageUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f3/Ognisko_ubt_0126.jpeg/1280px-Ognisko_ubt_0126.jpeg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=thumbnail",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=smoke&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "a195b6f1-4ecc-427a-88dc-a7bf26737b0a",
+      "letter": "w",
+      "word": "WATER SPRAY",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJ9Nv2QhTFew3E_EuLtNeHR-kizW_4eEPlzdKywl16EA&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=water%20spray&tl=en&client=tw-ob",
+      "fallback": "❓"
+    }
+  ],
+  "categories": [
+    "fruit",
+    "animal",
+    "vehicle",
+    "food",
+    "characters"
+  ],
+  "stories": [
+    {
+      "id": "4e5cc029-0164-4908-85b7-dcec3c3112af",
+      "title": "The Little Monkeys",
+      "wordIds": [
+        "85dc6812-46ea-4562-890b-a3230834dcbb",
+        "f88395b3-fa7d-415f-b95b-ca9136806702",
+        "f88395b3-fa7d-415f-b95b-ca9136806702",
+        "f88395b3-fa7d-415f-b95b-ca9136806702",
+        "f88395b3-fa7d-415f-b95b-ca9136806702",
+        "f88395b3-fa7d-415f-b95b-ca9136806702",
+        "f3b13d01-11f1-4391-b042-82cf905aae42",
+        "1494e245-31cb-4ca4-b056-4f0ef67d87cb"
+      ]
+    },
+    {
+      "id": "7f616749-a6d1-48fe-acf0-b5f9835f7d5f",
+      "title": "Peppa Pig goes to the zoo",
+      "wordIds": [
+        "ba9530f4-3759-4345-9376-601539dcf841",
+        "f3b13d01-11f1-4391-b042-82cf905aae42",
+        "1bb0d332-dd7a-4001-b42f-f129452b2e4d",
+        "9c542c42-e302-42b2-a77f-d084e4f806aa",
+        "1a50c042-7d84-4abe-b0d4-1daaeafb48b8",
+        "768d00ac-780a-4c42-bc56-339acaf1bec1",
+        "10491482-9eb8-4b35-b9ab-8928a8c3465f",
+        "9992a431-9e71-4fb7-9fc8-2d4768c1bc97",
+        "1f8e06d8-f7e6-4896-be13-4e3a28bd55b6",
+        "7d53ee45-9fd0-42f0-b9a3-8f1a3758af4b",
+        "4c8ba96e-6492-45a5-8207-54e7667295ec",
+        "1494e245-31cb-4ca4-b056-4f0ef67d87cb"
+      ]
+    },
+    {
+      "id": "default-story-1",
+      "title": "Journey to the River",
+      "wordIds": [
+        "2a66ea6f-f520-459d-921b-89bd14c1918d",
+        "7c050fb2-2588-4366-b922-d64f8a3a8cee",
+        "7c050fb2-2588-4366-b922-d64f8a3a8cee",
+        "7c050fb2-2588-4366-b922-d64f8a3a8cee",
+        "7c050fb2-2588-4366-b922-d64f8a3a8cee",
+        "fe2640ce-ea0e-4510-a437-c9e9c7761b00",
+        "2ac18b9b-e90b-4b5e-b52a-9b98c2e138ef"
+      ]
+    },
+    {
+      "id": "ea7df195-f6f8-4292-9a85-a7c1a033d22e",
+      "title": "Firetruck Stops Fire Alarm",
+      "wordIds": [
+        "85dc6812-46ea-4562-890b-a3230834dcbb",
+        "f88395b3-fa7d-415f-b95b-ca9136806702",
+        "f88395b3-fa7d-415f-b95b-ca9136806702",
+        "f88395b3-fa7d-415f-b95b-ca9136806702",
+        "f88395b3-fa7d-415f-b95b-ca9136806702",
+        "f88395b3-fa7d-415f-b95b-ca9136806702",
+        "46119abe-d649-4c76-b80d-71a0b8915f75",
+        "b9a6164a-f023-4ba9-ac9f-833f0c416624",
+        "a195b6f1-4ecc-427a-88dc-a7bf26737b0a"
+      ]
+    }
+  ],
+  "config": {
+    "title": "Alphabet Adventure",
+    "instruction": "⌨️ Press a letter!",
+    "primary": "#ec4899",
+    "secondary": "#fce7f3",
+    "letterDelay": 100,
+    "imageDelay": 200,
+    "soundEnabled": true,
+    "customAudioEnabled": true,
+    "kidPin": "1234",
+    "lockDelay": 500,
+    "keyboardListener": false,
+    "maxAudioDuration": 3,
+    "kidPinEnabled": false,
+    "bingSearchEnabled": false,
+    "bubbleCount": 15,
+    "bubbleSpeed": "slow",
+    "imagePopDuration": 2
+  }
+}
