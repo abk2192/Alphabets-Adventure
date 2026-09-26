@@ -322,7 +322,7 @@ function spawnConfetti(cx, cy) {
 
 // Global listener to pop background bubbles even if they are behind other elements
 // Only active on the home screen or when the bubble game is explicitly running
-document.addEventListener('click', function(e) {
+document.addEventListener('click', async function(e) {
     const homeViewEl = document.getElementById('homeView');
     const isOnHomeScreen = homeViewEl && homeViewEl.classList.contains('active');
     if (!isOnHomeScreen && !window.isBubbleGameActive) return;
