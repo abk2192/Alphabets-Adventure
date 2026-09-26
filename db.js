@@ -1,5 +1,5 @@
 const DB_NAME = 'AlphabetAdventureDB';
-const DB_VERSION = 1;
+const DB_VERSION = 2;
 
 window.appDB = {
     db: null,
@@ -22,6 +22,10 @@ window.appDB = {
                 }
                 if (!db.objectStoreNames.contains('config')) {
                     db.createObjectStore('config', { keyPath: 'id' });
+                }
+                // v2: persistent image cache (base64 data URLs keyed by word id)
+                if (!db.objectStoreNames.contains('imageCache')) {
+                    db.createObjectStore('imageCache', { keyPath: 'id' });
                 }
             };
 
@@ -147,5 +151,27 @@ window.appDB = {
             transaction.oncomplete = () => resolve();
             transaction.onerror = (e) => reject(e.target.error);
         });
+    },
+
+    // Retrieve a base64 data URL from the imageCache store
+    getCachedImage: function(wordId) {
+        return new Promise((resolve) => {
+            if (!this.db) { resolve(null); return; }
+            try {
+                const tx = this.db.transaction(['imageCache'], 'readonly');
+                const req = tx.objectStore('imageCache').get(wordId);
+                req.onsuccess = () => resolve(req.result ? req.result.dataUrl : null);
+                req.onerror = () => resolve(null);
+            } catch(e) { resolve(null); }
+        });
+    },
+
+    // Store a base64 data URL in the imageCache store
+    setCachedImage: function(wordId, dataUrl) {
+        if (!this.db) return;
+        try {
+            const tx = this.db.transaction(['imageCache'], 'readwrite');
+            tx.objectStore('imageCache').put({ id: wordId, dataUrl });
+        } catch(e) { /* silent – cache miss is fine */ }
     }
 };

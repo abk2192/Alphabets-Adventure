@@ -33,132 +33,300 @@ function getBubbleDuration() {
     return 12 + Math.random() * 6; // normal 12-18s
 }
 
+
+// Helper: fetch an image URL and persist it as a base64 data URL in IndexedDB
+async function fetchAndCacheImage(wordId, url) {
+    try {
+        // Check IDB first
+        const cached = await window.appDB.getCachedImage(wordId);
+        if (cached) return cached;
+
+        const resp = await fetch(url, { mode: 'cors' });
+        if (!resp.ok) return url; // fallback to original URL
+        const blob = await resp.blob();
+        return await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onload = () => {
+                const dataUrl = reader.result;
+                window.appDB.setCachedImage(wordId, dataUrl);
+                resolve(dataUrl);
+            };
+            reader.onerror = () => resolve(url);
+            reader.readAsDataURL(blob);
+        });
+    } catch(e) {
+        return url; // network/CORS failure — fall back to original URL
+    }
+}
+
+// Helper: generate a center-weighted random position (0–100)
+// Uses the average of N uniform samples to bias toward the centre
+function centeredRandom(min = 10, max = 90, pulls = 3) {
+    let sum = 0;
+    for (let i = 0; i < pulls; i++) sum += Math.random();
+    return min + (sum / pulls) * (max - min);
+}
+
+// Counter used to give each bubble a unique CSS animation name
+let _bubbleAnimId = 0;
+
+
+// ── LETTER PRACTICE MODE: max total bubbles ────────────────────────────────
+const LETTER_PRACTICE_MAX = 2;   // 1 target + 1 distractor
+const LETTER_PRACTICE_MIN_SIZE = 140; // px — large enough to see the image
+
 window.spawnBubble = function(isRespawn = false, forceTargetOverride = false) {
     const bgContainer = document.querySelector('.background-decoration');
     if (!bgContainer) return;
-    
-    // Safety check so we don't spawn infinitely if not needed
+
+    const isLetterPractice = window.isBubbleGameActive && window.bubbleGameLetterPractice;
+
+    // ── Cap total bubble count ──────────────────────────────────────────────
     const currentBubbles = bgContainer.querySelectorAll('.bubble:not(.popped)').length;
-    const maxBubbles = appState.config.bubbleCount !== undefined ? appState.config.bubbleCount : 5;
+    const maxBubbles = isLetterPractice
+        ? LETTER_PRACTICE_MAX
+        : (appState.config.bubbleCount !== undefined ? appState.config.bubbleCount : 5);
     if (isRespawn && !forceTargetOverride && currentBubbles >= maxBubbles) return;
-    
+
     const bubble = document.createElement('div');
     bubble.className = 'bubble';
     let preloadedWord = null;
     let isTarget = false;
-    let randomLetter = null;
-    
-    if (window.isBubbleGameActive) {
-        if (window.bubbleGameLetterPractice) {
-            bubble.classList.add('has-letter');
-            
-            let forceTarget = forceTargetOverride;
-            let targetCount = 0;
-            if (window.bubbleGameTargetLetter) {
-                targetCount = Array.from(bgContainer.querySelectorAll('.bubble:not(.popped)')).filter(b => b.dataset.letter === window.bubbleGameTargetLetter).length;
-                if (targetCount === 0) forceTarget = true;
-            }
-            
-            let assignedLetter = '';
-            
-            // Limit targetCount to < 1 so there's never more than 1 target unless forced.
-            if (window.bubbleGameTargetLetter && (forceTarget || (Math.random() < 0.3 && targetCount < 1))) {
-                isTarget = true;
-                assignedLetter = window.bubbleGameTargetLetter;
-            } else {
-                const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                randomLetter = window.bubbleGameTargetLetter || '';
-                while (randomLetter === (window.bubbleGameTargetLetter || '')) {
-                    randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
-                }
-                assignedLetter = randomLetter;
-            }
-            
-            bubble.textContent = assignedLetter;
-            bubble.dataset.letter = assignedLetter;
-            
-            // ALWAYS assign a preloaded word for ANY letter (if available) so popping it later works!
-            const matching = appState.words.filter(w => w.letter.toUpperCase() === assignedLetter.toUpperCase());
-            if (matching.length > 0) preloadedWord = matching[Math.floor(Math.random() * matching.length)];
-            
+
+    // ── Word / letter assignment ────────────────────────────────────────────
+    if (isLetterPractice) {
+        bubble.classList.add('has-letter');
+
+        // In letter practice: decide target vs. distractor
+        const existingTargetCount = Array.from(
+            bgContainer.querySelectorAll('.bubble:not(.popped)')
+        ).filter(b => b.dataset.letter === window.bubbleGameTargetLetter).length;
+
+        // Force target if none exists OR explicitly overridden
+        if (forceTargetOverride || existingTargetCount === 0) {
+            isTarget = true;
+        }
+        // else: spawn a distractor
+
+        let assignedLetter;
+        if (isTarget) {
+            assignedLetter = window.bubbleGameTargetLetter || 'A';
         } else {
-            if (appState.words.length > 0) {
-                preloadedWord = appState.words[Math.floor(Math.random() * appState.words.length)];
-            }
+            // Pick a random letter that is NOT the target
+            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+            do {
+                assignedLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
+            } while (assignedLetter === window.bubbleGameTargetLetter);
+        }
+
+        bubble.textContent = assignedLetter;
+        bubble.dataset.letter = assignedLetter;
+        bubble.dataset.isTarget = isTarget ? '1' : '0';
+
+        // Always assign a word (used for the pop image)
+        const matching = appState.words.filter(
+            w => w.letter.toUpperCase() === assignedLetter.toUpperCase()
+        );
+        if (matching.length > 0) {
+            preloadedWord = matching[Math.floor(Math.random() * matching.length)];
+        }
+
+    } else if (window.isBubbleGameActive) {
+        // Normal (non-practice) bubble game
+        if (appState.words.length > 0) {
+            preloadedWord = appState.words[Math.floor(Math.random() * appState.words.length)];
         }
     }
-    
-    // Determine size: Target letters are always the biggest (180px - 260px)
-    // Non-target letters are smaller (60px - 140px)
+    // else: decorative background bubble — no word needed
+
+    // ── Size ────────────────────────────────────────────────────────────────
     let size;
-    if (isTarget) {
+    if (isLetterPractice) {
+        // Both target and distractor are large enough to show an image
+        size = Math.floor(Math.random() * 80) + LETTER_PRACTICE_MIN_SIZE;
+    } else if (isTarget) {
         size = Math.floor(Math.random() * 80) + 180;
     } else {
         size = Math.floor(Math.random() * 80) + 60;
     }
-    bubble.style.width = `${size}px`;
+    bubble.style.width  = `${size}px`;
     bubble.style.height = `${size}px`;
-    if (window.isBubbleGameActive && window.bubbleGameLetterPractice) {
-        bubble.style.fontSize = `${size * 0.5}px`;
+    if (isLetterPractice) {
+        bubble.style.fontSize = `${size * 0.48}px`;
     }
-    
-    if (Math.random() < 0.7) {
-        bubble.style.left = `${10 + Math.random() * 75}%`;
-        bubble.style.top = `${10 + Math.random() * 75}%`;
-    } else {
-        const edge = Math.floor(Math.random() * 4);
-        if (edge === 0) { // top
-            bubble.style.left = `${Math.random() * 100}%`;
-            bubble.style.top = `-10%`;
-        } else if (edge === 1) { // right
-            bubble.style.left = `100%`;
-            bubble.style.top = `${Math.random() * 100}%`;
-        } else if (edge === 2) { // bottom
-            bubble.style.left = `${Math.random() * 100}%`;
-            bubble.style.top = `100%`;
-        } else { // left
-            bubble.style.left = `-10%`;
-            bubble.style.top = `${Math.random() * 100}%`;
-        }
-    }
-    
-    // Since animation is now forwards, we shouldn't use negative delay for respawns 
-    // unless it's initial load to desync them. 
-    if (!isRespawn) {
-        bubble.style.animationDelay = `-${Math.random() * 12}s`;
-    } else {
-        bubble.style.animationDelay = `0s`;
-    }
-    bubble.style.animationDuration = `${getBubbleDuration()}s`;
-    
-    // When animation ends, bubble has fully faded out. Remove and spawn a new one!
+
+    // ── Center-weighted positioning ─────────────────────────────────────────
+    const strongCenter = Math.random() < 0.5;
+    const pulls = strongCenter ? 4 : 2;
+    const leftPct = centeredRandom(5, 88, pulls);
+    const topPct  = centeredRandom(5, 85, pulls);
+    bubble.style.left = `${leftPct}%`;
+    bubble.style.top  = `${topPct}%`;
+
+    // ── Per-bubble unique float animation ───────────────────────────────────
+    const animId = `floatB${++_bubbleAnimId}`;
+    const dx1 = (Math.random() - 0.5) * 20;
+    const dy1 = (Math.random() - 0.5) * 20;
+    const dx2 = (Math.random() - 0.5) * 30;
+    const dy2 = (Math.random() - 0.5) * 30;
+    const dx3 = (Math.random() - 0.5) * 20;
+    const dy3 = (Math.random() - 0.5) * 20;
+    const styleEl = document.createElement('style');
+    styleEl.textContent = `
+      @keyframes ${animId} {
+        0%   { transform: translate(0,0) scale(0.5); opacity: 0; }
+        10%  { opacity: 1; transform: translate(${dx1}vw,${dy1}vh) scale(1); }
+        40%  { transform: translate(${dx2}vw,${dy2}vh) scale(1.05); }
+        70%  { transform: translate(${dx3}vw,${dy3}vh) scale(0.97); }
+        90%  { opacity: 1; transform: translate(${dx1 * 0.5}vw,${dy1 * 0.5}vh) scale(1); }
+        100% { transform: translate(0,0) scale(0.5); opacity: 0; }
+      }
+    `;
+    document.head.appendChild(styleEl);
+
+    const duration = getBubbleDuration();
+    const delay = isRespawn ? 0 : -(Math.random() * 12);
+    bubble.style.animation = `${animId} ${duration}s ease-in-out ${delay}s forwards`;
+
+    // When animation ends, remove + replace
     bubble.addEventListener('animationend', (e) => {
-        if (e.animationName === 'floatBubble') {
-            if (bubble.parentNode) bubble.remove();
-            if (window.isBubbleGameActive) {
-                // If it was the target letter that just naturally left, force spawn a replacement!
-                window.spawnBubble(true, isTarget); 
-            } else {
-                window.spawnBubble(true);
-            }
+        if (e.animationName !== animId) return;
+        if (bubble.parentNode) bubble.remove();
+        styleEl.remove();
+
+        if (isLetterPractice) {
+            // Only force a replacement target if none exist on screen
+            const remaining = Array.from(
+                (document.querySelector('.background-decoration') || { querySelectorAll: () => [] })
+                    .querySelectorAll('.bubble:not(.popped)')
+            ).filter(b => b.dataset.letter === window.bubbleGameTargetLetter).length;
+            window.spawnBubble(true, remaining === 0);
+        } else if (window.isBubbleGameActive) {
+            window.spawnBubble(true, isTarget);
+        } else {
+            window.spawnBubble(true);
         }
     });
-        
-        if (preloadedWord) {
-            bubble.dataset.wordId = preloadedWord.id;
-            const cacheUrl = localStorage.getItem(`img_${preloadedWord.id}`);
-            const urlToLoad = cacheUrl || preloadedWord.imageUrl || preloadedWord.url;
-            if (urlToLoad && urlToLoad !== 'undefined' && urlToLoad !== window.location.href && !urlToLoad.endsWith('/')) {
-                const img = new Image();
-                img.src = urlToLoad;
-            }
+
+    // ── Image pre-caching ───────────────────────────────────────────────────
+    if (preloadedWord) {
+        bubble.dataset.wordId = preloadedWord.id;
+        const rawUrl = preloadedWord.imageUrl || preloadedWord.url || '';
+        if (rawUrl && rawUrl !== 'undefined' && !rawUrl.endsWith('/')) {
+            fetchAndCacheImage(preloadedWord.id, rawUrl).then(resolvedUrl => {
+                bubble.dataset.cachedImgUrl = resolvedUrl;
+            });
         }
-    
+    }
+
     bgContainer.appendChild(bubble);
 };
 
+
+
+/* ========================================================= BUBBLE POP SOUNDS ========================================================= */
+function playBubblePopSound(soundType) {
+    try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const t = ctx.currentTime;
+
+        if (soundType === 'chime') {
+            // Bright rising bell tone
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain); gain.connect(ctx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(600, t);
+            osc.frequency.exponentialRampToValueAtTime(1200, t + 0.12);
+            gain.gain.setValueAtTime(0.35, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.5);
+            osc.start(t); osc.stop(t + 0.5);
+
+        } else if (soundType === 'tada') {
+            // 3-note ascending fanfare chord
+            [[440, 0], [554, 0.08], [659, 0.16]].forEach(([freq, delay]) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(freq, t + delay);
+                osc.frequency.exponentialRampToValueAtTime(freq * 1.5, t + delay + 0.15);
+                gain.gain.setValueAtTime(0.25, t + delay);
+                gain.gain.exponentialRampToValueAtTime(0.001, t + delay + 0.4);
+                osc.start(t + delay); osc.stop(t + delay + 0.45);
+            });
+
+        } else if (soundType === 'pop') {
+            // Satisfying rubbery thwock
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.connect(gain); gain.connect(ctx.destination);
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(300, t);
+            osc.frequency.exponentialRampToValueAtTime(80, t + 0.06);
+            gain.gain.setValueAtTime(0.5, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+            osc.start(t); osc.stop(t + 0.2);
+            // add a soft noise click
+            const buf = ctx.createBuffer(1, ctx.sampleRate * 0.04, ctx.sampleRate);
+            const data = buf.getChannelData(0);
+            for (let i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
+            const src = ctx.createBufferSource();
+            const ng = ctx.createGain();
+            src.buffer = buf; src.connect(ng); ng.connect(ctx.destination);
+            ng.gain.setValueAtTime(0.15, t);
+            src.start(t);
+
+        } else if (soundType === 'sparkle') {
+            // Rapid glittery ascending arpeggio
+            [523, 659, 784, 1047, 1319].forEach((freq, i) => {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain); gain.connect(ctx.destination);
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(freq, t + i * 0.055);
+                gain.gain.setValueAtTime(0.2, t + i * 0.055);
+                gain.gain.exponentialRampToValueAtTime(0.001, t + i * 0.055 + 0.2);
+                osc.start(t + i * 0.055); osc.stop(t + i * 0.055 + 0.22);
+            });
+        }
+    } catch(err) { /* silent on unsupported browsers */ }
+}
+
+/* ========================================================= CONFETTI BURST ========================================================= */
+function spawnConfetti(cx, cy) {
+    const colors = ['#ff7eb3','#6c63ff','#ffd166','#4ecdc4','#ff5d73','#a8edea','#fed6e3'];
+    const count = 18;
+    for (let i = 0; i < count; i++) {
+        const p = document.createElement('div');
+        p.className = 'confetti-particle';
+        const angle = (i / count) * Math.PI * 2 + (Math.random() - 0.5) * 0.5;
+        const dist = 60 + Math.random() * 80;
+        const endX = Math.cos(angle) * dist;
+        const endY = Math.sin(angle) * dist - 40; // slight upward bias
+        p.style.left = `${cx}px`;
+        p.style.top  = `${cy}px`;
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.width  = `${6 + Math.random() * 8}px`;
+        p.style.height = `${6 + Math.random() * 8}px`;
+        p.style.borderRadius = Math.random() < 0.5 ? '50%' : '2px';
+        p.style.setProperty('--cx', `${endX}px`);
+        p.style.setProperty('--cy', `${endY}px`);
+        p.style.setProperty('--cr', `${(Math.random() - 0.5) * 540}deg`);
+        const dur = 0.5 + Math.random() * 0.4;
+        p.style.animationDuration = `${dur}s`;
+        p.style.animationDelay = `${Math.random() * 0.06}s`;
+        document.body.appendChild(p);
+        p.addEventListener('animationend', () => p.remove());
+    }
+}
+
 // Global listener to pop background bubbles even if they are behind other elements
+// Only active on the home screen or when the bubble game is explicitly running
 document.addEventListener('click', function(e) {
+    const homeViewEl = document.getElementById('homeView');
+    const isOnHomeScreen = homeViewEl && homeViewEl.classList.contains('active');
+    if (!isOnHomeScreen && !window.isBubbleGameActive) return;
     const bubbles = document.querySelectorAll('.bubble:not(.popped)');
     for (let bubble of bubbles) {
         const rect = bubble.getBoundingClientRect();
@@ -175,12 +343,31 @@ document.addEventListener('click', function(e) {
             if (window.isBubbleGameActive) {
                 if (window.bubbleGameLetterPractice) {
                     if (bubble.dataset.letter === window.bubbleGameTargetLetter) {
+                        // 1. Try the word already assigned to this bubble
                         if (bubble.dataset.wordId) {
                             showImageWord = appState.words.find(w => w.id === bubble.dataset.wordId);
                         }
+                        // 2. If not found (bubble spawned before target was set), look up fresh from appState
+                        if (!showImageWord) {
+                            const fresh = appState.words.filter(
+                                w => w.letter.toUpperCase() === window.bubbleGameTargetLetter
+                            );
+                            if (fresh.length > 0) {
+                                showImageWord = fresh[Math.floor(Math.random() * fresh.length)];
+                                // Also resolve the image URL now for instant display
+                                const rawUrl = showImageWord.imageUrl || showImageWord.url || '';
+                                if (rawUrl && rawUrl !== 'undefined' && !rawUrl.endsWith('/')) {
+                                    fetchAndCacheImage(showImageWord.id, rawUrl).then(url => {
+                                        bubble.dataset.cachedImgUrl = url;
+                                    });
+                                }
+                            }
+                        }
+                        // 3. Absolute fallback — show the letter initial
                         if (!showImageWord) showImageWord = { id: 'fake', fallback: bubble.dataset.letter };
-                        setTimeout(() => { pickNewBubbleGameLetter(); }, 1000);
+                        setTimeout(() => { pickNewBubbleGameLetter(); }, 1200);
                     }
+                    // Non-target letter tapped — just pop silently (small beep, no image/confetti)
                 } else {
                     if (bubble.dataset.wordId) {
                         showImageWord = appState.words.find(w => w.id === bubble.dataset.wordId);
@@ -189,6 +376,7 @@ document.addEventListener('click', function(e) {
                     if (!showImageWord && appState.words.length > 0) showImageWord = { id: 'fake', fallback: '?' };
                 }
             }
+
             
             bubble.classList.add('popped');
             
@@ -198,8 +386,10 @@ document.addEventListener('click', function(e) {
                 
                 let urlToUse = '';
                 if (showImageWord.id !== 'fake') {
-                    const cacheUrl = localStorage.getItem(`img_${showImageWord.id}`);
-                    urlToUse = cacheUrl || showImageWord.imageUrl || showImageWord.url || '';
+                    // Prefer the pre-cached data URL stored on the bubble element,
+                    // fall back to the word's raw URL if caching is still in progress
+                    urlToUse = bubble.dataset.cachedImgUrl
+                        || showImageWord.imageUrl || showImageWord.url || '';
                 }
                 
                 const fallbackRaw = (showImageWord.fallback || showImageWord.word || '?').charAt(0).toUpperCase();
@@ -212,35 +402,40 @@ document.addEventListener('click', function(e) {
                     img.onerror = function() { this.src = svgFallback; };
                 }
                 
-                img.style.left = `${rect.left + rect.width / 2}px`;
-                img.style.top = `${rect.top + rect.height / 2}px`;
-                img.style.width = `${rect.width}px`;
+                const cx = rect.left + rect.width / 2;
+                const cy = rect.top + rect.height / 2;
+                img.style.left = `${cx}px`;
+                img.style.top  = `${cy}px`;
+                img.style.width  = `${rect.width}px`;
                 img.style.height = `${rect.height}px`;
                 
+                // Apply the configured pop animation
+                const animName = appState.config.popAnimation || 'popBounce';
                 const duration = appState.config.imagePopDuration !== undefined ? appState.config.imagePopDuration : 1.0;
-                img.style.animationDuration = `${duration}s`;
+                img.style.animation = `${animName} ${duration}s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards`;
                 
                 document.body.appendChild(img);
-                
-                img.addEventListener('animationend', () => {
-                    img.remove();
-                });
-            }
-            
-            if (appState.config.soundEnabled) {
+                img.addEventListener('animationend', () => img.remove());
+
+                // 🎉 Celebration: confetti burst + configured pop sound
+                spawnConfetti(cx, cy);
+                if (appState.config.soundEnabled) {
+                    playBubblePopSound(appState.config.popSound || 'chime');
+                }
+
+            } else if (appState.config.soundEnabled) {
+                // Plain decorative pop (no image) — keep a small generic beep
                 try {
                     const ctx = new (window.AudioContext || window.webkitAudioContext)();
                     const osc = ctx.createOscillator();
                     const gain = ctx.createGain();
-                    osc.connect(gain);
-                    gain.connect(ctx.destination);
+                    osc.connect(gain); gain.connect(ctx.destination);
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(400 + Math.random()*200, ctx.currentTime);
                     osc.frequency.exponentialRampToValueAtTime(800 + Math.random()*200, ctx.currentTime + 0.1);
-                    gain.gain.setValueAtTime(0.3, ctx.currentTime);
+                    gain.gain.setValueAtTime(0.15, ctx.currentTime);
                     gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.1);
-                    osc.start();
-                    osc.stop(ctx.currentTime + 0.1);
+                    osc.start(); osc.stop(ctx.currentTime + 0.1);
                 } catch(err) {}
             }
             
@@ -253,6 +448,7 @@ document.addEventListener('click', function(e) {
         }
     }
 });
+
 
 /* ========================================================= FIND WORD ========================================================= */ function getWordForLetter( letter, category ) {
     let options = appState.words.filter( item => 
@@ -380,8 +576,9 @@ function showHomeView() {
     document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
     homeView.classList.add("active");
     document.getElementById("backHomeBtn").style.display = "none";
-    document.getElementById("kidModeButton").style.display = "none";
-    document.getElementById("muteBtn").style.display = "none";
+    document.getElementById("kidModeButton").style.display = "inline-flex";
+    document.getElementById("muteBtn").style.display = "inline-flex";
+    updateMuteButtonIcon();
     if (document.getElementById("kidModeMuteBtn")) document.getElementById("kidModeMuteBtn").style.display = "none";
 }
 
@@ -393,10 +590,9 @@ function showGameView(mode) {
     document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
     gameView.classList.add("active"); 
     document.getElementById("backHomeBtn").style.display = "inline-flex";
-    document.getElementById("kidModeButton").style.display = "inline-flex";
-    document.getElementById("muteBtn").style.display = "inline-flex";
+    document.getElementById("kidModeButton").style.display = "none";
+    document.getElementById("muteBtn").style.display = "none";
     if (document.getElementById("kidModeMuteBtn")) document.getElementById("kidModeMuteBtn").style.display = "none";
-    updateMuteButtonIcon();
     playLetter(currentLetter);
 }
 
@@ -905,41 +1101,86 @@ document.getElementById("closeStoryPlayer").addEventListener("click", () => {
     stopCurrentAudio();
 });
 
+// Returns the logical bounding box of a card in canvas space (accounts for its own scale transform)
+function getCardLogicalRect(card) {
+    const scale = parseFloat(card.dataset.scale || 1);
+    const w = card.offsetWidth * scale;
+    const h = card.offsetHeight * scale;
+    return {
+        left:   card.offsetLeft,
+        top:    card.offsetTop,
+        right:  card.offsetLeft + w,
+        bottom: card.offsetTop  + h,
+    };
+}
+
+// Remove groupId from any group that is down to 0 or 1 member
+function cleanupSingletonGroups() {
+    const groupCounts = {};
+    document.querySelectorAll('.story-card-item[data-group-id]').forEach(el => {
+        const gId = el.dataset.groupId;
+        groupCounts[gId] = (groupCounts[gId] || 0) + 1;
+    });
+    Object.entries(groupCounts).forEach(([gId, count]) => {
+        if (count < 2) {
+            document.querySelectorAll(`[data-group-id="${gId}"]`).forEach(el => {
+                el.removeAttribute('data-group-id');
+                el.classList.remove('grouped-card');
+            });
+        }
+    });
+}
+
 function checkStickyCollisions(droppedEls) {
-    const allCards = Array.from(document.querySelectorAll(".story-card-item:not(.docked-bubble)"));
+    const allCards = Array.from(document.querySelectorAll('.story-card-item:not(.docked-bubble)'));
     const droppedSet = new Set(droppedEls);
     const otherCards = allCards.filter(c => !droppedSet.has(c));
-    
+
     let collidedCards = new Set();
-    
+
     droppedEls.forEach(dEl => {
-        const dRect = dEl.getBoundingClientRect();
+        const dRect = getCardLogicalRect(dEl);
         otherCards.forEach(oEl => {
-            const oRect = oEl.getBoundingClientRect();
-            if (!(oRect.left > dRect.right || oRect.right < dRect.left || oRect.top > dRect.bottom || oRect.bottom < dRect.top)) {
-                collidedCards.add(oEl);
-            }
+            const oRect = getCardLogicalRect(oEl);
+            const overlap = !(oRect.left > dRect.right || oRect.right < dRect.left ||
+                               oRect.top  > dRect.bottom || oRect.bottom < dRect.top);
+            if (overlap) collidedCards.add(oEl);
         });
     });
-    
+
     if (collidedCards.size > 0) {
-        const newGroupId = "group_" + Date.now();
+        const newGroupId = 'group_' + Date.now();
         let allToMerge = new Set([...droppedEls, ...collidedCards]);
-        
+
+        // Pull in every member from any existing group being merged
         collidedCards.forEach(c => {
             const gId = c.dataset.groupId;
             if (gId) {
-                document.querySelectorAll(`[data-group-id="${gId}"]`).forEach(sibling => allToMerge.add(sibling));
+                document.querySelectorAll(`[data-group-id="${gId}"]`).forEach(
+                    sibling => allToMerge.add(sibling)
+                );
             }
         });
-        
+        droppedEls.forEach(dEl => {
+            const gId = dEl.dataset.groupId;
+            if (gId) {
+                document.querySelectorAll(`[data-group-id="${gId}"]`).forEach(
+                    sibling => allToMerge.add(sibling)
+                );
+            }
+        });
+
         allToMerge.forEach(c => {
             c.dataset.groupId = newGroupId;
-            c.classList.add("grouped-card");
-            c.dataset.tapState = "bottom"; 
+            c.classList.add('grouped-card');
+            c.dataset.tapState = 'bottom';
         });
     }
+
+    // After any collision check, clean up groups that now have < 2 members
+    cleanupSingletonGroups();
 }
+
 
 function performDock(edge, movingCards) {
     const leader = movingCards[0].el;
@@ -1610,6 +1851,19 @@ window.copyUrl = function(id) {
     document.getElementById( "configBubbleCount" ).value = appState.config.bubbleCount !== undefined ? appState.config.bubbleCount : 5;
     document.getElementById( "configBubbleSpeed" ).value = appState.config.bubbleSpeed || 'normal';
     document.getElementById( "configImagePopDuration" ).value = appState.config.imagePopDuration !== undefined ? appState.config.imagePopDuration : 1.0;
+
+    // Pop animation picker
+    const popAnim = appState.config.popAnimation || 'popBounce';
+    document.querySelectorAll('.pop-anim-option').forEach(el => {
+        el.classList.toggle('selected', el.dataset.anim === popAnim);
+    });
+
+    // Pop sound picker
+    const popSnd = appState.config.popSound || 'chime';
+    document.querySelectorAll('.pop-sound-option').forEach(el => {
+        el.classList.toggle('selected', el.dataset.sound === popSnd);
+    });
+
 } document.getElementById( "saveConfigButton" ) .addEventListener( "click", () => { appState.config.title = document.getElementById( "configTitle" ) .value .trim() || "Alphabets Adventure"; appState.config.instruction = document.getElementById( "configInstruction" ) .value .trim() || "Tap on a letter to hear its sound and discover a word!"; appState.config.letterDelay = Number( document.getElementById( "configLetterDelay" ) .value ) || 600; appState.config.imageDelay = Number( document.getElementById( "configImageDelay" ) .value ) || 800; appState.config.soundEnabled = document.getElementById( "configSound" ) .checked;
     appState.config.customAudioEnabled = document.getElementById( "configCustomAudio" ).checked;
     appState.config.kidPin = document.getElementById( "configKidPin" ).value.trim() || "1234";
@@ -1621,28 +1875,56 @@ window.copyUrl = function(id) {
     appState.config.bubbleCount = Number( document.getElementById( "configBubbleCount" ).value );
     appState.config.bubbleSpeed = document.getElementById( "configBubbleSpeed" ).value;
     appState.config.imagePopDuration = Number( document.getElementById( "configImagePopDuration" ).value ) || 1.0;
+
+    // Save pop animation selection
+    const selAnim = document.querySelector('.pop-anim-option.selected');
+    appState.config.popAnimation = selAnim ? selAnim.dataset.anim : 'popBounce';
+
+    // Save pop sound selection
+    const selSnd = document.querySelector('.pop-sound-option.selected');
+    appState.config.popSound = selSnd ? selSnd.dataset.sound : 'chime';
+
     saveState(); applyConfiguration(); 
     if (typeof updateMuteButtonIcon === 'function') updateMuteButtonIcon();
     showToast( "Configuration saved!" ); } );
+
+// Tile picker interaction — pop animation
+document.getElementById('popAnimPicker').addEventListener('click', (e) => {
+    const tile = e.target.closest('.pop-anim-option');
+    if (!tile) return;
+    document.querySelectorAll('.pop-anim-option').forEach(el => el.classList.remove('selected'));
+    tile.classList.add('selected');
+});
+
+// Tile picker interaction — pop sound (also preview the sound on click)
+document.getElementById('popSoundPicker').addEventListener('click', (e) => {
+    const tile = e.target.closest('.pop-sound-option');
+    if (!tile) return;
+    document.querySelectorAll('.pop-sound-option').forEach(el => el.classList.remove('selected'));
+    tile.classList.add('selected');
+    playBubblePopSound(tile.dataset.sound); // preview
+});
+
+
 
 function pickNewBubbleGameLetter() {
     if (!window.bubbleGameLetterQueue || window.bubbleGameLetterQueue.length === 0) {
         window.bubbleGameLetterQueue = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split('').sort(() => Math.random() - 0.5);
     }
     window.bubbleGameTargetLetter = window.bubbleGameLetterQueue.pop();
-    
+
     const display = document.getElementById('bubbleTargetLetterDisplay');
     if (display) display.textContent = window.bubbleGameTargetLetter;
-    
-    // Do NOT reset screen! Just ensure it's spawned if not present.
-    setTimeout(() => {
-        const bgContainer = document.querySelector('.background-decoration');
-        if (!bgContainer) return;
-        const targetCount = Array.from(bgContainer.querySelectorAll('.bubble:not(.popped)')).filter(b => b.dataset.letter === window.bubbleGameTargetLetter).length;
-        if (targetCount < 1) {
-            window.spawnBubble(true, true); // force spawn
-        }
-    }, 200);
+
+    // Clear ALL existing bubbles so the new set spawns cleanly with correct words/images
+    const bgContainer = document.querySelector('.background-decoration');
+    if (bgContainer) {
+        bgContainer.querySelectorAll('.bubble').forEach(b => b.remove());
+    }
+
+    // Spawn target bubble immediately, then the distractor shortly after
+    window.spawnBubble(false, true);   // target
+    setTimeout(() => window.spawnBubble(false, false), 150); // distractor
 }
 
 const practiceBtn = document.getElementById('bubbleLetterPracticeBtn');
@@ -1654,19 +1936,7 @@ if (practiceBtn) {
             practiceBtn.style.background = 'var(--primary)';
             practiceBtn.style.color = 'white';
             display.style.display = 'flex';
-            
-            // Inject letters into existing bubbles smoothly
-            document.querySelectorAll('.bubble:not(.popped)').forEach(bubble => {
-                if (!bubble.dataset.letter) {
-                    const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                    const randomLetter = alphabet[Math.floor(Math.random() * alphabet.length)];
-                    bubble.textContent = randomLetter;
-                    bubble.dataset.letter = randomLetter;
-                    bubble.classList.add('has-letter');
-                    const size = parseInt(bubble.style.width);
-                    bubble.style.fontSize = `${size * 0.5}px`;
-                }
-            });
+            // pickNewBubbleGameLetter clears old bubbles and spawns a fresh target+distractor pair
             pickNewBubbleGameLetter();
         } else {
             practiceBtn.style.background = '';
@@ -1688,6 +1958,8 @@ function showBubbleGameView() {
     const view = document.getElementById("bubbleGameView");
     if (view) view.classList.add("active");
     document.getElementById("backHomeBtn").style.display = "inline-flex";
+    document.getElementById("kidModeButton").style.display = "none";
+    document.getElementById("muteBtn").style.display = "none";
     if (practiceBtn) practiceBtn.style.display = "inline-flex";
     
     window.isBubbleGameActive = true;
@@ -1876,7 +2148,11 @@ function exitKidMode() {
     document.getElementById("pinModal").classList.remove("active");
     
     const kidModeBtn = document.getElementById("kidModeButton");
-    if (kidModeBtn) kidModeBtn.style.display = "inline-flex";
+    const homeViewActive = document.getElementById("homeView") && document.getElementById("homeView").classList.contains("active");
+    if (kidModeBtn) kidModeBtn.style.display = homeViewActive ? "inline-flex" : "none";
+    
+    const muteBtnEl = document.getElementById("muteBtn");
+    if (muteBtnEl) muteBtnEl.style.display = homeViewActive ? "inline-flex" : "none";
     
     const storyKidModeBtn = document.getElementById("storyKidModeBtn");
     if (storyKidModeBtn) storyKidModeBtn.style.display = "inline-flex";

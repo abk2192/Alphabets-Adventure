@@ -384,6 +384,9 @@
     /* font-size set dynamically based on size */
 }
 
+/* ====================================================
+   BUBBLE POP IMAGE OVERLAY
+   ==================================================== */
 .bubble-image-popup {
     position: fixed;
     z-index: 50;
@@ -393,12 +396,118 @@
     background: rgba(255, 255, 255, 0.9);
     box-sizing: border-box;
     box-shadow: inset 0 0 20px rgba(255,255,255,0.8), 0 10px 30px rgba(0,0,0,0.2);
-    animation: bubbleImagePop 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    /* animation name is applied dynamically via JS */
 }
 
-@keyframes bubbleImagePop {
-    0% { transform: translate(-50%, -50%); opacity: 0; }
-    20% { transform: translate(-50%, -50%); opacity: 1; }
-    80% { transform: translate(-50%, -50%); opacity: 1; }
-    100% { transform: translate(-50%, -50%); opacity: 0; }
+/* 1. Bounce — gentle spring scale-in, hold, fade out */
+@keyframes popBounce {
+    0%   { transform: translate(-50%,-50%) scale(0.2); opacity: 0; }
+    30%  { transform: translate(-50%,-50%) scale(1.15); opacity: 1; }
+    45%  { transform: translate(-50%,-50%) scale(0.95); }
+    60%  { transform: translate(-50%,-50%) scale(1.05); }
+    75%  { transform: translate(-50%,-50%) scale(1); }
+    88%  { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+    100% { transform: translate(-50%,-50%) scale(0.6); opacity: 0; }
 }
+
+/* 2. Spin — rotate + scale in, hold, spin-out */
+@keyframes popSpin {
+    0%   { transform: translate(-50%,-50%) scale(0.1) rotate(-180deg); opacity: 0; }
+    35%  { transform: translate(-50%,-50%) scale(1.1) rotate(10deg); opacity: 1; }
+    55%  { transform: translate(-50%,-50%) scale(1) rotate(0deg); }
+    85%  { transform: translate(-50%,-50%) scale(1) rotate(0deg); opacity: 1; }
+    100% { transform: translate(-50%,-50%) scale(0.5) rotate(180deg); opacity: 0; }
+}
+
+/* 3. Explode — burst outward, ring-pulse, fade */
+@keyframes popExplode {
+    0%   { transform: translate(-50%,-50%) scale(0.3); opacity: 0; box-shadow: inset 0 0 20px rgba(255,255,255,0.8), 0 0 0 0px rgba(255,200,0,0); }
+    20%  { transform: translate(-50%,-50%) scale(1.4); opacity: 1; box-shadow: inset 0 0 20px rgba(255,255,255,0.8), 0 0 0 12px rgba(255,200,0,0.5); }
+    45%  { transform: translate(-50%,-50%) scale(1); box-shadow: inset 0 0 20px rgba(255,255,255,0.8), 0 0 0 24px rgba(255,200,0,0); }
+    80%  { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+    100% { transform: translate(-50%,-50%) scale(0.7); opacity: 0; }
+}
+
+/* 4. Rainbow glow — scale pulse with shifting hue glow */
+@keyframes popRainbow {
+    0%   { transform: translate(-50%,-50%) scale(0.2); opacity: 0; filter: hue-rotate(0deg) brightness(1); }
+    25%  { transform: translate(-50%,-50%) scale(1.2); opacity: 1; filter: hue-rotate(60deg) brightness(1.3); }
+    50%  { transform: translate(-50%,-50%) scale(1); filter: hue-rotate(180deg) brightness(1.1); }
+    75%  { transform: translate(-50%,-50%) scale(1.05); opacity: 1; filter: hue-rotate(300deg) brightness(1.2); }
+    90%  { transform: translate(-50%,-50%) scale(1); opacity: 1; filter: hue-rotate(360deg) brightness(1); }
+    100% { transform: translate(-50%,-50%) scale(0.5); opacity: 0; filter: hue-rotate(360deg); }
+}
+
+/* ====================================================
+   CONFETTI PARTICLES (celebration burst)
+   ==================================================== */
+.confetti-particle {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+    pointer-events: none;
+    z-index: 9999;
+    animation: confettiFall linear forwards;
+}
+@keyframes confettiFall {
+    0%   { transform: translate(0,0) rotate(0deg) scale(1); opacity: 1; }
+    100% { transform: translate(var(--cx), var(--cy)) rotate(var(--cr)) scale(0.4); opacity: 0; }
+}
+
+/* preview swatches in settings */
+.pop-anim-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 10px;
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.6);
+    transition: border-color 0.2s, background 0.2s;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-align: center;
+    user-select: none;
+}
+.pop-anim-option:hover { background: rgba(255,255,255,0.9); }
+.pop-anim-option.selected {
+    border-color: var(--primary);
+    background: rgba(108,99,255,0.1);
+    color: var(--primary);
+}
+.pop-anim-option .preview-bubble {
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, rgba(255,255,255,0.9), rgba(108,99,255,0.4));
+    box-shadow: inset -4px -4px 8px rgba(0,0,0,0.1), 0 4px 12px rgba(108,99,255,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+}
+.pop-sound-option {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 10px;
+    border: 2px solid var(--border);
+    border-radius: 14px;
+    cursor: pointer;
+    background: rgba(255,255,255,0.6);
+    transition: border-color 0.2s, background 0.2s;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--muted);
+    text-align: center;
+    user-select: none;
+}
+.pop-sound-option:hover { background: rgba(255,255,255,0.9); }
+.pop-sound-option.selected {
+    border-color: var(--secondary);
+    background: rgba(255,126,179,0.1);
+    color: var(--secondary);
+}
+.pop-sound-option .sound-icon { font-size: 1.8rem; }
