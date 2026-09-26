@@ -80,9 +80,11 @@ window.spawnBubble = function(isRespawn = false, forceTargetOverride = false) {
 
     const isLetterPractice = window.isBubbleGameActive && window.bubbleGameLetterPractice;
 
-    // ── Respect configured bubble count in all modes ────────────────────────
+    // ── Respect configured bubble count per mode ────────────────────────────
     const currentBubbles = bgContainer.querySelectorAll('.bubble:not(.popped)').length;
-    const maxBubbles = appState.config.bubbleCount !== undefined ? appState.config.bubbleCount : 5;
+    const maxBubbles = isLetterPractice
+        ? (appState.config.letterPracticeBubbleCount !== undefined ? appState.config.letterPracticeBubbleCount : 4)
+        : (appState.config.bubbleCount !== undefined ? appState.config.bubbleCount : 5);
     if (isRespawn && !forceTargetOverride && currentBubbles >= maxBubbles) return;
 
     const bubble = document.createElement('div');
@@ -1853,6 +1855,7 @@ window.copyUrl = function(id) {
     document.getElementById( "configMaxAudioDuration" ).value = appState.config.maxAudioDuration !== undefined ? appState.config.maxAudioDuration : 3;
     document.getElementById( "configBingSearch" ).checked = appState.config.bingSearchEnabled === true;
     document.getElementById( "configBubbleCount" ).value = appState.config.bubbleCount !== undefined ? appState.config.bubbleCount : 5;
+    document.getElementById( "configLetterPracticeBubbleCount" ).value = appState.config.letterPracticeBubbleCount !== undefined ? appState.config.letterPracticeBubbleCount : 4;
     document.getElementById( "configBubbleSpeed" ).value = appState.config.bubbleSpeed || 'normal';
     document.getElementById( "configImagePopDuration" ).value = appState.config.imagePopDuration !== undefined ? appState.config.imagePopDuration : 1.0;
 
@@ -1879,6 +1882,7 @@ window.copyUrl = function(id) {
     appState.config.maxAudioDuration = Number( document.getElementById( "configMaxAudioDuration" ).value ) || 3;
     appState.config.bingSearchEnabled = document.getElementById( "configBingSearch" ).checked;
     appState.config.bubbleCount = Number( document.getElementById( "configBubbleCount" ).value );
+    appState.config.letterPracticeBubbleCount = Number( document.getElementById( "configLetterPracticeBubbleCount" ).value ) || 4;
     appState.config.bubbleSpeed = document.getElementById( "configBubbleSpeed" ).value;
     appState.config.imagePopDuration = Number( document.getElementById( "configImagePopDuration" ).value ) || 1.0;
 
@@ -1954,8 +1958,8 @@ function pickNewBubbleGameLetter() {
         bgContainer.querySelectorAll('.bubble').forEach(b => b.remove());
     }
 
-    // Spawn total bubbles to match configured bubble count setting
-    const totalToSpawn = appState.config.bubbleCount !== undefined ? appState.config.bubbleCount : 5;
+    // Spawn total bubbles to match configured Letter Practice Mode count setting
+    const totalToSpawn = appState.config.letterPracticeBubbleCount !== undefined ? appState.config.letterPracticeBubbleCount : 4;
     
     // Spawn target bubble(s) first
     window.spawnBubble(false, true); // 1st target
