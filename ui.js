@@ -101,9 +101,11 @@ window.spawnBubble = function(isRespawn = false, forceTargetOverride = false) {
             bgContainer.querySelectorAll('.bubble:not(.popped)')
         ).filter(b => b.dataset.letter === window.bubbleGameTargetLetter).length;
 
-        // Force target if none exists OR explicitly overridden
-        if (forceTargetOverride || existingTargetCount === 0) {
+        // Force target ONLY if explicitly overridden and none exists yet
+        if (forceTargetOverride && existingTargetCount === 0) {
             isTarget = true;
+        } else {
+            isTarget = false;
         }
 
         let assignedLetter;
@@ -1961,15 +1963,11 @@ function pickNewBubbleGameLetter() {
     // Spawn total bubbles to match configured Letter Practice Mode count setting
     const totalToSpawn = appState.config.letterPracticeBubbleCount !== undefined ? appState.config.letterPracticeBubbleCount : 4;
     
-    // Spawn target bubble(s) first
-    window.spawnBubble(false, true); // 1st target
-    if (totalToSpawn >= 4) {
-        setTimeout(() => window.spawnBubble(false, true), 100); // 2nd target if count is large
-    }
+    // Spawn EXACTLY 1 target bubble first
+    window.spawnBubble(false, true); // 1 target
     
     // Spawn remaining distractors up to totalToSpawn
-    const startIdx = totalToSpawn >= 4 ? 2 : 1;
-    for (let i = startIdx; i < totalToSpawn; i++) {
+    for (let i = 1; i < totalToSpawn; i++) {
         setTimeout(() => window.spawnBubble(false, false), i * 120);
     }
 }
