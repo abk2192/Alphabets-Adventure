@@ -71,9 +71,8 @@ function centeredRandom(min = 10, max = 90, pulls = 3) {
 let _bubbleAnimId = 0;
 
 
-// ── LETTER PRACTICE MODE: max total bubbles ────────────────────────────────
-const LETTER_PRACTICE_MAX = 3;   // 1 target + 2 distractors
-const LETTER_PRACTICE_MIN_SIZE = 140; // px — large enough to see the image
+// ── BUBBLE SPAWN CONSTANTS ────────────────────────────────────────────────
+const LETTER_PRACTICE_MIN_SIZE = 140; // px — large enough to see the image clearly
 
 window.spawnBubble = function(isRespawn = false, forceTargetOverride = false) {
     const bgContainer = document.querySelector('.background-decoration');
@@ -81,11 +80,9 @@ window.spawnBubble = function(isRespawn = false, forceTargetOverride = false) {
 
     const isLetterPractice = window.isBubbleGameActive && window.bubbleGameLetterPractice;
 
-    // ── Cap total bubble count ──────────────────────────────────────────────
+    // ── Respect configured bubble count in all modes ────────────────────────
     const currentBubbles = bgContainer.querySelectorAll('.bubble:not(.popped)').length;
-    const maxBubbles = isLetterPractice
-        ? LETTER_PRACTICE_MAX
-        : (appState.config.bubbleCount !== undefined ? appState.config.bubbleCount : 5);
+    const maxBubbles = appState.config.bubbleCount !== undefined ? appState.config.bubbleCount : 5;
     if (isRespawn && !forceTargetOverride && currentBubbles >= maxBubbles) return;
 
     const bubble = document.createElement('div');
@@ -106,7 +103,6 @@ window.spawnBubble = function(isRespawn = false, forceTargetOverride = false) {
         if (forceTargetOverride || existingTargetCount === 0) {
             isTarget = true;
         }
-        // else: spawn a distractor
 
         let assignedLetter;
         if (isTarget) {
@@ -123,21 +119,22 @@ window.spawnBubble = function(isRespawn = false, forceTargetOverride = false) {
         bubble.dataset.letter = assignedLetter;
         bubble.dataset.isTarget = isTarget ? '1' : '0';
 
-        // Always assign a word (used for the pop image)
+        // Always assign a word matching the assigned letter
         const matching = appState.words.filter(
             w => w.letter && w.letter.trim().toLowerCase() === assignedLetter.trim().toLowerCase()
         );
         if (matching.length > 0) {
             preloadedWord = matching[Math.floor(Math.random() * matching.length)];
+        } else if (appState.words.length > 0) {
+            preloadedWord = appState.words[Math.floor(Math.random() * appState.words.length)];
         }
 
-    } else if (window.isBubbleGameActive) {
-        // Normal (non-practice) bubble game
-        if (appState.words.length > 0) {
+    } else {
+        // Normal mode & background bubbles — assign a random word so every bubble has an image ready
+        if (appState.words && appState.words.length > 0) {
             preloadedWord = appState.words[Math.floor(Math.random() * appState.words.length)];
         }
     }
-    // else: decorative background bubble — no word needed
 
     // ── Size ────────────────────────────────────────────────────────────────
     let size;
@@ -340,37 +337,38 @@ document.addEventListener('click', async function(e) {
             let showImageWord = null;
             
             if (window.isBubbleGameActive) {
-                if (window.bubbleGameLetterPractice) {
-                    if (bubble.dataset.letter === window.bubbleGameTargetLetter) {
-                        // 1. Try the word already assigned to this bubble
-                        if (bubble.dataset.wordId) {
-                            showImageWord = appState.words.find(w => w.id === bubble.dataset.wordId);
-                        }
-                        // 2. If not found (bubble spawned before target was set), look up fresh from appState
-                        if (!showImageWord) {
-                            const fresh = appState.words.filter(
-                                w => w.letter && w.letter.trim().toLowerCase() === String(window.bubbleGameTargetLetter || '').trim().toLowerCase()
-                            );
-                            if (fresh.length > 0) {
-                                showImageWord = fresh[Math.floor(Math.random() * fresh.length)];
-                                if (typeof window.getOrFetchWordImage === 'function') {
-                                    window.getOrFetchWordImage(showImageWord).then(url => {
-                                        if (url) bubble.dataset.cachedImgUrl = url;
-                                    });
-                                }
-                            }
-                        }
-                        // 3. Absolute fallback — show the letter initial
-                        if (!showImageWord) showImageWord = { id: 'fake', fallback: bubble.dataset.letter };
-                        setTimeout(() => { pickNewBubbleGameLetter(); }, 1200);
-                    }
-                    // Non-target letter tapped — just pop silently (small beep, no image/confetti)
-                } else {
+            if (window.isBubbleGameActive && window.bubbleGameLetterPractice) {
+                if (bubble.dataset.letter === window.bubbleGameTargetLetter) {
+                    // 1. Try word pre-assigned to bubble if its letter matches current target
                     if (bubble.dataset.wordId) {
-                        showImageWord = appState.words.find(w => w.id === bubble.dataset.wordId);
+                        const candidate = appState.words.find(w => w.id === bubble.dataset.wordId);
+                        if (candidate && candidate.letter && candidate.letter.trim().toLowerCase() === String(window.bubbleGameTargetLetter || '').trim().toLowerCase()) {
+                            showImageWord = candidate;
+                        }
                     }
-                    // In normal mode, only show if we had a word or words exist
-                    if (!showImageWord && appState.words.length > 0) showImageWord = { id: 'fake', fallback: '?' };
+                    // 2. If missing or letter mismatched, pick a matching word for target letter from appState
+                    if (!showImageWord) {
+                        const fresh = appState.words.filter(
+                            w => w.letter && w.letter.trim().toLowerCase() === String(window.bubbleGameTargetLetter || '').trim().toLowerCase()
+                        );
+                        if (fresh.length > 0) {
+                            showImageWord = fresh[Math.floor(Math.random() * fresh.length)];
+                        }
+                    }
+                    // 3. Absolute fallback only if no words exist in appState for this letter
+                    if (!showImageWord && appState.words.length > 0) {
+                        showImageWord = appState.words[Math.floor(Math.random() * appState.words.length)];
+                    }
+                    setTimeout(() => { pickNewBubbleGameLetter(); }, 1200);
+                }
+                // Non-target letter tapped — just pop silently (small beep, no image/confetti)
+            } else {
+                // Normal mode & Home Screen bubbles — always find or assign a valid word image
+                if (bubble.dataset.wordId) {
+                    showImageWord = appState.words.find(w => w.id === bubble.dataset.wordId);
+                }
+                if (!showImageWord && appState.words && appState.words.length > 0) {
+                    showImageWord = appState.words[Math.floor(Math.random() * appState.words.length)];
                 }
             }
 
