@@ -17,7 +17,17 @@ async function initialize() {
         if (typeof applyConfiguration === 'function') applyConfiguration();
         if (typeof renderCategoryButtons === 'function') renderCategoryButtons();
         if (typeof renderVirtualKeyboard === 'function') renderVirtualKeyboard();
-        
+
+        // Background auto pre-caching of all word images into IndexedDB
+        setTimeout(async () => {
+            if (window.appState && window.appState.words && typeof window.getOrFetchWordImage === 'function') {
+                for (let word of window.appState.words) {
+                    try {
+                        await window.getOrFetchWordImage(word);
+                    } catch(e) {}
+                }
+            }
+        }, 1000);
 
     } catch (error) {
         console.error("Initialization failed:", error);

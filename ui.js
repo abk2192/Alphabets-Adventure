@@ -385,8 +385,8 @@ document.addEventListener('click', async function(e) {
                     urlToUse = showImageWord.imageUrl || showImageWord.url || '';
                 }
                 
-                const fallbackRaw = (showImageWord.fallback || showImageWord.word || '?').charAt(0).toUpperCase();
-                const svgFallback = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%23f0f0f0'/%3E%3Ctext x='50' y='55' font-family='sans-serif' font-size='50' font-weight='bold' text-anchor='middle' alignment-baseline='middle' fill='%23aaa'%3E${encodeURIComponent(fallbackRaw)}%3C/text%3E%3C/svg%3E`;
+                const fallbackIcon = showImageWord.fallback || (showImageWord.word || '⭐').charAt(0).toUpperCase();
+                const svgFallback = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cdefs%3E%3ClinearGradient id='bg' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' stop-color='%236c63ff'/%3E%3Cstop offset='100%25' stop-color='%23ff7eb3'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle cx='100' cy='100' r='95' fill='url(%23bg)' stroke='white' stroke-width='6'/%3E%3Ctext x='100' y='110' font-size='75' text-anchor='middle' alignment-baseline='middle'%3E${encodeURIComponent(fallbackIcon)}%3C/text%3E%3C/svg%3E`;
                 
                 if (!urlToUse || urlToUse === 'undefined' || urlToUse.endsWith('/')) {
                     img.src = svgFallback;
@@ -1954,10 +1954,22 @@ function pickNewBubbleGameLetter() {
         bgContainer.querySelectorAll('.bubble').forEach(b => b.remove());
     }
 
-    // Spawn target bubble immediately, then the distractor shortly after
-    window.spawnBubble(false, true);   // target
-    setTimeout(() => window.spawnBubble(false, false), 150); // distractor
+    // Spawn total bubbles to match configured bubble count setting
+    const totalToSpawn = appState.config.bubbleCount !== undefined ? appState.config.bubbleCount : 5;
+    
+    // Spawn target bubble(s) first
+    window.spawnBubble(false, true); // 1st target
+    if (totalToSpawn >= 4) {
+        setTimeout(() => window.spawnBubble(false, true), 100); // 2nd target if count is large
+    }
+    
+    // Spawn remaining distractors up to totalToSpawn
+    const startIdx = totalToSpawn >= 4 ? 2 : 1;
+    for (let i = startIdx; i < totalToSpawn; i++) {
+        setTimeout(() => window.spawnBubble(false, false), i * 120);
+    }
 }
+
 
 const practiceBtn = document.getElementById('bubbleLetterPracticeBtn');
 if (practiceBtn) {
