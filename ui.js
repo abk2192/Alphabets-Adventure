@@ -336,7 +336,6 @@ document.addEventListener('click', async function(e) {
             
             let showImageWord = null;
             
-            if (window.isBubbleGameActive) {
             if (window.isBubbleGameActive && window.bubbleGameLetterPractice) {
                 if (bubble.dataset.letter === window.bubbleGameTargetLetter) {
                     // 1. Try word pre-assigned to bubble if its letter matches current target
