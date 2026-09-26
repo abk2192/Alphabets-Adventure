@@ -72,7 +72,7 @@ let _bubbleAnimId = 0;
 
 
 // ── LETTER PRACTICE MODE: max total bubbles ────────────────────────────────
-const LETTER_PRACTICE_MAX = 2;   // 1 target + 1 distractor
+const LETTER_PRACTICE_MAX = 3;   // 1 target + 2 distractors
 const LETTER_PRACTICE_MIN_SIZE = 140; // px — large enough to see the image
 
 window.spawnBubble = function(isRespawn = false, forceTargetOverride = false) {
@@ -125,7 +125,7 @@ window.spawnBubble = function(isRespawn = false, forceTargetOverride = false) {
 
         // Always assign a word (used for the pop image)
         const matching = appState.words.filter(
-            w => w.letter.toUpperCase() === assignedLetter.toUpperCase()
+            w => w.letter && w.letter.trim().toLowerCase() === assignedLetter.trim().toLowerCase()
         );
         if (matching.length > 0) {
             preloadedWord = matching[Math.floor(Math.random() * matching.length)];
@@ -211,10 +211,9 @@ window.spawnBubble = function(isRespawn = false, forceTargetOverride = false) {
     // ── Image pre-caching ───────────────────────────────────────────────────
     if (preloadedWord) {
         bubble.dataset.wordId = preloadedWord.id;
-        const rawUrl = preloadedWord.imageUrl || preloadedWord.url || '';
-        if (rawUrl && rawUrl !== 'undefined' && !rawUrl.endsWith('/')) {
-            fetchAndCacheImage(preloadedWord.id, rawUrl).then(resolvedUrl => {
-                bubble.dataset.cachedImgUrl = resolvedUrl;
+        if (typeof window.getOrFetchWordImage === 'function') {
+            window.getOrFetchWordImage(preloadedWord).then(resolvedUrl => {
+                if (resolvedUrl) bubble.dataset.cachedImgUrl = resolvedUrl;
             });
         }
     }
@@ -350,15 +349,13 @@ document.addEventListener('click', function(e) {
                         // 2. If not found (bubble spawned before target was set), look up fresh from appState
                         if (!showImageWord) {
                             const fresh = appState.words.filter(
-                                w => w.letter.toUpperCase() === window.bubbleGameTargetLetter
+                                w => w.letter && w.letter.trim().toLowerCase() === String(window.bubbleGameTargetLetter || '').trim().toLowerCase()
                             );
                             if (fresh.length > 0) {
                                 showImageWord = fresh[Math.floor(Math.random() * fresh.length)];
-                                // Also resolve the image URL now for instant display
-                                const rawUrl = showImageWord.imageUrl || showImageWord.url || '';
-                                if (rawUrl && rawUrl !== 'undefined' && !rawUrl.endsWith('/')) {
-                                    fetchAndCacheImage(showImageWord.id, rawUrl).then(url => {
-                                        bubble.dataset.cachedImgUrl = url;
+                                if (typeof window.getOrFetchWordImage === 'function') {
+                                    window.getOrFetchWordImage(showImageWord).then(url => {
+                                        if (url) bubble.dataset.cachedImgUrl = url;
                                     });
                                 }
                             }
@@ -377,19 +374,18 @@ document.addEventListener('click', function(e) {
                 }
             }
 
-            
             bubble.classList.add('popped');
             
             if (showImageWord) {
                 const img = document.createElement('img');
                 img.className = 'bubble-image-popup';
                 
-                let urlToUse = '';
-                if (showImageWord.id !== 'fake') {
-                    // Prefer the pre-cached data URL stored on the bubble element,
-                    // fall back to the word's raw URL if caching is still in progress
-                    urlToUse = bubble.dataset.cachedImgUrl
-                        || showImageWord.imageUrl || showImageWord.url || '';
+                let urlToUse = bubble.dataset.cachedImgUrl;
+                if (!urlToUse && showImageWord.id !== 'fake' && typeof window.getOrFetchWordImage === 'function') {
+                    urlToUse = await window.getOrFetchWordImage(showImageWord);
+                }
+                if (!urlToUse && showImageWord.id !== 'fake') {
+                    urlToUse = showImageWord.imageUrl || showImageWord.url || '';
                 }
                 
                 const fallbackRaw = (showImageWord.fallback || showImageWord.word || '?').charAt(0).toUpperCase();
@@ -401,6 +397,7 @@ document.addEventListener('click', function(e) {
                     img.src = urlToUse;
                     img.onerror = function() { this.src = svgFallback; };
                 }
+
                 
                 const cx = rect.left + rect.width / 2;
                 const cy = rect.top + rect.height / 2;
@@ -1226,8 +1223,8 @@ function spawnDraggableCard(wordObj, spawnX, spawnY) {
 
     
     let visualHtml = "";
-    if (wordObj.imageUrl) {
-        visualHtml = `<div class="card-visual-layer" style="width: 100%; height: 90px; display: flex; align-items: center; justify-content: center; pointer-events: none;"><img src="${escapeHtml(wordObj.imageUrl)}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 8px; -webkit-touch-callout: none; pointer-events: none; user-select: none; -webkit-user-select: none;" onerror="this.style.display='none'"></div>`;
+    if (wordObj.imageUrl || wordObj.url) {
+        visualHtml = `<div class="card-visual-layer" style="width: 100%; height: 90px; display: flex; align-items: center; justify-content: center; pointer-events: none;"><img src="${escapeHtml(wordObj.imageUrl || wordObj.url)}" style="max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 8px; -webkit-touch-callout: none; pointer-events: none; user-select: none; -webkit-user-select: none;" onerror="this.style.display='none'"></div>`;
     } else {
         visualHtml = `<div class="card-visual-layer" style="font-size: 2.5rem; height: 90px; display: flex; align-items: center; justify-content: center; pointer-events: none;">${escapeHtml(wordObj.fallback || "❓")}</div>`;
     }
@@ -1238,6 +1235,16 @@ function spawnDraggableCard(wordObj, spawnX, spawnY) {
         <div class="card-resize-handle" style="position: absolute; bottom: 0; right: 0; width: 35px; height: 35px; cursor: se-resize; z-index: 5;"></div>
     `;
     card.dataset.scale = "1";
+
+    if (wordObj && (wordObj.imageUrl || wordObj.url) && typeof window.getOrFetchWordImage === 'function') {
+        window.getOrFetchWordImage(wordObj).then(dataUrl => {
+            if (dataUrl) {
+                const imgEl = card.querySelector('img');
+                if (imgEl) imgEl.src = dataUrl;
+            }
+        });
+    }
+
 
     let isDragging = false;
     let isResizing = false;
@@ -1824,7 +1831,7 @@ document.getElementById("closeWebSearchModal").addEventListener("click", () => {
     document.getElementById("webSearchIframe").src = "";
 });
 
-/* ========================================================= SAVE WORD ========================================================= */ wordForm.addEventListener( "submit", event => { event.preventDefault(); const letter = wordLetter.value .trim() .toLowerCase(); if ( !/^[a-z]$/.test( letter ) ) { showToast( "Please enter one letter from A to Z." ); return; } const newData = { letter: letter, word: wordName.value .trim() .toUpperCase(), categories: Array.from(wordCategory.querySelectorAll('input[type="checkbox"]:checked')).map(chk => chk.value), imageUrl: wordImageUrl.value .trim(), audioUrl: document.getElementById("wordAudioUrl").value.trim(), fallback: wordFallback.value .trim() || "❓" }; const existingId = editingWordId.value; if ( existingId ) { const index = appState.words.findIndex( item => item.id === existingId ); if ( index !== -1 ) { appState.words[index] = { id: existingId, ...newData }; } } else { appState.words.push({ id: crypto.randomUUID(), ...newData }); }    try { saveState(); renderWordTable(); renderCategoryButtons(); } catch(e) { console.error(e); } finally { if(typeof renderStoryBuilderWordPickers === 'function') renderStoryBuilderWordPickers(); closeModal(); showToast("Word saved!"); } } ); /* =========================================================
+/* ========================================================= SAVE WORD ========================================================= */ wordForm.addEventListener( "submit", event => { event.preventDefault(); const letter = wordLetter.value .trim() .toLowerCase(); if ( !/^[a-z]$/.test( letter ) ) { showToast( "Please enter one letter from A to Z." ); return; } const newData = { letter: letter, word: wordName.value .trim() .toUpperCase(), categories: Array.from(wordCategory.querySelectorAll('input[type="checkbox"]:checked')).map(chk => chk.value), imageUrl: wordImageUrl.value .trim(), audioUrl: document.getElementById("wordAudioUrl").value.trim(), fallback: wordFallback.value .trim() || "❓" }; const existingId = editingWordId.value; let savedWordObj = null; if ( existingId ) { const index = appState.words.findIndex( item => item.id === existingId ); if ( index !== -1 ) { appState.words[index] = { id: existingId, ...newData }; savedWordObj = appState.words[index]; } } else { savedWordObj = { id: crypto.randomUUID(), ...newData }; appState.words.push(savedWordObj); } if (savedWordObj && typeof window.getOrFetchWordImage === 'function') { window.getOrFetchWordImage(savedWordObj); }   try { saveState(); renderWordTable(); renderCategoryButtons(); } catch(e) { console.error(e); } finally { if(typeof renderStoryBuilderWordPickers === 'function') renderStoryBuilderWordPickers(); closeModal(); showToast("Word saved!"); } } ); /* =========================================================
      COPY URL
 ========================================================= */
 window.copyUrl = function(id) {
@@ -1858,11 +1865,13 @@ window.copyUrl = function(id) {
         el.classList.toggle('selected', el.dataset.anim === popAnim);
     });
 
-    // Pop sound picker
-    const popSnd = appState.config.popSound || 'chime';
-    document.querySelectorAll('.pop-sound-option').forEach(el => {
-        el.classList.toggle('selected', el.dataset.sound === popSnd);
-    });
+    // Update IDB cached image count status
+    if (window.appDB) {
+        window.appDB.getAllCachedImagesCount().then(c => {
+            const st = document.getElementById('precacheStatus');
+            if (st) st.textContent = `${c}/${appState.words.length} images cached`;
+        });
+    }
 
 } document.getElementById( "saveConfigButton" ) .addEventListener( "click", () => { appState.config.title = document.getElementById( "configTitle" ) .value .trim() || "Alphabets Adventure"; appState.config.instruction = document.getElementById( "configInstruction" ) .value .trim() || "Tap on a letter to hear its sound and discover a word!"; appState.config.letterDelay = Number( document.getElementById( "configLetterDelay" ) .value ) || 600; appState.config.imageDelay = Number( document.getElementById( "configImageDelay" ) .value ) || 800; appState.config.soundEnabled = document.getElementById( "configSound" ) .checked;
     appState.config.customAudioEnabled = document.getElementById( "configCustomAudio" ).checked;
@@ -1904,6 +1913,32 @@ document.getElementById('popSoundPicker').addEventListener('click', (e) => {
     tile.classList.add('selected');
     playBubblePopSound(tile.dataset.sound); // preview
 });
+
+// Pre-cache all word images to IndexedDB
+const precacheBtn = document.getElementById('precacheAllImagesBtn');
+if (precacheBtn) {
+    precacheBtn.addEventListener('click', async () => {
+        precacheBtn.disabled = true;
+        const status = document.getElementById('precacheStatus');
+        const words = appState.words || [];
+        let count = 0;
+        let cached = 0;
+
+        for (let word of words) {
+            count++;
+            if (status) status.textContent = `Caching: ${count}/${words.length} (${Math.round((count/words.length)*100)}%)...`;
+            try {
+                const res = await window.getOrFetchWordImage(word);
+                if (res && res.startsWith('data:image')) cached++;
+            } catch(e) {}
+        }
+
+        if (status) status.textContent = `Done! ${cached}/${words.length} images cached in IndexedDB.`;
+        precacheBtn.disabled = false;
+        if (typeof showToast === 'function') showToast(`Successfully cached ${cached} images in IndexedDB!`);
+    });
+}
+
 
 
 

@@ -514,7 +514,24 @@
                             Use Web Search Modal (Bing) for Images
                         </label>
                     </div>
+
+                    <div class="form-group full" style="grid-column: 1 / -1; background: #f8fafc; padding: 16px; border-radius: 14px; border: 2px dashed var(--primary); margin-top: 12px;">
+                        <label style="font-size: 1rem; color: var(--primary); font-weight: 800; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
+                            <span class="material-icons">sd_storage</span>
+                            Offline Image Cache (IndexedDB)
+                        </label>
+                        <p style="font-size: 0.85rem; color: var(--muted); margin: 0 0 12px 0; line-height: 1.4;">
+                            Download and save all word images directly into the local IndexedDB database so all games run 100% offline without needing internet access.
+                        </p>
+                        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                            <button id="precacheAllImagesBtn" type="button" class="button button-primary" style="display: flex; align-items: center; gap: 6px;">
+                                <span class="material-icons">cloud_download</span> Cache All Images to DB
+                            </button>
+                            <span id="precacheStatus" style="font-weight: 700; color: var(--text); font-size: 0.9rem;"></span>
+                        </div>
                     </div>
+                    </div>
+
 
 
 

@@ -61,14 +61,13 @@ class WordCardComponent {
             const wrapper = document.createElement("div");
             wrapper.className = "image-wrapper";
 
-            if (!wordData.imageUrl) {
+            if (!wordData.imageUrl && !wordData.url) {
                 WordCardComponent.renderFallback(wrapper, wordData);
                 imageAreaElement.appendChild(wrapper);
                 if (options.onImageError) options.onImageError();
             } else {
                 const image = document.createElement("img");
                 image.className = "word-image";
-                image.src = wordData.imageUrl;
                 image.alt = wordData.word;
                 
                 image.addEventListener("load", () => {
@@ -79,9 +78,24 @@ class WordCardComponent {
                     WordCardComponent.renderFallback(wrapper, wordData);
                     if (options.onImageError) options.onImageError();
                 }, { once: true });
-                
+
                 wrapper.appendChild(image);
                 imageAreaElement.appendChild(wrapper);
+
+                // Fetch from IDB cache (or populate IDB)
+                if (typeof window.getOrFetchWordImage === 'function') {
+                    window.getOrFetchWordImage(wordData).then(dataUrl => {
+                        if (dataUrl) {
+                            image.src = dataUrl;
+                        } else {
+                            image.src = wordData.imageUrl || wordData.url;
+                        }
+                    }).catch(() => {
+                        image.src = wordData.imageUrl || wordData.url;
+                    });
+                } else {
+                    image.src = wordData.imageUrl || wordData.url;
+                }
             }
         };
 

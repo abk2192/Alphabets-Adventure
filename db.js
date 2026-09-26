@@ -173,5 +173,95 @@ window.appDB = {
             const tx = this.db.transaction(['imageCache'], 'readwrite');
             tx.objectStore('imageCache').put({ id: wordId, dataUrl });
         } catch(e) { /* silent – cache miss is fine */ }
+    },
+
+    // Count how many images are stored in IDB imageCache
+    getAllCachedImagesCount: function() {
+        return new Promise((resolve) => {
+            if (!this.db) { resolve(0); return; }
+            try {
+                const tx = this.db.transaction(['imageCache'], 'readonly');
+                const req = tx.objectStore('imageCache').count();
+                req.onsuccess = () => resolve(req.result || 0);
+                req.onerror = () => resolve(0);
+            } catch(e) { resolve(0); }
+        });
     }
 };
+
+// Global helper: retrieve base64 data URL from IDB, or fetch & cache it to IDB if missing
+window.getOrFetchWordImage = async function(word) {
+    if (!word) return null;
+    const wordId = typeof word === 'string' ? word : word.id;
+    const wordObj = typeof word === 'string' 
+        ? (window.appState && window.appState.words ? window.appState.words.find(w => w.id === word) || {} : {}) 
+        : word;
+    const rawUrl = wordObj.imageUrl || wordObj.url || '';
+
+    // 1. Check IDB cache first
+    if (wordId && window.appDB) {
+        try {
+            const cached = await window.appDB.getCachedImage(wordId);
+            if (cached && cached.startsWith('data:image')) return cached;
+        } catch(e) {}
+    }
+
+    if (!rawUrl || rawUrl === 'undefined' || rawUrl.endsWith('/')) {
+        return null;
+    }
+
+    // 2. If rawUrl is already a base64 Data URL, save to IDB and return
+    if (rawUrl.startsWith('data:')) {
+        if (wordId && window.appDB) window.appDB.setCachedImage(wordId, rawUrl);
+        return rawUrl;
+    }
+
+    // 3. Try fetching from network with CORS proxy fallbacks
+    const urlsToTry = [
+        rawUrl,
+        `https://api.allorigins.win/raw?url=${encodeURIComponent(rawUrl)}`,
+        `https://corsproxy.io/?${encodeURIComponent(rawUrl)}`
+    ];
+
+    for (let u of urlsToTry) {
+        try {
+            const resp = await fetch(u, { mode: 'cors' });
+            if (resp.ok) {
+                const blob = await resp.blob();
+                const dataUrl = await new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onload = () => resolve(reader.result);
+                    reader.onerror = () => resolve(null);
+                    reader.readAsDataURL(blob);
+                });
+                if (dataUrl && dataUrl.startsWith('data:image')) {
+                    if (wordId && window.appDB) window.appDB.setCachedImage(wordId, dataUrl);
+                    return dataUrl;
+                }
+            }
+        } catch(e) {}
+    }
+
+    // 4. Try Canvas export fallback
+    return new Promise((resolve) => {
+        const img = new Image();
+        img.crossOrigin = 'Anonymous';
+        img.onload = () => {
+            try {
+                const canvas = document.createElement('canvas');
+                canvas.width = img.naturalWidth || img.width || 200;
+                canvas.height = img.naturalHeight || img.height || 200;
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0);
+                const dataUrl = canvas.toDataURL('image/png');
+                if (wordId && window.appDB) window.appDB.setCachedImage(wordId, dataUrl);
+                resolve(dataUrl);
+            } catch(err) {
+                resolve(rawUrl);
+            }
+        };
+        img.onerror = () => resolve(rawUrl);
+        img.src = rawUrl;
+    });
+};
+
