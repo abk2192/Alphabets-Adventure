@@ -8,7 +8,7 @@
         "characters"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT3l49ncgy_Dd9RNm58RGqiUvHxSldquvbKa4SGxzfvUQ&s=10",
-      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=Buster+Bus&tl=en&client=tw-ob",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=buster%20bus&tl=en&client=tw-ob",
       "fallback": "❓"
     },
     {
@@ -86,7 +86,7 @@
         "animal"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSKiYlbMTOClMb0NPQVRSxkNdmWfKQJuDcfDUgDQ-ur4BNyRVk4wRd2Ph9DerOK_2AbmfDB9dUNdTD6JQzfzWaKNT7-3cm7lZ9hvhykTQ&s=10",
-      "audioUrl": "https://www.myinstants.com/media/sounds/elephant-sound.mp3",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=elephant&tl=en&client=tw-ob",
       "fallback": "🐘"
     },
     {
@@ -117,7 +117,7 @@
         "animal"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSNq23w5CvpeCVFt2DlPpz__x9evu5XleslxCxq1VRMNg&s=10",
-      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=dino&tl=en&client=tw-ob",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=dyno&tl=en&client=tw-ob",
       "fallback": "🦖"
     },
     {
@@ -146,7 +146,7 @@
         "characters"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfoLZmoceJub7wiZVj02sKyySJRZrWqHIOAhUD6Qqj2Q&s=10",
-      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=George+Pig&tl=en&client=tw-ob",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=george%20pig&tl=en&client=tw-ob",
       "fallback": "❓"
     },
     {
@@ -239,6 +239,26 @@
       "fallback": "❓"
     },
     {
+      "id": "2a66ea6f-f520-459d-921b-89bd14c1918d",
+      "letter": "d",
+      "word": "DUCK",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjFz5EzdL3TqBb1wUJfv8PTh0tPgoPTDue8Vhf1RSdbg&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=duck&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "2ac18b9b-e90b-4b5e-b52a-9b98c2e138ef",
+      "letter": "b",
+      "word": "BRIDGE",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBU8Ug5cZe_sPXB_6lf0FU7lRrfUb0DuYUdqFBLZsT1w&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=bridge&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
       "id": "2cf6a527-0c73-420a-a3f2-9bf8e0170904",
       "letter": "c",
       "word": "CONCRETE MIXER",
@@ -246,7 +266,7 @@
         "vehicle"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSeDbmOjyA7achUGal7UcKoxB_bpEhnke8fS3KsLC19XQ&s",
-      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=concrete+mixer&tl=en&client=tw-ob",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=concrete%20mixer&tl=en&client=tw-ob",
       "fallback": "❓"
     },
     {
@@ -439,7 +459,7 @@
       "word": "LADY BUG",
       "categories": [],
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/7/77/Coccinella-septempunctata-15-fws.jpg",
-      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=ladybug&tl=en&client=tw-ob",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=lady%20bug&tl=en&client=tw-ob",
       "fallback": "❓"
     },
     {
@@ -470,7 +490,7 @@
         "animal"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQAe1xRKSSjq12zRZH52pb103ab_svCmS6bTaPTJO8OgQ&s=10",
-      "audioUrl": "https://www.myinstants.com/media/sounds/goat-scream_1.mp3",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=goat&tl=en&client=tw-ob",
       "fallback": "🐐"
     },
     {
@@ -490,7 +510,7 @@
       "word": "MS RACHEL",
       "categories": [],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTXUNvAMnsF5oPJuy9ZyDMKX1Bc3r6Byrg8-MvEvg4EEQ&s=10",
-      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=Ms+Rachel&tl=en&client=tw-ob",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=ms%20rachel&tl=en&client=tw-ob",
       "fallback": "❓"
     },
     {
@@ -512,7 +532,7 @@
         "food"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQfCBzkPnRWGieAGc9FhdQ3vrhJ9O8IlvUgnZT1pwW6vQ&s=10",
-      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=ice+cream&tl=en&client=tw-ob",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=ice%20cream&tl=en&client=tw-ob",
       "fallback": "🍦"
     },
     {
@@ -524,6 +544,17 @@
       ],
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/8/84/Male_and_female_chicken_sitting_together.jpg",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=chicken&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "7c050fb2-2588-4366-b922-d64f8a3a8cee",
+      "letter": "d",
+      "word": "DUCKLING",
+      "categories": [
+        "animal"
+      ],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZBzPDTYaEfUo6xbV0OjSY22_eK_aCfL939QYK-pUc_Q&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=duckling&tl=en&client=tw-ob",
       "fallback": "❓"
     },
     {
@@ -545,7 +576,7 @@
         "vehicle"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2zwKPayaLtXtXztLhSiEMaFjiE6GrfJfuylX1WVUBXg&s=10",
-      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=dump+truck&tl=en&client=tw-ob",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=dump%20truck&tl=en&client=tw-ob",
       "fallback": "❓"
     },
     {
@@ -557,6 +588,15 @@
       ],
       "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/0/04/Pound_layer_cake.jpg",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=cake&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "85dc6812-46ea-4562-890b-a3230834dcbb",
+      "letter": "b",
+      "word": "BED",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQIN2XjhPGUC-itu3fJ4gXmZMAjMlos7SK4nKbjHy26_Q&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=bed&tl=en&client=tw-ob",
       "fallback": "❓"
     },
     {
@@ -662,7 +702,7 @@
         "characters"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ9o8QqgdfUK9Y4zQo1bdL_LDVV4Hl6Wx37nuUiwFPYEQ&s=10",
-      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=Daddy+Pig&tl=en&client=tw-ob",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=daddy%20pig&tl=en&client=tw-ob",
       "fallback": "❓"
     },
     {
@@ -699,7 +739,7 @@
       "letter": "a",
       "word": "ARROW",
       "categories": [],
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e8/Arrow_icon.svg/800px-Arrow_icon.svg.png",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIABVXpbsdI9xjjbPVJ0fZo1UzjQaPgVoH4IYn_QV-8A&s=10",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=arrow&tl=en&client=tw-ob",
       "fallback": "➡️"
     },
@@ -708,7 +748,7 @@
       "letter": "r",
       "word": "RAINBOW",
       "categories": [],
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Rainbow_after_storm.jpg/800px-Rainbow_after_storm.jpg",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTzM3w6gQQ0GDyMdFyjJFbzAErsKkuBmkO7qjzw87mkqA&s=10",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=rainbow&tl=en&client=tw-ob",
       "fallback": "🌈"
     },
@@ -719,7 +759,7 @@
       "categories": [
         "animal"
       ],
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Jellyfish_%28Chrysaora_achlyos%29.jpg/800px-Jellyfish_%28Chrysaora_achlyos%29.jpg",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/f/f9/Aurelia_aurita_%28Cnidaria%29_Luc_Viatour.jpg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=original",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=jellyfish&tl=en&client=tw-ob",
       "fallback": "🐙"
     },
@@ -761,7 +801,7 @@
       "letter": "d",
       "word": "DOLL",
       "categories": [],
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Matryoshka_Doll_%28cropped%29.jpg/800px-Matryoshka_Doll_%28cropped%29.jpg",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTrV2Vvuo1MurEQSO_2y2IutPjpHldZVxoDWNKQRNtLVw&s=10",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=doll&tl=en&client=tw-ob",
       "fallback": "🎎"
     },
@@ -770,7 +810,7 @@
       "letter": "s",
       "word": "STAR",
       "categories": [],
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Star_%28star_burst_blue%29.png/800px-Star_%28star_burst_blue%29.png",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRW3dEBNoRJXD8L_kAEGumdnlZtR3YnzIF_NM421a6EQg&s=10",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=star&tl=en&client=tw-ob",
       "fallback": "⭐"
     },
@@ -810,7 +850,7 @@
       "categories": [
         "animal"
       ],
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/4/49/Koala_climbing_tree.jpg/800px-Koala_climbing_tree.jpg",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRF59k1rFZPEIL8AmhQqoR6CD8tGQh3Z4Xyr9AjVRHVqg&s=10",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=koala&tl=en&client=tw-ob",
       "fallback": "🐨"
     },
@@ -822,7 +862,7 @@
         "characters"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQsgeFg7NiP3OKGGuAl0_UqE6UIJX6-JPtv56mSFayUdg&s=10",
-      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=Tayo&tl=en&client=tw-ob",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=taayo&tl=en&client=tw-ob",
       "fallback": "❓"
     },
     {
@@ -833,7 +873,7 @@
         "characters"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuNOf0a0vl34YO5JjVPjQZIHFQbiG0l-7gUEdi7RLr5A&s=10",
-      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=Peppa+Pig&tl=en&client=tw-ob",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=peppa%20pig&tl=en&client=tw-ob",
       "fallback": "❓"
     },
     {
@@ -874,7 +914,7 @@
       "categories": [
         "animal"
       ],
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a4/Eel_at_Churaumi_Aquarium.jpg/800px-Eel_at_Churaumi_Aquarium.jpg",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQFQqgtJg5zr4liEZXKCr1pvyupEbKjDNR-vfN5SXy1A&s=10",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=eel&tl=en&client=tw-ob",
       "fallback": "🐍"
     },
@@ -885,7 +925,7 @@
       "categories": [
         "animal"
       ],
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Unicorn_%28PSF%29.png/800px-Unicorn_%28PSF%29.png",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQf5CLC0g-jbfAOrnTOAJ8UmFnZdcr1a3dH9HkRpJgm4A&s=10",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=unicorn&tl=en&client=tw-ob",
       "fallback": "🦄"
     },
@@ -894,7 +934,7 @@
       "letter": "m",
       "word": "MOON",
       "categories": [],
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/FullMoon2010.jpg/800px-FullMoon2010.jpg",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSoK-sKQUQqG0R2CSx8rkrrBOp7w_OwRF5PHzlbP4Z9fw&s=10",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=moon&tl=en&client=tw-ob",
       "fallback": "🌙"
     },
@@ -923,7 +963,7 @@
       "letter": "n",
       "word": "NURSE",
       "categories": [],
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/2e/Nurse_on_white_background.jpg/800px-Nurse_on_white_background.jpg",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2WWPGnUMisJeCNb6T1ymnO59BFWdOqYPdhLwb4GEpyw&s=10",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=nurse&tl=en&client=tw-ob",
       "fallback": "👩‍⚕️"
     },
@@ -945,7 +985,7 @@
       "categories": [
         "food"
       ],
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a7/Eggs_in_a_basket.jpg/800px-Eggs_in_a_basket.jpg",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRm0yGavJdXwPB6pkpOJRumyQkIODPP8Rjq8SrmES8zXA&s=10",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=egg&tl=en&client=tw-ob",
       "fallback": "🥚"
     },
@@ -967,7 +1007,7 @@
       "categories": [
         "vehicle"
       ],
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Volkswagen_Transporter_T3_van_silver.jpg/800px-Volkswagen_Transporter_T3_van_silver.jpg",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQgEiLiMlvY_1kGajeMktynODkjo8gPl0XSksXgxSLJEg&s=10_silver.jpg",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=van&tl=en&client=tw-ob",
       "fallback": "🚐"
     },
@@ -998,7 +1038,7 @@
       "categories": [
         "animal"
       ],
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/57/Octopus2.jpg/800px-Octopus2.jpg",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTA7dL_UBl0B2y7Rz1YEsCbgi983lOqbF-uPy8kLkczyg&s=10",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=octopus&tl=en&client=tw-ob",
       "fallback": "🐙"
     },
@@ -1007,7 +1047,7 @@
       "letter": "f",
       "word": "FLOWER",
       "categories": [],
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Flower_poster_2.jpg/800px-Flower_poster_2.jpg",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ0FU1ZzWzPn1r_scZiamlD84YBMbQaaYTb_vN4PuACMA&s=10",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=flower&tl=en&client=tw-ob",
       "fallback": "🌸"
     },
@@ -1034,7 +1074,7 @@
       "letter": "x",
       "word": "X-RAY",
       "categories": [],
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bb/X-ray_of_hand.jpg/800px-X-ray_of_hand.jpg",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8r18-Kxbv3ZBwfr7gL6jxlaCiJPjmGZgjpQDfvBe3mA&s",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=x-ray&tl=en&client=tw-ob",
       "fallback": "🩻"
     },
@@ -1056,7 +1096,7 @@
       "categories": [
         "animal"
       ],
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Common_Quail_%28Coturnix_coturnix%29.jpg/800px-Common_Quail_%28Coturnix_coturnix%29.jpg",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTm3GTIpz-Ohwq3OlLPPIrrZQCd5rKhE3y21kHxJKufjA&s=10rnix%29.jpg",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=quail&tl=en&client=tw-ob",
       "fallback": "🐦"
     },
@@ -1069,7 +1109,7 @@
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTJFBDbgXTciJrfZcpohfKPTARpHfZBXD7QldIVlis8lw&s=10",
       "fallback": "❓",
-      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=en&q=mummy%20pig"
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=mummy%20pig&tl=en&client=tw-ob"
     },
     {
       "id": "f6a7b8c9-d0e1-2345-fghi-678901234567",
@@ -1078,7 +1118,7 @@
       "categories": [
         "food"
       ],
-      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8b/Honey_comb.jpg/800px-Honey_comb.jpg",
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTkkwYTZycHBsC8x4oCpOgg-w0fvqgpvTZL3WxT1ngSCg&s=10",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=honey&tl=en&client=tw-ob",
       "fallback": "🍯"
     },
@@ -1090,7 +1130,7 @@
         "animal"
       ],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZETIBHztISgGwDgXiLhAnwOOOu49U52aPQgUg3LBRtg&s",
-      "audioUrl": "https://www.myinstants.com/media/sounds/monkey-scream.mp3",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=monkey&tl=en&client=tw-ob",
       "fallback": "🐒"
     },
     {
@@ -1105,43 +1145,39 @@
       "fallback": "✈️"
     },
     {
-      "id": "2a66ea6f-f520-459d-921b-89bd14c1918d",
-      "letter": "d",
-      "word": "DUCK",
-      "categories": [
-        "animal"
-      ],
-      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRjFz5EzdL3TqBb1wUJfv8PTh0tPgoPTDue8Vhf1RSdbg&s=10",
-      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=duck&tl=en&client=tw-ob",
-      "fallback": "❓"
-    },
-    {
-      "id": "7c050fb2-2588-4366-b922-d64f8a3a8cee",
-      "letter": "d",
-      "word": "DUCKLING",
-      "categories": [
-        "animal"
-      ],
-      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTZBzPDTYaEfUo6xbV0OjSY22_eK_aCfL939QYK-pUc_Q&s=10",
-      "audioUrl": "https://upload.wikimedia.org/wikipedia/commons/5/58/The_Ugly_Duckling_narrated_by_ravenotation.ogg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
-      "fallback": "❓"
-    },
-    {
-      "id": "2ac18b9b-e90b-4b5e-b52a-9b98c2e138ef",
-      "letter": "b",
-      "word": "BRIDGE",
-      "categories": [],
-      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRBU8Ug5cZe_sPXB_6lf0FU7lRrfUb0DuYUdqFBLZsT1w&s=10",
-      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=bridge&tl=en&client=tw-ob",
-      "fallback": "❓"
-    },
-    {
       "id": "fe2640ce-ea0e-4510-a437-c9e9c7761b00",
       "letter": "r",
       "word": "RIVER",
       "categories": [],
       "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYNkr5orGhtBjvWpHaE4TYXzo-NDhBQb6M5S-imQIr1w&s=10",
       "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=river&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "b9a6164a-f023-4ba9-ac9f-833f0c416624",
+      "letter": "f",
+      "word": "FIRE ALARM",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBBm1SOUoXgLVyrWuEhJnm0lA22kPONfdkm43qlT5HbQ&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=fire%20alarm&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "fa96f789-e517-46ff-9d8e-a4313f63e9cd",
+      "letter": "s",
+      "word": "SMOKE",
+      "categories": [],
+      "imageUrl": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f3/Ognisko_ubt_0126.jpeg/1280px-Ognisko_ubt_0126.jpeg?utm_source=en.wikipedia.org&utm_campaign=index&utm_content=thumbnail",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=smoke&tl=en&client=tw-ob",
+      "fallback": "❓"
+    },
+    {
+      "id": "a195b6f1-4ecc-427a-88dc-a7bf26737b0a",
+      "letter": "w",
+      "word": "WATER SPRAY",
+      "categories": [],
+      "imageUrl": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJ9Nv2QhTFew3E_EuLtNeHR-kizW_4eEPlzdKywl16EA&s=10",
+      "audioUrl": "https://translate.google.com/translate_tts?ie=UTF-8&q=water%20spray&tl=en&client=tw-ob",
       "fallback": "❓"
     }
   ],
@@ -1153,6 +1189,20 @@
     "characters"
   ],
   "stories": [
+    {
+      "id": "4e5cc029-0164-4908-85b7-dcec3c3112af",
+      "title": "The Little Monkeys",
+      "wordIds": [
+        "85dc6812-46ea-4562-890b-a3230834dcbb",
+        "f88395b3-fa7d-415f-b95b-ca9136806702",
+        "f88395b3-fa7d-415f-b95b-ca9136806702",
+        "f88395b3-fa7d-415f-b95b-ca9136806702",
+        "f88395b3-fa7d-415f-b95b-ca9136806702",
+        "f88395b3-fa7d-415f-b95b-ca9136806702",
+        "f3b13d01-11f1-4391-b042-82cf905aae42",
+        "1494e245-31cb-4ca4-b056-4f0ef67d87cb"
+      ]
+    },
     {
       "id": "7f616749-a6d1-48fe-acf0-b5f9835f7d5f",
       "title": "Peppa Pig goes to the zoo",
@@ -1183,13 +1233,28 @@
         "fe2640ce-ea0e-4510-a437-c9e9c7761b00",
         "2ac18b9b-e90b-4b5e-b52a-9b98c2e138ef"
       ]
+    },
+    {
+      "id": "ea7df195-f6f8-4292-9a85-a7c1a033d22e",
+      "title": "Firetruck Stops Fire Alarm",
+      "wordIds": [
+        "85dc6812-46ea-4562-890b-a3230834dcbb",
+        "f88395b3-fa7d-415f-b95b-ca9136806702",
+        "f88395b3-fa7d-415f-b95b-ca9136806702",
+        "f88395b3-fa7d-415f-b95b-ca9136806702",
+        "f88395b3-fa7d-415f-b95b-ca9136806702",
+        "f88395b3-fa7d-415f-b95b-ca9136806702",
+        "46119abe-d649-4c76-b80d-71a0b8915f75",
+        "b9a6164a-f023-4ba9-ac9f-833f0c416624",
+        "a195b6f1-4ecc-427a-88dc-a7bf26737b0a"
+      ]
     }
   ],
   "config": {
     "title": "Alphabet Adventure",
     "instruction": "⌨️ Press a letter!",
-    "primary": "#6c63ff",
-    "secondary": "#ff7eb3",
+    "primary": "#ec4899",
+    "secondary": "#fce7f3",
     "letterDelay": 100,
     "imageDelay": 200,
     "soundEnabled": true,
@@ -1197,6 +1262,11 @@
     "kidPin": "1234",
     "lockDelay": 500,
     "keyboardListener": false,
-    "maxAudioDuration": 3
+    "maxAudioDuration": 3,
+    "kidPinEnabled": false,
+    "bingSearchEnabled": false,
+    "bubbleCount": 15,
+    "bubbleSpeed": "slow",
+    "imagePopDuration": 2
   }
 }
