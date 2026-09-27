@@ -169,570 +169,381 @@
 
     <section id="settingsView" class="view">
         <div class="settings-card">
+
             <div class="settings-header">
                 <div>
                     <h1 class="settings-title">
                         <span class="material-icons" style="vertical-align: middle;">settings</span> Settings
                     </h1>
-                    <div>
-                        Manage words,
-                        images,
-                        categories
-                        and app settings.
-                    </div>
+                    <div style="color:var(--muted); font-size:0.9rem;">Tap a section to expand</div>
                 </div>
                 <button id="forceUpdateButton" class="button button-secondary" style="margin-left: 10px;">
-                    <span class="material-icons" style="vertical-align: middle;">system_update_alt</span> Force Update App
+                    <span class="material-icons" style="vertical-align: middle;">system_update_alt</span> Force Update
                 </button>
-
-
             </div>
 
+            <!-- ═══════════════════════════════════════════
+                 ACCORDION LIST
+            ══════════════════════════════════════════════ -->
+            <div class="acc-list">
 
 
-            <!-- TABS -->
-
-            <div class="settings-tabs">
-
-
-                <button class="settings-tab" data-tab="words">
-
-                    <span class="material-icons" style="vertical-align: middle;">menu_book</span> Words
-
-                </button>
-
-
-                <button class="settings-tab" data-tab="categories">
-
-                    <span class="material-icons" style="vertical-align: middle;">label</span> Categories
-
-                </button>
-
-                <button class="settings-tab" data-tab="stories">
-                    <span class="material-icons" style="vertical-align: middle;">auto_stories</span> Stories
-                </button>
-
-
-                <button class="settings-tab" data-tab="configuration">
-
-                    <span class="material-icons" style="vertical-align: middle;">palette</span> Configuration
-
-                </button>
-
-
-                <button class="settings-tab active" data-tab="export">
-
-                    <span class="material-icons" style="vertical-align: middle;">save</span> Export
-
-                </button>
-
-
-            </div>
-
-
-
-            <!-- =====================================
-                 WORDS PANEL
-            ====================================== -->
-
-            <div id="wordsPanel" class="settings-panel">
-
-
-                <div class="toolbar">
-
-
-                    <input id="wordSearch" class="search-input" placeholder="Search letter, word or category...">
-
-
-                    <button id="addWordButton" class="button button-success">
-
-                        <span class="material-icons" style="vertical-align: middle;">add</span> Add Word
-
+                <!-- ── WORDS ────────────────────────────── -->
+                <div class="acc-item" id="acc-words">
+                    <button class="acc-header" onclick="toggleAcc('acc-words')">
+                        <span class="acc-icon"><span class="material-icons">menu_book</span></span>
+                        <span class="acc-title">Words</span>
+                        <span class="acc-badge" id="acc-words-badge"></span>
+                        <span class="acc-chevron material-icons">expand_more</span>
                     </button>
-
-
-                </div>
-
-
-
-                <div id="wordListContainer" class="word-list-container"></div>
-
-
-            </div>
-
-
-
-            <!-- =====================================
-                 CATEGORIES PANEL
-            ====================================== -->
-
-            <div id="categoriesPanel" class="settings-panel">
-
-
-                <div class="toolbar">
-
-
-                    <input id="newCategoryInput" class="search-input" placeholder="New category name...">
-
-
-                    <button id="addCategoryButton" class="button button-success">
-
-                        <span class="material-icons" style="vertical-align: middle;">add</span> Add Category
-
-                    </button>
-
-
-                </div>
-
-
-
-                <div id="categoryList" class="category-list"></div>
-
-
-            </div>
-
-
-
-            <!-- =====================================
-                 STORIES PANEL
-            ====================================== -->
-
-            <div id="storiesPanel" class="settings-panel">
-                <div class="toolbar">
-                    <button id="addStoryButton" class="button button-success">
-                        <span class="material-icons" style="vertical-align: middle;">add</span> Create New Story
-                    </button>
-                </div>
-                <div id="storyListContainer" class="category-list"></div>
-            </div>
-
-
-
-            <!-- =====================================
-                 CONFIGURATION PANEL
-            ====================================== -->
-
-            <div id="configurationPanel" class="settings-panel">
-
-                <div class="config-section">
-                    <h3>
-                        <span class="material-icons" style="vertical-align: middle;">category</span> Practice Category
-                    </h3>
-                    <p style="margin-top:0; color:var(--muted);">
-                        Choose which category to practice during the game.
-                    </p>
-                    <div id="categoryControls" class="category-controls" style="justify-content: flex-start;"></div>
-                </div>
-
-
-
-                <div class="config-section">
-
-
-                    <h3>
-
-                        <span class="material-icons" style="vertical-align: middle;">palette</span> Game Appearance
-
-                    </h3>
-
-
-                    <div class="form-grid">
-
-
-                        <div class="form-group">
-
-                            <label>
-
-                                Application Title
-
-                            </label>
-
-
-                            <input id="configTitle" type="text">
-
-
-                        </div>
-
-
-
-                        <div class="form-group">
-
-                            <label>
-
-                                Instruction Text
-
-                            </label>
-
-
-                            <input id="configInstruction" type="text">
-
-
-                        </div>
-
-
-
-                        <div class="form-group full" style="grid-column: 1 / -1;">
-                            <label>Theme Selection</label>
-                            <div id="themeSelectionContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-top: 10px;">
-                                <!-- themes will be injected here via JS -->
-                            </div>
-                        </div>
-
-
-                    </div>
-
-
-                </div>
-
-
-
-                <div class="config-section">
-                    <h3><span class="material-icons" style="vertical-align: middle;">security</span> Security</h3>
-                    <div class="form-grid">
-                        <div class="form-group" style="display: flex; align-items: center; gap: 10px;">
-                            <input id="configKidPinEnabled" type="checkbox" style="width: auto;">
-                            <label style="margin: 0;">Enable Kid Mode PIN Lock</label>
-                        </div>
-                        <div class="form-group">
-                            <label>Kid Mode PIN (4 Digits)</label>
-                            <input id="configKidPin" type="text" maxlength="4" pattern="[0-9]*" inputmode="numeric">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="config-section">
-                    <h3><span class="material-icons" style="vertical-align: middle;">animation</span> Animation</h3>
-
-
-                    <div class="form-grid">
-
-
-                        <div class="form-group">
-
-                            <label>
-
-                                Letter Delay (ms)
-
-                            </label>
-
-
-                            <input id="configLetterDelay" type="number" min="0" max="2000">
-
-
-                        </div>
-
-
-
-                        <div class="form-group">
-
-                            <label>
-
-                                Image Delay (ms)
-
-                            </label>
-
-
-                            <input id="configImageDelay" type="number" min="0" max="5000">
-
-
-                        </div>
-
-                        <div class="form-group">
-                            <label>
-                                Input Lock Delay (ms)
-                            </label>
-                            <input id="configLockDelay" type="number" min="0" max="5000">
-                        </div>
-
-                        <div class="form-group">
-                            <label>
-                                Max Audio Duration (sec)
-                            </label>
-                            <input id="configMaxAudioDuration" type="number" min="1" max="60" step="0.5">
-                        </div>
-
-                    <div class="form-group">
-                        <label>
-                            Background Bubbles Count
-                        </label>
-                        <input id="configBubbleCount" type="number" min="0" max="20" step="1">
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            Letter Practice Mode Bubbles Count
-                        </label>
-                        <input id="configLetterPracticeBubbleCount" type="number" min="1" max="20" step="1" value="4">
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            Background Bubbles Speed
-                        </label>
-                        <select id="configBubbleSpeed">
-                            <option value="slow">Slow</option>
-                            <option value="normal">Normal</option>
-                            <option value="fast">Fast</option>
-                            <option value="very-fast">Very Fast</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            Image Pop Duration (seconds)
-                        </label>
-                        <input id="configImagePopDuration" type="number" min="0.5" max="5" step="0.5" value="1.0">
-                    </div>
-
-
-                    <div class="form-group full" style="grid-column: 1 / -1;">
-                        <label>Bubble Style</label>
-                        <div id="bubbleStylePicker" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 8px;">
-
-                            <div class="bubble-style-option selected" data-style="crystal" title="Classic translucent white — high visibility on any background">
-                                <div class="preview-bubble bubble-style-preview-crystal">⬤</div>
-                                Crystal White
-                            </div>
-
-                            <div class="bubble-style-option" data-style="theme" title="Subtle tint from the selected theme colour — blends with background">
-                                <div class="preview-bubble bubble-style-preview-theme">⬤</div>
-                                Theme Blend
-                            </div>
-
-                            <div class="bubble-style-option" data-style="frosted" title="Frosted glass — white with a strong blur halo and glassy border">
-                                <div class="preview-bubble bubble-style-preview-frosted">⬤</div>
-                                Frosted Glass
-                            </div>
-
-                            <div class="bubble-style-option" data-style="pastel" title="Soft warm pastels — independent of theme">
-                                <div class="preview-bubble bubble-style-preview-pastel">⬤</div>
-                                Pastel Pop
-                            </div>
-
-                            <div class="bubble-style-option" data-style="neon" title="Vivid theme glow — bold and eye-catching">
-                                <div class="preview-bubble bubble-style-preview-neon">⬤</div>
-                                Neon Glow
-                            </div>
-
-                        </div>
-                    </div>
-
-                    <div class="form-group full" style="grid-column: 1 / -1;">
-                        <label>Bubble Pop Animation</label>
-                        <div id="popAnimPicker" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 8px;">
-                            <div class="pop-anim-option selected" data-anim="popBounce">
-                                <div class="preview-bubble">🏀</div>
-                                Bounce
-                            </div>
-                            <div class="pop-anim-option" data-anim="popSpin">
-                                <div class="preview-bubble">🌀</div>
-                                Spin
-                            </div>
-                            <div class="pop-anim-option" data-anim="popExplode">
-                                <div class="preview-bubble">💥</div>
-                                Explode
-                            </div>
-                            <div class="pop-anim-option" data-anim="popRainbow">
-                                <div class="preview-bubble">🌈</div>
-                                Rainbow
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group full" style="grid-column: 1 / -1;">
-                        <label>Bubble Pop Sound</label>
-                        <div id="popSoundPicker" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 8px;">
-                            <div class="pop-sound-option selected" data-sound="chime">
-                                <span class="sound-icon">🔔</span>
-                                Chime
-                            </div>
-                            <div class="pop-sound-option" data-sound="tada">
-                                <span class="sound-icon">🎺</span>
-                                Tada
-                            </div>
-                            <div class="pop-sound-option" data-sound="pop">
-                                <span class="sound-icon">💧</span>
-                                Pop
-                            </div>
-                            <div class="pop-sound-option" data-sound="sparkle">
-                                <span class="sound-icon">✨</span>
-                                Sparkle
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>
-                            <input id="configBingSearch" type="checkbox">
-                            Use Web Search Modal (Bing) for Images
-                        </label>
-                    </div>
-
-                    <div class="form-group full" style="grid-column: 1 / -1; background: #f8fafc; padding: 16px; border-radius: 14px; border: 2px dashed var(--primary); margin-top: 12px;">
-                        <label style="font-size: 1rem; color: var(--primary); font-weight: 800; display: flex; align-items: center; gap: 6px; margin-bottom: 6px;">
-                            <span class="material-icons">sd_storage</span>
-                            Offline Image Cache (IndexedDB)
-                        </label>
-                        <p style="font-size: 0.85rem; color: var(--muted); margin: 0 0 12px 0; line-height: 1.4;">
-                            Download and save all word images directly into the local IndexedDB database so all games run 100% offline without needing internet access.
-                        </p>
-                        <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-                            <button id="precacheAllImagesBtn" type="button" class="button button-primary" style="display: flex; align-items: center; gap: 6px;">
-                                <span class="material-icons">cloud_download</span> Cache All Images to DB
+                    <div class="acc-body" id="wordsPanel">
+                        <div class="toolbar">
+                            <input id="wordSearch" class="search-input" placeholder="Search letter, word or category...">
+                            <button id="addWordButton" class="button button-success">
+                                <span class="material-icons" style="vertical-align: middle;">add</span> Add Word
                             </button>
-                            <span id="precacheStatus" style="font-weight: 700; color: var(--text); font-size: 0.9rem;"></span>
+                        </div>
+                        <div id="wordListContainer" class="word-list-container"></div>
+                    </div>
+                </div>
+
+
+                <!-- ── CATEGORIES ────────────────────────── -->
+                <div class="acc-item" id="acc-categories">
+                    <button class="acc-header" onclick="toggleAcc('acc-categories')">
+                        <span class="acc-icon"><span class="material-icons">label</span></span>
+                        <span class="acc-title">Categories</span>
+                        <span class="acc-chevron material-icons">expand_more</span>
+                    </button>
+                    <div class="acc-body" id="categoriesPanel">
+                        <div class="toolbar">
+                            <input id="newCategoryInput" class="search-input" placeholder="New category name...">
+                            <button id="addCategoryButton" class="button button-success">
+                                <span class="material-icons" style="vertical-align: middle;">add</span> Add Category
+                            </button>
+                        </div>
+                        <div id="categoryList" class="category-list"></div>
+                    </div>
+                </div>
+
+
+                <!-- ── STORIES ───────────────────────────── -->
+                <div class="acc-item" id="acc-stories">
+                    <button class="acc-header" onclick="toggleAcc('acc-stories')">
+                        <span class="acc-icon"><span class="material-icons">auto_stories</span></span>
+                        <span class="acc-title">Stories</span>
+                        <span class="acc-chevron material-icons">expand_more</span>
+                    </button>
+                    <div class="acc-body" id="storiesPanel">
+                        <div class="toolbar">
+                            <button id="addStoryButton" class="button button-success">
+                                <span class="material-icons" style="vertical-align: middle;">add</span> Create New Story
+                            </button>
+                        </div>
+                        <div id="storyListContainer" class="category-list"></div>
+                    </div>
+                </div>
+
+
+                <!-- ── APPEARANCE ────────────────────────── -->
+                <div class="acc-item" id="acc-appearance">
+                    <button class="acc-header" onclick="toggleAcc('acc-appearance')">
+                        <span class="acc-icon"><span class="material-icons">palette</span></span>
+                        <span class="acc-title">Appearance</span>
+                        <span class="acc-chevron material-icons">expand_more</span>
+                    </button>
+                    <div class="acc-body" id="configurationPanel">
+
+                        <!-- Practice category -->
+                        <div class="config-section">
+                            <h3><span class="material-icons" style="vertical-align: middle;">category</span> Practice Category</h3>
+                            <p style="margin-top:0; color:var(--muted);">Choose which category to practice during the game.</p>
+                            <div id="categoryControls" class="category-controls" style="justify-content: flex-start;"></div>
+                        </div>
+
+                        <!-- App text -->
+                        <div class="config-section">
+                            <h3><span class="material-icons" style="vertical-align: middle;">title</span> App Text</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Application Title</label>
+                                    <input id="configTitle" type="text">
+                                </div>
+                                <div class="form-group">
+                                    <label>Instruction Text</label>
+                                    <input id="configInstruction" type="text">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Theme -->
+                        <div class="config-section">
+                            <h3><span class="material-icons" style="vertical-align: middle;">color_lens</span> Theme</h3>
+                            <div id="themeSelectionContainer" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; margin-top: 10px;">
+                                <!-- themes injected by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Save button -->
+                        <div style="margin-top: 10px;">
+                            <button id="saveConfigButton" class="button button-primary">
+                                <span class="material-icons" style="vertical-align: middle;">save</span> Save Configuration
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+
+                <!-- ── BUBBLES ───────────────────────────── -->
+                <div class="acc-item" id="acc-bubbles">
+                    <button class="acc-header" onclick="toggleAcc('acc-bubbles')">
+                        <span class="acc-icon"><span class="material-icons">bubble_chart</span></span>
+                        <span class="acc-title">Bubble Game</span>
+                        <span class="acc-chevron material-icons">expand_more</span>
+                    </button>
+                    <div class="acc-body">
+                        <div class="config-section">
+                            <h3><span class="material-icons" style="vertical-align: middle;">tune</span> Bubble Settings</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label>Background Bubbles Count</label>
+                                    <input id="configBubbleCount" type="number" min="0" max="20" step="1">
+                                </div>
+                                <div class="form-group">
+                                    <label>Letter Practice Bubbles Count</label>
+                                    <input id="configLetterPracticeBubbleCount" type="number" min="1" max="20" step="1" value="4">
+                                </div>
+                                <div class="form-group">
+                                    <label>Bubble Speed</label>
+                                    <select id="configBubbleSpeed">
+                                        <option value="slow">Slow</option>
+                                        <option value="normal">Normal</option>
+                                        <option value="fast">Fast</option>
+                                        <option value="very-fast">Very Fast</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Image Pop Duration (seconds)</label>
+                                    <input id="configImagePopDuration" type="number" min="0.5" max="5" step="0.5" value="1.0">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="config-section">
+                            <h3><span class="material-icons" style="vertical-align: middle;">style</span> Bubble Style</h3>
+                            <div id="bubbleStylePicker" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 8px;">
+                                <div class="bubble-style-option selected" data-style="crystal" title="Classic translucent white — high visibility on any background">
+                                    <div class="preview-bubble bubble-style-preview-crystal">⬤</div>
+                                    Crystal White
+                                </div>
+                                <div class="bubble-style-option" data-style="theme" title="Subtle tint from the selected theme colour — blends with background">
+                                    <div class="preview-bubble bubble-style-preview-theme">⬤</div>
+                                    Theme Blend
+                                </div>
+                                <div class="bubble-style-option" data-style="frosted" title="Frosted glass — white with a strong blur halo and glassy border">
+                                    <div class="preview-bubble bubble-style-preview-frosted">⬤</div>
+                                    Frosted Glass
+                                </div>
+                                <div class="bubble-style-option" data-style="pastel" title="Soft warm pastels — independent of theme">
+                                    <div class="preview-bubble bubble-style-preview-pastel">⬤</div>
+                                    Pastel Pop
+                                </div>
+                                <div class="bubble-style-option" data-style="neon" title="Vivid theme glow — bold and eye-catching">
+                                    <div class="preview-bubble bubble-style-preview-neon">⬤</div>
+                                    Neon Glow
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="config-section">
+                            <h3><span class="material-icons" style="vertical-align: middle;">touch_app</span> Pop Animation</h3>
+                            <div id="popAnimPicker" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 8px;">
+                                <div class="pop-anim-option selected" data-anim="popBounce"><div class="preview-bubble">🏀</div>Bounce</div>
+                                <div class="pop-anim-option" data-anim="popSpin"><div class="preview-bubble">🌀</div>Spin</div>
+                                <div class="pop-anim-option" data-anim="popExplode"><div class="preview-bubble">💥</div>Explode</div>
+                                <div class="pop-anim-option" data-anim="popRainbow"><div class="preview-bubble">🌈</div>Rainbow</div>
+                            </div>
+                        </div>
+
+                        <!-- Save button -->
+                        <div style="margin-top: 10px;">
+                            <button onclick="document.getElementById('saveConfigButton').click()" class="button button-primary">
+                                <span class="material-icons" style="vertical-align: middle;">save</span> Save Configuration
+                            </button>
                         </div>
                     </div>
-                    </div>
-
-
-
-
-                </div>
-
-                <div class="config-section">
-                    <h3><span class="material-icons" style="vertical-align: middle;">keyboard</span> Input</h3>
-                    <div class="form-group">
-                        <label>
-                            <input id="configKeyboardListener" type="checkbox">
-                            Enable words listener (listen for letter taps)
-                        </label>
-                    </div>
                 </div>
 
 
-
-                <div class="config-section">
-
-
-                    <h3>
-
-                        <span class="material-icons" style="vertical-align: middle;">volume_up</span> Audio
-
-                    </h3>
-
-
-                    <div class="form-group">
-                        <label>
-                            <input id="configSound" type="checkbox">
-                            Enable synthetic sound effects
-                        </label>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <input id="configCustomAudio" type="checkbox">
-                            Enable custom word audio (e.g. animal sounds)
-                        </label>
-                    </div>
-                    <div class="form-group" style="margin-top: 15px;">
-                        <button type="button" id="btnReplaceAllAudio" class="button button-secondary">
-                            <span class="material-icons" style="vertical-align: middle;">autorenew</span> Replace All Word Audio with Google TTS
-                        </button>
-                    </div>
-
-                </div>
-
-
-
-                <button id="saveConfigButton" class="button button-primary">
-                    <span class="material-icons" style="vertical-align: middle;">save</span> Save Configuration
-                </button>
-            </div>
-
-
-
-            <!-- =====================================
-                 EXPORT PANEL
-            ====================================== -->
-
-            <div id="exportPanel" class="settings-panel active">
-
-
-
-
-
-
-                <div class="config-section">
-
-
-                    <h3>
-
-                        <span class="material-icons" style="vertical-align: middle;">backup</span> Backup Data
-
-                    </h3>
-
-
-                    <p>
-
-                        Download your data as JSON.
-                        You can later restore it.
-
-                    </p>
-
-
-                    <br>
-
-
-                    <button id="downloadJsonButton" class="button button-secondary">
-
-                        Download JSON Backup
-
+                <!-- ── AUDIO ─────────────────────────────── -->
+                <div class="acc-item" id="acc-audio">
+                    <button class="acc-header" onclick="toggleAcc('acc-audio')">
+                        <span class="acc-icon"><span class="material-icons">volume_up</span></span>
+                        <span class="acc-title">Audio</span>
+                        <span class="acc-chevron material-icons">expand_more</span>
                     </button>
+                    <div class="acc-body">
+                        <div class="config-section">
+                            <h3><span class="material-icons" style="vertical-align: middle;">music_note</span> Sound Effects</h3>
+                            <div class="form-grid">
+                                <div class="form-group" style="display:flex; align-items:center; gap:10px;">
+                                    <input id="configSound" type="checkbox" style="width:auto;">
+                                    <label style="margin:0;">Enable synthetic sound effects</label>
+                                </div>
+                                <div class="form-group" style="display:flex; align-items:center; gap:10px;">
+                                    <input id="configCustomAudio" type="checkbox" style="width:auto;">
+                                    <label style="margin:0;">Enable custom word audio</label>
+                                </div>
+                                <div class="form-group">
+                                    <label>Max Audio Duration (sec)</label>
+                                    <input id="configMaxAudioDuration" type="number" min="1" max="60" step="0.5">
+                                </div>
+                            </div>
+                        </div>
 
+                        <div class="config-section">
+                            <h3><span class="material-icons" style="vertical-align: middle;">notifications_active</span> Pop Sound</h3>
+                            <div id="popSoundPicker" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 8px;">
+                                <div class="pop-sound-option selected" data-sound="chime"><span class="sound-icon">🔔</span>Chime</div>
+                                <div class="pop-sound-option" data-sound="tada"><span class="sound-icon">🎺</span>Tada</div>
+                                <div class="pop-sound-option" data-sound="pop"><span class="sound-icon">💧</span>Pop</div>
+                                <div class="pop-sound-option" data-sound="sparkle"><span class="sound-icon">✨</span>Sparkle</div>
+                            </div>
+                        </div>
 
-                    <input id="importJsonInput" type="file" accept=".json" style="display:none">
+                        <div class="config-section">
+                            <div class="form-group">
+                                <button type="button" id="btnReplaceAllAudio" class="button button-secondary">
+                                    <span class="material-icons" style="vertical-align: middle;">autorenew</span> Replace All Word Audio with Google TTS
+                                </button>
+                            </div>
+                        </div>
 
-
-                    <button id="importJsonButton" class="button button-primary">
-
-                        Import JSON Backup
-
-                    </button>
-
-
+                        <!-- Save button -->
+                        <div style="margin-top: 10px;">
+                            <button onclick="document.getElementById('saveConfigButton').click()" class="button button-primary">
+                                <span class="material-icons" style="vertical-align: middle;">save</span> Save Configuration
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
 
-
-                <div class="config-section">
-
-
-                    <h3>
-
-                        <span class="material-icons" style="vertical-align: middle;">warning</span> Reset Application
-
-                    </h3>
-
-
-                    <p>
-
-                        Restore the original built-in
-                        alphabet data.
-                        <strong>
-                            This cannot be undone.
-                        </strong>
-
-                    </p>
-
-
-                    <br>
-
-
-                    <button id="resetAppButton" class="button button-danger">
-
-                        <span class="material-icons" style="vertical-align: middle;">delete_forever</span> Reset Everything
-
+                <!-- ── INPUT & SECURITY ──────────────────── -->
+                <div class="acc-item" id="acc-input">
+                    <button class="acc-header" onclick="toggleAcc('acc-input')">
+                        <span class="acc-icon"><span class="material-icons">security</span></span>
+                        <span class="acc-title">Input &amp; Security</span>
+                        <span class="acc-chevron material-icons">expand_more</span>
                     </button>
+                    <div class="acc-body">
+                        <div class="config-section">
+                            <h3><span class="material-icons" style="vertical-align: middle;">keyboard</span> Input</h3>
+                            <div class="form-grid">
+                                <div class="form-group" style="display:flex; align-items:center; gap:10px;">
+                                    <input id="configKeyboardListener" type="checkbox" style="width:auto;">
+                                    <label style="margin:0;">Enable keyboard letter listener</label>
+                                </div>
+                                <div class="form-group">
+                                    <label>Letter Delay (ms)</label>
+                                    <input id="configLetterDelay" type="number" min="0" max="2000">
+                                </div>
+                                <div class="form-group">
+                                    <label>Image Delay (ms)</label>
+                                    <input id="configImageDelay" type="number" min="0" max="5000">
+                                </div>
+                                <div class="form-group">
+                                    <label>Input Lock Delay (ms)</label>
+                                    <input id="configLockDelay" type="number" min="0" max="5000">
+                                </div>
+                                <div class="form-group" style="display:flex; align-items:center; gap:10px;">
+                                    <input id="configBingSearch" type="checkbox" style="width:auto;">
+                                    <label style="margin:0;">Use Web Search (Bing) for Images</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="config-section">
+                            <h3><span class="material-icons" style="vertical-align: middle;">lock</span> Kid Mode PIN</h3>
+                            <div class="form-grid">
+                                <div class="form-group" style="display:flex; align-items:center; gap:10px;">
+                                    <input id="configKidPinEnabled" type="checkbox" style="width:auto;">
+                                    <label style="margin:0;">Enable Kid Mode PIN Lock</label>
+                                </div>
+                                <div class="form-group">
+                                    <label>PIN (4 digits)</label>
+                                    <input id="configKidPin" type="text" maxlength="4" pattern="[0-9]*" inputmode="numeric">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Save button -->
+                        <div style="margin-top: 10px;">
+                            <button onclick="document.getElementById('saveConfigButton').click()" class="button button-primary">
+                                <span class="material-icons" style="vertical-align: middle;">save</span> Save Configuration
+                            </button>
+                        </div>
 
 
+                    </div>
                 </div>
 
 
-            </div>
+                <!-- ── DATA & EXPORT ─────────────────────── -->
+                <div class="acc-item" id="acc-data">
+                    <button class="acc-header" onclick="toggleAcc('acc-data')">
+                        <span class="acc-icon"><span class="material-icons">save</span></span>
+                        <span class="acc-title">Data &amp; Export</span>
+                        <span class="acc-chevron material-icons">expand_more</span>
+                    </button>
+                    <div class="acc-body" id="exportPanel">
+                        <div class="config-section">
+                            <h3><span class="material-icons" style="vertical-align: middle;">backup</span> Backup Data</h3>
+                            <p>Download your data as JSON. You can later restore it.</p>
+                            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+                                <button id="downloadJsonButton" class="button button-secondary">Download JSON Backup</button>
+                                <input id="importJsonInput" type="file" accept=".json" style="display:none">
+                                <button id="importJsonButton" class="button button-primary">Import JSON Backup</button>
+                            </div>
+                        </div>
+
+                        <div class="config-section">
+                            <h3><span class="material-icons" style="vertical-align: middle;">phone_android</span> Export App</h3>
+                            <div style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;" id="downloadAppSection">
+                                <!-- injected by JS -->
+                            </div>
+                        </div>
+
+                        <div class="config-section">
+                            <h3><span class="material-icons" style="vertical-align: middle;">sd_storage</span> Offline Image Cache</h3>
+                            <p style="font-size:0.85rem; color:var(--muted); margin:0 0 12px; line-height:1.4;">
+                                Save all word images to IndexedDB so games run 100% offline.
+                            </p>
+                            <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+                                <button id="precacheAllImagesBtn" type="button" class="button button-primary" style="display:flex; align-items:center; gap:6px;">
+                                    <span class="material-icons">cloud_download</span> Cache All Images
+                                </button>
+                                <span id="precacheStatus" style="font-weight:700; color:var(--text); font-size:0.9rem;"></span>
+                            </div>
+                        </div>
+
+                        <div class="config-section">
+                            <h3><span class="material-icons" style="vertical-align: middle;">warning</span> Reset Application</h3>
+                            <p>Restore original data. <strong>Cannot be undone.</strong></p>
+                            <button id="downloadAppButton" class="button button-secondary" style="display:flex; align-items:center; gap:6px;"><span class="material-icons">download</span> Export as HTML App</button>
+                            <button id="resetAppButton" class="button button-danger" style="margin-top:10px;">
+                                <span class="material-icons" style="vertical-align: middle;">delete_forever</span> Reset Everything
+                            </button>
+                        </div>
+                    </div>
+                </div>
 
 
-        </div>
+            </div><!-- /acc-list -->
 
-
+        </div><!-- /settings-card -->
     </section>
-
 
 </main>
 
@@ -1034,5 +845,35 @@
       });
     });
   }
+</script>
+
+<script>
+function toggleAcc(id) {
+    const item = document.getElementById(id);
+    if (!item) return;
+    const wasOpen = item.classList.contains('acc-open');
+    // Close all other sections
+    document.querySelectorAll('.acc-item.acc-open').forEach(el => {
+        if (el !== item) el.classList.remove('acc-open');
+    });
+    item.classList.toggle('acc-open', !wasOpen);
+}
+
+// Update the word-count badge on the Words accordion header
+function updateAccBadges() {
+    const badge = document.getElementById('acc-words-badge');
+    if (badge && window.appState && window.appState.words) {
+        badge.textContent = window.appState.words.length + ' words';
+    }
+}
+
+// Open the Words section by default on first visit
+document.addEventListener('DOMContentLoaded', () => {
+    // Small delay so renderAllSettings has populated the list
+    setTimeout(() => {
+        toggleAcc('acc-words');
+        updateAccBadges();
+    }, 120);
+});
 </script>
 </body></html>

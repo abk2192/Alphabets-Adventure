@@ -759,7 +759,7 @@ document.getElementById("homeStoryModeBtn").addEventListener("click", (e) => {
     if (!appState.stories || appState.stories.length === 0) {
         showToast("Please create a story in Settings first!");
         showSettingsView();
-        document.querySelector('[data-tab="stories"]').click();
+        setTimeout(() => { if (typeof toggleAcc === 'function') toggleAcc('acc-stories'); }, 50);
         return;
     }
     showStorySelectionView();
@@ -768,7 +768,7 @@ document.getElementById("homeSettingsBtn").addEventListener("click", (e) => { e.
 /* ========================================================= SETTINGS TABS ========================================================= */ 
 document.querySelectorAll( ".settings-tab" ) .forEach( tab => { tab.addEventListener( "click", () => { const tabName = tab.dataset.tab; document.querySelectorAll( ".settings-tab" ) .forEach( item => item.classList.remove( "active" ) ); tab.classList.add( "active" ); document.querySelectorAll( ".settings-panel" ) .forEach( panel => panel.classList.remove( "active" ) ); document.getElementById( tabName + "Panel" ) .classList.add( "active" ); } ); } ); 
 /* ========================================================= SETTINGS RENDER ========================================================= */ 
-function renderAllSettings() { renderWordTable(); renderCategoryManager(); renderStoryManager(); loadConfigurationForm(); } 
+function renderAllSettings() { renderWordTable(); renderCategoryManager(); renderStoryManager(); loadConfigurationForm(); if (typeof updateAccBadges === 'function') updateAccBadges(); } 
 /* ========================================================= WORD TABLE ========================================================= */ 
 function renderWordTable() {
     const search = wordSearch.value.toLowerCase().trim();

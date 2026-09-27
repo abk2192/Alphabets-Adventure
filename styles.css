@@ -654,3 +654,111 @@ body[data-bubble-style="neon"] .bubble {
     80%  { transform: translate( 5px, 0) scale(1.02); color: #ff5d73; }
     100% { transform: translate(0, 0)    scale(1); }
 }
+
+
+/* ====================================================
+   SETTINGS ACCORDION
+   ==================================================== */
+.acc-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    margin-top: 16px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+    border: 1.5px solid var(--border);
+}
+
+.acc-item {
+    border-bottom: 1.5px solid var(--border);
+    background: rgba(255,255,255,0.6);
+}
+.acc-item:last-child { border-bottom: none; }
+
+/* Header row — always visible */
+.acc-header {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    font-family: "Nunito", sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    color: var(--text);
+    transition: background 0.18s;
+    -webkit-tap-highlight-color: transparent;
+}
+.acc-header:hover,
+.acc-header:focus-visible {
+    background: rgba(108,99,255,0.06);
+    outline: none;
+}
+.acc-item.acc-open .acc-header {
+    background: color-mix(in srgb, var(--primary) 8%, white);
+    color: var(--primary);
+}
+
+.acc-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: rgba(108,99,255,0.1);
+    color: var(--primary);
+    flex-shrink: 0;
+}
+.acc-item.acc-open .acc-icon {
+    background: var(--primary);
+    color: white;
+}
+
+.acc-title {
+    flex: 1;
+    font-size: 1rem;
+}
+
+.acc-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    background: var(--primary);
+    color: white;
+    border-radius: 999px;
+    padding: 2px 8px;
+    display: none;
+}
+.acc-badge:not(:empty) { display: inline-block; }
+
+.acc-chevron {
+    color: var(--muted);
+    font-size: 1.4rem !important;
+    transition: transform 0.25s ease;
+    flex-shrink: 0;
+}
+.acc-item.acc-open .acc-chevron {
+    transform: rotate(180deg);
+    color: var(--primary);
+}
+
+/* Collapsible body */
+.acc-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.25s ease;
+    padding: 0 18px;
+}
+.acc-item.acc-open .acc-body {
+    max-height: 4000px;   /* large enough for any content */
+    padding: 4px 18px 20px;
+    overflow: visible;
+}
+
+/* Suppress old tab styles so they don't conflict */
+.settings-tabs { display: none !important; }
+.settings-panel { display: block !important; }
