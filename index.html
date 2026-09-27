@@ -304,6 +304,23 @@
                     </button>
                     <div class="acc-body">
                         <div class="config-section">
+                            <h3><span class="material-icons" style="vertical-align: middle;">visibility</span> Bubble Visibility</h3>
+                            <div class="form-grid">
+                                <div class="form-group full" style="grid-column: 1 / -1;">
+                                    <label>Show Bubbles</label>
+                                    <select id="configBubbleBackground">
+                                        <option value="everywhere">Everywhere (Home, Games &amp; Bubble Game)</option>
+                                        <option value="bubble-game-only">Bubble Game only — saves CPU on other screens</option>
+                                        <option value="off">Off — no background bubbles anywhere</option>
+                                    </select>
+                                    <p style="margin:6px 0 0; font-size:0.82rem; color:var(--muted); line-height:1.4;">
+                                        The physics loop runs continuously when bubbles are visible. Limiting them to the Bubble Game reduces CPU usage on other screens.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="config-section">
                             <h3><span class="material-icons" style="vertical-align: middle;">tune</span> Bubble Settings</h3>
                             <div class="form-grid">
                                 <div class="form-group">

@@ -5,6 +5,17 @@ function applyBubbleStyle() {
     const style = (appState.config.bubbleStyle || 'crystal');
     document.body.dataset.bubbleStyle = style;
 }
+// Stop the physics loop and clear all background bubbles
+function stopBubbles() {
+    if (typeof _physicsRafId !== 'undefined' && _physicsRafId) {
+        cancelAnimationFrame(_physicsRafId);
+        _physicsRafId = null;
+        _physicsLastTime = null;
+    }
+    const bg = document.querySelector('.background-decoration');
+    if (bg) bg.innerHTML = '';
+}
+
 function applyConfiguration() { 
     document.title = appState.config.title; 
     const logoText = document.querySelector( ".logo span:last-child" );
@@ -27,10 +38,16 @@ function applyConfiguration() {
             _physicsLastTime = null;
         }
         bgContainer.innerHTML = '';
-        const bubbleCount = appState.config.bubbleCount !== undefined ? appState.config.bubbleCount : 5;
-        for (let i = 0; i < bubbleCount; i++) {
-            window.spawnBubble(false);
+        // Only spawn bubbles if visibility setting allows it on this screen
+        const bubbleVis = appState.config.bubbleBackground || 'everywhere';
+        if (bubbleVis === 'everywhere') {
+            const bubbleCount = appState.config.bubbleCount !== undefined ? appState.config.bubbleCount : 5;
+            for (let i = 0; i < bubbleCount; i++) {
+                window.spawnBubble(false);
+            }
         }
+        // 'bubble-game-only' and 'off' → no bubbles spawned here;
+        // showBubbleGameView() always spawns them regardless.
     }
 } 
 
@@ -1973,6 +1990,10 @@ window.copyUrl = function(id) {
     document.getElementById( "configBubbleSpeed" ).value = appState.config.bubbleSpeed || 'normal';
     document.getElementById( "configImagePopDuration" ).value = appState.config.imagePopDuration !== undefined ? appState.config.imagePopDuration : 1.0;
 
+    // Bubble visibility setting
+    const bgEl = document.getElementById('configBubbleBackground');
+    if (bgEl) bgEl.value = appState.config.bubbleBackground || 'everywhere';
+
     // Bubble style picker
     const bubbleStyle = appState.config.bubbleStyle || 'crystal';
     document.querySelectorAll('.bubble-style-option').forEach(el => {
@@ -2005,6 +2026,8 @@ window.copyUrl = function(id) {
     appState.config.letterPracticeBubbleCount = Number( document.getElementById( "configLetterPracticeBubbleCount" ).value ) || 4;
     appState.config.bubbleSpeed = document.getElementById( "configBubbleSpeed" ).value;
     appState.config.imagePopDuration = Number( document.getElementById( "configImagePopDuration" ).value ) || 1.0;
+    const bgSettingEl = document.getElementById('configBubbleBackground');
+    if (bgSettingEl) appState.config.bubbleBackground = bgSettingEl.value;
 
     // Save bubble style selection
     const selStyle = document.querySelector('.bubble-style-option.selected');
@@ -2152,6 +2175,12 @@ function showBubbleGameView() {
     // Also show/hide floating in-game letter button (always visible in this view)
     const floatingLetterBtn = document.getElementById("bubbleGameLetterModeBtn");
     if (floatingLetterBtn) floatingLetterBtn.style.display = "none"; // hidden until fullscreen
+    // Always ensure bubbles are running in the bubble game, regardless of visibility setting
+    const bgC = document.querySelector('.background-decoration');
+    if (bgC && bgC.querySelectorAll('.bubble').length === 0) {
+        const cnt = appState.config.bubbleCount !== undefined ? appState.config.bubbleCount : 5;
+        for (let i = 0; i < cnt; i++) window.spawnBubble(false);
+    }
     
     window.isBubbleGameActive = true;
     
